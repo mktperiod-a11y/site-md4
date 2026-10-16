@@ -102,6 +102,24 @@ function goPage(it) {
 `;
 }
 
+// AI 크롤러용 사이트 안내
+function llms({ updatedAt, items }) {
+  const ranking = items.map((it, i) => `${i + 1}. ${it.name}: ${it.desc} (${it.benefit})`).join('\n');
+  return `# 모리디
+
+> 웹하드의 이용 편의성, 혜택과 서비스 특징을 비교하는 한국어 가이드입니다.
+
+페이지에 표시된 기준일과 각 서비스 공식 안내를 함께 확인해 주세요.
+
+- 사이트: ${PLACEHOLDER}/
+- 기준일: ${updatedAt}
+
+## 2026 웹하드 순위
+
+${ranking}
+`;
+}
+
 function fill(template, values) {
   return template.replace(/\{\{(\w+)\}\}/g, (m, key) => {
     if (!(key in values)) throw new Error(`알 수 없는 자리: ${m}`);
@@ -150,6 +168,7 @@ export function build(outDir, site = '', data = loadData()) {
 `,
   );
   fs.writeFileSync(path.join(outDir, 'sitemap.txt'), `${PLACEHOLDER}/\n`);
+  fs.writeFileSync(path.join(outDir, 'llms.txt'), llms(data));
 
   if (site) {
     for (const file of fs.readdirSync(outDir, { recursive: true })) {

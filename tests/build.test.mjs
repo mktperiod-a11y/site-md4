@@ -52,6 +52,28 @@ test('순위 카드와 이동 페이지가 데이터와 맞는다', () => {
   assert.deepEqual(fs.readdirSync(path.join(dir, 'go')).sort(), items.map((it) => it.slug).sort());
 });
 
+test('공유·검색용 메타와 보조 파일', () => {
+  const { items, updatedAt } = loadData();
+  const dir = buildTo();
+  const html = read(dir, 'index.html');
+  const ld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  const page = ld['@graph'].find((n) => n['@type'] === 'WebPage');
+  assert.equal(page.url, `${SITE}/`);
+  assert.equal(page.dateModified, updatedAt);
+  assert.match(html, new RegExp(`<meta property="og:image" content="${SITE}/og.png" />`));
+  for (const href of [...html.matchAll(/<link rel="(?:icon|apple-touch-icon)" href="([^"]+)"/g)].map((m) => m[1])) {
+    assert.ok(fs.existsSync(path.join(dir, href)), `${href} 없음`);
+  }
+  assert.ok(fs.existsSync(path.join(dir, 'og.png')));
+  assert.match(read(dir, '404.html'), new RegExp(`<a href="${SITE}/">`));
+  const llms = read(dir, 'llms.txt');
+  assert.ok(llms.includes(`- 사이트: ${SITE}/`));
+  assert.deepEqual(
+    [...llms.matchAll(/^(\d+)\. ([^:]+):/gm)].map((m) => m[2]),
+    items.map((it) => it.name),
+  );
+});
+
 test('SITE_URL이 없으면 자리표시를 그대로 둔다', () => {
   const dir = buildTo('');
   assert.ok(read(dir, 'index.html').includes(`${PLACEHOLDER}/`));
