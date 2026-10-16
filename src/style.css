@@ -1,14 +1,5 @@
-@font-face {
-  font-family: "Ridibatang";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff")
-    format("woff");
-  font-weight: normal;
-  font-display: swap;
-}
-
 :root {
-  --serif: "Ridibatang", "Noto Serif KR", "Apple Myungjo", serif;
-  --mint: #3fd2b4;
+  --mint: #22c5a5;
   --mint-text: #0f7a66;
   --mint-soft: #e8f8f4;
   --ink: #17302d;
@@ -120,11 +111,9 @@ summary:focus-visible {
 }
 
 .title h1 {
-  font-family: var(--serif);
-  font-weight: normal;
   margin: 0;
-  font-size: 32px;
-  letter-spacing: -0.5px;
+  font-size: 28px;
+  letter-spacing: -1px;
 }
 
 .title p {
@@ -173,9 +162,9 @@ summary:focus-visible {
 }
 
 .no {
-  font-family: var(--serif);
   color: #7f8f8b;
-  font-size: 24px;
+  font-size: 21px;
+  font-weight: 800;
   text-align: center;
 }
 
@@ -184,7 +173,6 @@ summary:focus-visible {
 }
 
 .mark {
-  font-family: var(--serif);
   display: grid;
   place-items: center;
   width: 44px;
@@ -192,16 +180,14 @@ summary:focus-visible {
   border-radius: 12px;
   background: hsl(var(--hue) 80% 94%);
   color: hsl(var(--hue) 60% 28%);
-  font-size: 19px;
-  font-weight: normal;
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .name h2 {
-  font-family: var(--serif);
-  font-weight: normal;
   margin: 0;
-  font-size: 19px;
-  letter-spacing: 0;
+  font-size: 17px;
+  letter-spacing: -0.3px;
 }
 
 .tags {
@@ -243,7 +229,7 @@ summary:focus-visible {
 }
 
 .go:hover {
-  background: #2cc3a4;
+  background: #1db394;
 }
 
 .note {
@@ -257,11 +243,9 @@ summary:focus-visible {
 }
 
 .section > h2 {
-  font-family: var(--serif);
-  font-weight: normal;
   margin: 0 0 14px;
-  font-size: 24px;
-  letter-spacing: 0;
+  font-size: 21px;
+  letter-spacing: -0.5px;
 }
 
 .checks {
@@ -298,13 +282,13 @@ summary:focus-visible {
 }
 
 .faq summary {
-  font-family: var(--serif);
   display: flex;
   gap: 10px;
   align-items: baseline;
   padding: 16px 4px;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 16px;
+  font-weight: 700;
   list-style: none;
 }
 
@@ -315,7 +299,7 @@ summary:focus-visible {
 .faq summary::before {
   content: "Q";
   color: var(--mint-text);
-  font-weight: normal;
+  font-weight: 800;
 }
 
 .faq summary::after {
@@ -344,10 +328,8 @@ summary:focus-visible {
 }
 
 .doc h2 {
-  font-family: var(--serif);
-  font-weight: normal;
   margin: 36px 0 8px;
-  font-size: 21px;
+  font-size: 19px;
 }
 
 .doc p,
@@ -422,7 +404,7 @@ summary:focus-visible {
   }
 
   .title h1 {
-    font-size: 27px;
+    font-size: 23px;
   }
 
   .row {
@@ -446,7 +428,7 @@ summary:focus-visible {
     align-self: start;
     width: 38px;
     height: 38px;
-    font-size: 17px;
+    font-size: 14px;
   }
 
   .name {
