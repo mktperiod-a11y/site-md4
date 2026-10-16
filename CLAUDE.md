@@ -43,6 +43,8 @@
 
 ## 이 저장소
 
-- 의존성 없는 정적 사이트다. `scripts/build.mjs`가 `src/`를 `_site/`로 복사하고, `.github/workflows/pages.yml`이 그 결과를 GitHub Pages로 배포한다.
+- 의존성 없는 정적 사이트다. `scripts/build.mjs`가 `src/`와 `data/services.json`으로 `_site/`를 만들고, `.github/workflows/pages.yml`이 그 결과를 GitHub Pages로 배포한다. 운영 방법은 `docs/운영.md`에 있다.
+- 순위는 `data/services.json`의 `items` 순서다. 순위 카드, 이동 페이지(`go/`), `robots.txt`, `sitemap.*`은 빌드가 만들므로 `src/`에 두지 않는다.
 - `pages.yml`이 `base_url`을 `SITE_URL` 환경 변수로 넘기면 빌드가 `https://site-url.invalid` 자리표시를 실제 주소로 바꾼다. 로컬에서 `SITE_URL` 없이 빌드하면 자리표시가 그대로 남는다.
-- 로컬 확인: `node scripts/build.mjs` 후 `_site/`를 정적 서버로 연다.
+- 바꾼 뒤에는 `node --test tests/*.test.mjs`를 돌리고, `node scripts/build.mjs` 결과(`_site/`)를 정적 서버로 열어 확인한다.
+- 업체 혜택·조건은 확인한 사실만 적는다. 확인하지 않은 내용으로 `updatedAt`을 올리지 않는다.

@@ -22,6 +22,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: 빌드 검사
+        run: node --test tests/*.test.mjs
       - id: pages
         uses: actions/configure-pages@v5
       - run: node scripts/build.mjs _site
