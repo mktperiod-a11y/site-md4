@@ -41,10 +41,18 @@
 
 - 검사가 실패하면 원인을 고친다. 통과시키려고 검사 스크립트나 워크플로를 약하게 바꾸지 않는다.
 
+## 코드 정리 (항상 지킴)
+
+- 배포된 사이트에서 "페이지 소스 보기"를 열었을 때 가로 스크롤 없이 세로로 읽히게 쓴다. 한 줄로 압축(minify)하지 않고 들여쓰기와 줄바꿈을 지킨다. 빌드가 만드는 HTML·CSS·XML도 같다.
+- 한 줄은 화면 폭 140칸(한글 2칸)을 넘기지 않는다. 긴 문장과 속성은 여러 줄로 나눈다. `tests/build.test.mjs`가 빌드 결과를 검사한다.
+- 주석은 코드만 보고 알기 어려운 곳에만 짧게 단다. 작업 날짜, 경위, 내부 사정 등 개발 과정을 주석에 남기지 않는다. 저장소가 공개라 그대로 보인다.
+- 배포되는 HTML·CSS에는 주석을 넣지 않는다.
+
 ## 이 저장소
 
-- 의존성 없는 정적 사이트다. `scripts/build.mjs`가 `src/`와 `data/services.json`으로 `_site/`를 만들고, `.github/workflows/pages.yml`이 그 결과를 GitHub Pages로 배포한다. 운영 방법은 `docs/운영.md`에 있다.
-- 순위는 `data/services.json`의 `items` 순서다. 순위 카드, 이동 페이지(`go/`), `robots.txt`, `sitemap.*`, `llms.txt`는 빌드가 만들므로 `src/`에 두지 않는다.
+- 의존성 없는 정적 사이트다. `scripts/build.mjs`가 `src/`와 `data/`로 `_site/`를 만들고, `.github/workflows/pages.yml`이 그 결과를 GitHub Pages로 배포한다. 운영 방법은 `docs/운영.md`에 있다.
+- 순위는 `data/services.json`의 `items` 순서, 자주 묻는 질문은 `data/faq.json`이다. 순위 목록, FAQ, 구조화 데이터, 이동 페이지(`go/`), `robots.txt`, `sitemap.*`, `llms.txt`는 빌드가 만들므로 `src/`에 두지 않는다.
+- 머리글과 바닥글은 `src/_partials/`에 한 벌만 두고 모든 페이지가 함께 쓴다. 스타일은 `src/style.css` 하나다.
 - `src/og.png`(공유 미리보기 1200×630)와 `src/apple-touch-icon.png`도 sharp로 다시 저장한 파일이다. 바꿀 때도 sharp로 다시 저장한다.
 - `pages.yml`이 `base_url`을 `SITE_URL` 환경 변수로 넘기면 빌드가 `https://site-url.invalid` 자리표시를 실제 주소로 바꾼다. 로컬에서 `SITE_URL` 없이 빌드하면 자리표시가 그대로 남는다.
 - 바꾼 뒤에는 `node --test tests/*.test.mjs`를 돌리고, `node scripts/build.mjs` 결과(`_site/`)를 정적 서버로 열어 확인한다.
