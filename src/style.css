@@ -412,22 +412,6 @@ summary:focus-visible {
   text-align: left;
 }
 
-.doc h2 {
-  margin: 36px 0 8px;
-  font-size: 20px;
-}
-
-.doc p,
-.doc li {
-  color: var(--sub);
-  font-size: 15px;
-  line-height: 1.75;
-}
-
-.doc ul {
-  padding-left: 20px;
-}
-
 .site-footer {
   padding: 48px 0 36px;
   border-top: 1px solid var(--line);
@@ -438,7 +422,7 @@ summary:focus-visible {
 
 .foot-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 32px;
 }
 

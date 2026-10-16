@@ -203,7 +203,7 @@ function llms({ updatedAt, items }, faq) {
 페이지에 표시된 기준일과 각 서비스 공식 안내를 함께 확인해 주세요.
 
 - 사이트: ${PLACEHOLDER}/
-- 운영 안내(순위 기준·제휴 안내): ${PLACEHOLDER}/about/
+- 일부 바로가기는 제휴 링크입니다.
 - 기준일: ${updatedAt}
 
 ## 웹하드 순위 2026 TOP ${items.length}
@@ -269,7 +269,7 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
     fs.writeFileSync(path.join(outDir, 'go', it.slug, 'index.html'), goPage(it));
   }
 
-  const pages = ['/', '/about/'];
+  const pages = ['/'];
   fs.writeFileSync(
     path.join(outDir, 'robots.txt'),
     `User-agent: *\nAllow: /\nDisallow: ${basePath}/go/\n\nSitemap: ${PLACEHOLDER}/sitemap.xml\n`,
