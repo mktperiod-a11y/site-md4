@@ -10,6 +10,7 @@ export const PLACEHOLDER = 'https://site-url.invalid';
 const TEXT = /\.(html|txt|xml|json|svg|css|js|webmanifest)$/;
 const SLUG = /^[a-z0-9-]+$/;
 const PARTIALS = '_partials';
+const normalize = (name) => name.normalize('NFKC').replace(/\s+/g, '').toLowerCase();
 
 export function loadData(file = 'data/services.json') {
   return validate(JSON.parse(fs.readFileSync(file, 'utf8')));
@@ -38,7 +39,33 @@ export function validate(data) {
     if (!/^https:\/\/[^/\s"']+\/\S*$/.test(it.url)) throw new Error(`${where}.url은 https 주소여야 합니다: ${it.url}`);
     if (!Array.isArray(it.tags)) throw new Error(`${where}.tags는 배열이어야 합니다`);
   }
+  const shown = data.shown ?? data.items.length;
+  if (!Number.isInteger(shown) || shown < 1) throw new Error('shown은 1 이상의 정수여야 합니다');
+  for (const key of ['blocked', 'required']) {
+    const list = data[key] ?? [];
+    if (!Array.isArray(list) || !list.every((n) => typeof n === 'string' && n.trim())) {
+      throw new Error(`${key}는 업체 이름 배열이어야 합니다`);
+    }
+  }
+  const names = new Set(data.items.map((it) => normalize(it.name)));
+  const blocked = new Set((data.blocked ?? []).map(normalize));
+  for (const name of data.required ?? []) {
+    if (!names.has(normalize(name))) throw new Error(`required의 ${name}이(가) items에 없습니다`);
+    if (blocked.has(normalize(name))) throw new Error(`${name}이(가) required와 blocked에 함께 있습니다`);
+  }
+  if ((data.required ?? []).length > shown) throw new Error('required가 shown보다 많습니다');
   return data;
+}
+
+// blocked는 빼고, required를 먼저 넣은 뒤 items 순서대로 shown개까지 채운다. 보여주는 순서는 items 순서다.
+export function pick(data) {
+  const blocked = new Set((data.blocked ?? []).map(normalize));
+  const required = new Set((data.required ?? []).map(normalize));
+  const allowed = data.items.filter((it) => !blocked.has(normalize(it.name)));
+  const limit = data.shown ?? allowed.length;
+  const chosen = new Set(allowed.filter((it) => required.has(normalize(it.name))));
+  for (const it of allowed) if (chosen.size < limit) chosen.add(it);
+  return allowed.filter((it) => chosen.has(it));
 }
 
 export const escape = (s) =>
@@ -233,7 +260,8 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
   site = site.replace(/\/+$/, '');
   if (site && !/^https?:\/\/[^/\s]+(\/[\w.-]+)*$/.test(site)) throw new Error(`사이트 주소 형식 오류: ${site}`);
   const basePath = site ? new URL(site).pathname.replace(/\/+$/, '') : '';
-  const { updatedAt, items } = validate(data);
+  const { updatedAt } = validate(data);
+  const items = pick(data);
 
   fs.rmSync(outDir, { recursive: true, force: true });
   fs.cpSync('src', outDir, { recursive: true, filter: (src) => path.basename(src) !== PARTIALS });
@@ -252,7 +280,7 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
     ),
     RANKING: items.map(rankRow).join('\n'),
     FAQ: faq.map(faqItem).join('\n'),
-    JSONLD: jsonLd(data, faq),
+    JSONLD: jsonLd({ updatedAt, items }, faq),
   };
 
   for (const file of htmlFiles(outDir)) {
@@ -283,7 +311,7 @@ ${pages.map((p) => `  <url>\n    <loc>${PLACEHOLDER}${p}</loc>\n    <lastmod>${u
 `,
   );
   fs.writeFileSync(path.join(outDir, 'sitemap.txt'), pages.map((p) => `${PLACEHOLDER}${p}\n`).join(''));
-  fs.writeFileSync(path.join(outDir, 'llms.txt'), llms(data, faq));
+  fs.writeFileSync(path.join(outDir, 'llms.txt'), llms({ updatedAt, items }, faq));
 
   if (site) {
     for (const file of fs.readdirSync(outDir, { recursive: true })) {

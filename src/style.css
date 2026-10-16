@@ -105,32 +105,38 @@ summary:focus-visible {
 }
 
 .hero {
-  padding: 56px 0 40px;
+  padding: 64px 0 52px;
   text-align: center;
 }
 
 .badge {
   display: inline-block;
-  padding: 6px 12px;
+  padding: 7px 14px;
   border-radius: 99px;
   background: var(--mint-soft);
   color: var(--mint-deep);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
 }
 
 .hero h1 {
-  margin: 14px 0 10px;
-  font-size: 40px;
+  margin: 18px 0 14px;
+  font-size: 56px;
   font-weight: 800;
-  letter-spacing: -1.2px;
-  line-height: 1.25;
+  letter-spacing: -2px;
+  line-height: 1.2;
+}
+
+.hero h1 em {
+  color: var(--mint-deep);
+  font-style: normal;
 }
 
 .hero p {
   margin: 0;
   color: var(--sub);
-  font-size: 16px;
+  font-size: 18px;
+  text-wrap: balance;
 }
 
 .board {
@@ -482,11 +488,17 @@ summary:focus-visible {
   }
 
   .hero {
-    padding: 36px 0 28px;
+    padding: 40px 0 32px;
+  }
+
+  .badge {
+    font-size: 13px;
   }
 
   .hero h1 {
-    font-size: 30px;
+    margin: 14px 0 10px;
+    font-size: 38px;
+    letter-spacing: -1.4px;
   }
 
   .hero p {
