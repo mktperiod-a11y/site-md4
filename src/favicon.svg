@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-  <rect width="48" height="48" rx="11" fill="#102a2e" />
+  <rect width="48" height="48" rx="11" fill="#22c5a5" />
   <g transform="translate(4.8 3.2) scale(0.8)">
     <path
       d="M8 36V13c0-4 5-6 8-3l8 9 8-9c3-3 8-1 8 3v23"
       fill="none"
-      stroke="#36d6b5"
+      stroke="#17302d"
       stroke-width="5"
       stroke-linecap="round"
       stroke-linejoin="round"
