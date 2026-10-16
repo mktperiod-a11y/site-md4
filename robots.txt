@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://mktperiod-a11y.github.io/moridee/sitemap.xml

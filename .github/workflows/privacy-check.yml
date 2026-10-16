@@ -1,0 +1,52 @@
+name: Privacy check
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  schedule:
+    - cron: "30 4 * * *"
+  workflow_dispatch:
+    inputs:
+      full_history:
+        description: "커밋 기록 전체도 검사"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: 파일 검사
+        env:
+          PRIVACY_PATTERNS: ${{ secrets.PRIVACY_PATTERNS }}
+        run: python3 .github/scripts/privacy_check.py files
+
+      - name: 커밋 검사
+        if: ${{ !cancelled() && github.event_name != 'schedule' && (github.event_name != 'workflow_dispatch' || inputs.full_history) }}
+        env:
+          PRIVACY_PATTERNS: ${{ secrets.PRIVACY_PATTERNS }}
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" = pull_request ]; then
+            range="$PR_BASE..$PR_HEAD"
+          elif [ "$EVENT" = push ] && [ -n "${BEFORE//0/}" ] && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            range="$BEFORE..$GITHUB_SHA"
+          elif [ "$EVENT" = push ] && [ "$GITHUB_REF_NAME" != "$DEFAULT_BRANCH" ] && git rev-parse -q --verify "origin/$DEFAULT_BRANCH" >/dev/null; then
+            range="origin/$DEFAULT_BRANCH..$GITHUB_SHA"
+          else
+            range="$GITHUB_SHA"
+          fi
+          python3 .github/scripts/privacy_check.py commits "$range"
