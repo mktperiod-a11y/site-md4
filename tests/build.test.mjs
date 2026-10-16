@@ -45,7 +45,7 @@ test('순위 목록과 이동 페이지가 데이터와 맞는다', () => {
     items.map((it) => [escape(it.name), it.slug]),
   );
   assert.equal((html.match(/<li class="row top"/g) ?? []).length, Math.min(3, items.length));
-  assert.match(html, new RegExp(`<h1>웹하드 순위 <em>2026</em> TOP ${items.length}</h1>`));
+  assert.match(html, new RegExp(`<h1>웹하드 순위 TOP ${items.length}</h1>`));
   assert.match(html, new RegExp(`<time datetime="${updatedAt}">${updatedAt.replaceAll('-', '.')}</time>`));
   for (const it of items) {
     const go = read(dir, `go/${it.slug}/index.html`);
@@ -125,7 +125,6 @@ test('잘못된 데이터는 빌드를 멈춘다', () => {
   const broken = (patch) => ({ ...data, items: [{ ...data.items[0], ...patch }, ...data.items.slice(1)] });
   assert.throws(() => buildTo(SITE, broken({ slug: 'Bad Slug' })), /slug/);
   assert.throws(() => buildTo(SITE, broken({ url: 'http://example.test/' })), /https/);
-  assert.throws(() => buildTo(SITE, broken({ hue: 400 })), /hue/);
   assert.throws(() => buildTo(SITE, { ...data, items: [data.items[0], data.items[0]] }), /겹칩니다/);
   assert.throws(() => buildTo('ftp://example.test'), /형식 오류/);
 });

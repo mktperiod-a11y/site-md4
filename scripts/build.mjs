@@ -36,7 +36,6 @@ export function validate(data) {
     if (slugs.has(it.slug)) throw new Error(`${where}.slug가 겹칩니다: ${it.slug}`);
     slugs.add(it.slug);
     if (!/^https:\/\/[^/\s"']+\/\S*$/.test(it.url)) throw new Error(`${where}.url은 https 주소여야 합니다: ${it.url}`);
-    if (!Number.isInteger(it.hue) || it.hue < 0 || it.hue > 360) throw new Error(`${where}.hue는 0~360 정수입니다`);
     if (!Array.isArray(it.tags)) throw new Error(`${where}.tags는 배열이어야 합니다`);
   }
   return data;
@@ -79,33 +78,35 @@ export function wrap(text, indent, width = 100) {
 function rankRow(it, i) {
   const name = escape(it.name);
   const tags = it.tags.map((t) => `<span>#${escape(t)}</span>`).join(' ');
-  return `          <li class="row${i < 3 ? ' top' : ''}" style="--hue: ${it.hue}">
-            <span class="no">${String(i + 1).padStart(2, '0')}</span>
-            <span class="mark" aria-hidden="true">${escape(it.mark)}</span>
-            <div class="name">
-              <h2>${name}</h2>
-              <p class="tags">${tags}</p>
-            </div>
-            <span class="benefit">${escape(it.benefit)}</span>
-            <span class="score" aria-label="별점 ${escape(it.score)}">★ ${escape(it.score)}</span>
-            <a
-              class="go"
-              href="go/${it.slug}/"
-              target="_blank"
-              rel="noopener noreferrer sponsored nofollow"
-              aria-label="${name} 바로가기 (새 창)"
-              >바로가기</a
-            >
-          </li>`;
+  return `            <li class="row${i < 3 ? ' top' : ''}">
+              <span class="no">${i + 1}</span>
+              <div class="service">
+                <span class="mark" aria-hidden="true">${escape(it.mark)}</span>
+                <div>
+                  <h2>${name}</h2>
+                  <p class="tags">${tags}</p>
+                </div>
+              </div>
+              <span class="benefit">${escape(it.benefit)}</span>
+              <span class="score" aria-label="별점 ${escape(it.score)}">${escape(it.score)}</span>
+              <a
+                class="go"
+                href="go/${it.slug}/"
+                target="_blank"
+                rel="noopener noreferrer sponsored nofollow"
+                aria-label="${name} 바로가기 (새 창)"
+                >바로가기</a
+              >
+            </li>`;
 }
 
 function faqItem(f, i) {
-  return `        <details${i === 0 ? ' open' : ''}>
-          <summary>${escape(f.q)}</summary>
-          <p>
-${wrap(escape(f.a), '            ')}
-          </p>
-        </details>`;
+  return `            <details${i === 0 ? ' open' : ''}>
+              <summary>${escape(f.q)}</summary>
+              <p>
+${wrap(escape(f.a), '                ')}
+              </p>
+            </details>`;
 }
 
 function jsonLd({ updatedAt, items }, faq) {
@@ -249,10 +250,6 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
     DESCRIPTION: escape(
       `웹하드 순위 2026 TOP ${items.length}. ${top3.join(', ')} 등 혜택과 편의성을 한눈에 비교해요.`,
     ),
-    SUMMARY: items
-      .slice(0, 3)
-      .map((it, i) => `${i + 1}위 <strong>${escape(it.name)}</strong>`)
-      .join(' ·\n              '),
     RANKING: items.map(rankRow).join('\n'),
     FAQ: faq.map(faqItem).join('\n'),
     JSONLD: jsonLd(data, faq),

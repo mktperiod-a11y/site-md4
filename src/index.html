@@ -16,6 +16,11 @@
     <link rel="canonical" href="https://site-url.invalid/" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
     <meta name="theme-color" content="#22c5a5" />
     <meta property="og:type" content="website" />
@@ -39,58 +44,81 @@
   <body>
 {{HEADER}}
     <main id="main">
-      <div class="wrap">
-        <div class="intro">
-          <div>
-            <p class="eyebrow">CURATED WEBHARD GUIDE</p>
-            <h1>웹하드 순위 <em>2026</em> TOP {{COUNT}}</h1>
-            <p class="summary">
-              {{SUMMARY}}
-            </p>
+      <section class="hero wrap">
+        <span class="badge"><time datetime="{{UPDATED_ISO}}">{{UPDATED}}</time> 기준</span>
+        <h1>웹하드 순위 TOP {{COUNT}}</h1>
+        <p>가입 혜택과 이용 편의성을 기준으로 비교한 2026년 신규 웹하드 순위예요.</p>
+      </section>
+
+      <section class="board" aria-labelledby="board-title">
+        <div class="wrap">
+          <div class="board-head">
+            <p id="board-title">전체 <b>{{COUNT}}</b>개 서비스</p>
+            <small>별점은 모리디 편집 기준</small>
           </div>
-          <aside class="note" aria-label="에디터 노트">
-            <span class="note-tag">EDITOR'S NOTE</span>
-            <p>
-              첫 가입 혜택만큼 포인트 유효기간과 자동 연장 여부가 중요해요. 결제 전에 꼭
-              확인하세요.
-            </p>
-            <div class="note-foot">
-              <span>LAST UPDATED</span>
-              <time datetime="{{UPDATED_ISO}}">{{UPDATED}}</time>
-            </div>
-          </aside>
-        </div>
-        <ol class="rank" id="ranking">
+          <div class="cols" aria-hidden="true">
+            <span>순위</span><span>서비스</span><span>가입 혜택</span><span>별점</span><span></span>
+          </div>
+          <ol class="rank" id="ranking">
 {{RANKING}}
-        </ol>
-        <p class="caution">※ 혜택과 이용 조건은 바뀔 수 있어요. 결제 전 공식 안내를 확인하세요.</p>
-      </div>
-
-      <div class="band">
-        <section class="wrap section" id="check">
-          <p class="eyebrow">HOW TO CHOOSE</p>
-          <h2 class="section-title">고르기 전 체크포인트</h2>
-          <ol class="steps">
-            <li>
-              <b>01</b><strong>포인트 유효기간</strong><span>가입 포인트를 언제까지 쓰는지</span>
-            </li>
-            <li>
-              <b>02</b><strong>검색·분류</strong><span>원하는 자료를 찾기 쉬운지</span>
-            </li>
-            <li>
-              <b>03</b><strong>모바일 지원</strong><span>앱·모바일 웹 이용 환경</span>
-            </li>
-            <li>
-              <b>04</b><strong>자동 결제·해지</strong><span>자동 연장 여부와 해지 방법</span>
-            </li>
           </ol>
-        </section>
-      </div>
+          <p class="caution">혜택과 이용 조건은 바뀔 수 있어요. 결제 전 공식 안내를 확인하세요.</p>
+        </div>
+      </section>
 
-      <section class="wrap section faq" id="faq">
-        <p class="eyebrow">FAQ</p>
-        <h2 class="section-title">자주 묻는 질문</h2>
+      <section class="section" id="check">
+        <div class="wrap">
+          <h2 class="title">고르기 전 체크포인트</h2>
+          <p class="lead">순위만큼 중요한 네 가지를 확인하세요.</p>
+          <ul class="checks">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="16" rx="2.5" />
+                <path d="M3 10h18M8 3v4M16 3v4" />
+              </svg>
+              <b>포인트 유효기간</b>
+              <span>가입 포인트를 언제까지 쓰는지</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" />
+                <path d="m16 16 4.5 4.5" />
+              </svg>
+              <b>검색·분류</b>
+              <span>원하는 자료를 찾기 쉬운지</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="6.5" y="2.5" width="11" height="19" rx="2.5" />
+                <path d="M11 18h2" />
+              </svg>
+              <b>모바일 지원</b>
+              <span>앱·모바일 웹 이용 환경</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2.5" y="5.5" width="19" height="13" rx="2.5" />
+                <path d="M2.5 10h19M6.5 15h4" />
+              </svg>
+              <b>자동 결제·해지</b>
+              <span>자동 연장 여부와 해지 방법</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section alt" id="faq">
+        <div class="wrap">
+          <h2 class="title">자주 묻는 질문</h2>
+          <p class="lead">웹하드를 고를 때 많이 묻는 내용을 모았어요.</p>
+          <div class="faq">
 {{FAQ}}
+          </div>
+        </div>
       </section>
     </main>
 {{FOOTER}}
