@@ -1,18 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
   <defs>
     <linearGradient id="mori-bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3ddbbb" />
-      <stop offset="1" stop-color="#19b394" />
+      <stop offset="0" stop-color="#d4f7ec" />
+      <stop offset="1" stop-color="#9be8d2" />
     </linearGradient>
   </defs>
-  <rect width="48" height="48" rx="13" fill="url(#mori-bg)" />
-  <path
-    d="M13 34V19.5a4.5 4.5 0 0 1 8-2.8L24 20.5l3-3.8a4.5 4.5 0 0 1 8 2.8V34"
-    fill="none"
-    stroke="#17302d"
-    stroke-width="4.8"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
-  <circle cx="24" cy="31.5" r="3" fill="#f29b64" />
+  <circle cx="24" cy="24" r="24" fill="url(#mori-bg)" />
+  <g fill="#17302d" stroke="#17302d" stroke-width="10" stroke-linejoin="round">
+    <path
+      transform="translate(8.47 33.6) scale(0.03)"
+      d="
+        M49 5H243C247 -6 250 -24 250 -41C250 -47 246 -50 237 -50C207 -50 193 -52 193 -75V-518
+        L397 -5C400 2 406 5 414 5H489L701 -526V-75C701 -55 687 -50 646 -50C641 -32 643 -9 653 5
+        H848C852 -6 855 -24 855 -41C855 -47 851 -50 842 -50C793 -50 779 -55 779 -74V-587
+        C779 -605 795 -610 846 -610C851 -628 848 -649 838 -663H680L451 -79L219 -663H52
+        C48 -652 45 -635 45 -619C45 -613 49 -610 58 -610C103 -610 115 -606 115 -587V-74
+        C115 -54 100 -50 40 -50C35 -31 38 -8 49 5Z
+      "
+    />
+  </g>
+  <circle cx="37.23" cy="31.2" r="2.4" fill="#f29b64" />
 </svg>
