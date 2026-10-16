@@ -7,6 +7,7 @@
   --line: #e8ebeb;
   --bg: #f6f7f7;
   --star: #f2a33a;
+  --button: #1f2a30;
   --radius: 16px;
 }
 
@@ -281,14 +282,14 @@ summary:focus-visible {
   place-items: center;
   height: 42px;
   border-radius: 10px;
-  background: var(--mint-deep);
+  background: var(--button);
   color: #fff;
   font-size: 14px;
   font-weight: 700;
 }
 
 .go:hover {
-  background: #0b6957;
+  background: #111a1f;
 }
 
 .caution {
