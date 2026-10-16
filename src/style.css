@@ -81,22 +81,10 @@ summary:focus-visible {
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 19px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
 }
 
-.logo svg {
-  width: 30px;
-  height: 30px;
-}
-
-.logo small {
-  color: var(--mint-text);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1px;
+.logo img {
+  display: block;
 }
 
 .site-nav {
@@ -367,10 +355,6 @@ summary:focus-visible {
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr;
   gap: 32px;
-}
-
-.foot-brand .logo {
-  color: var(--ink);
 }
 
 .foot-brand p {
