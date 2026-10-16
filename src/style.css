@@ -2,10 +2,10 @@
   --mint: #22c5a5;
   --mint-text: #0f7a66;
   --mint-soft: #e8f8f4;
-  --ink: #17302d;
-  --muted: #5d6f6b;
-  --line: #e3ebe8;
-  --soft: #f4f8f7;
+  --ink: #2b3a42;
+  --muted: #5d6a72;
+  --line: #e7e2d8;
+  --soft: #f7f3eb;
   --dot: #f29b64;
 }
 
@@ -162,7 +162,7 @@ summary:focus-visible {
 }
 
 .no {
-  color: #7f8f8b;
+  color: #7b8990;
   font-size: 21px;
   font-weight: 800;
   text-align: center;
