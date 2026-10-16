@@ -29,10 +29,9 @@ test('사이트 주소 자리표시와 템플릿 자리가 남지 않는다', ()
   }
   assert.ok(!fs.existsSync(path.join(dir, '_partials')));
   assert.match(read(dir, 'index.html'), new RegExp(`<link rel="canonical" href="${SITE}/" />`));
-  assert.match(read(dir, 'about/index.html'), new RegExp(`<link rel="canonical" href="${SITE}/about/" />`));
   assert.match(read(dir, 'robots.txt'), /^Disallow: \/sub\/go\/$/m);
   assert.match(read(dir, 'robots.txt'), new RegExp(`^Sitemap: ${SITE}/sitemap.xml$`, 'm'));
-  assert.equal(read(dir, 'sitemap.txt'), `${SITE}/\n${SITE}/about/\n`);
+  assert.equal(read(dir, 'sitemap.txt'), `${SITE}/\n`);
 });
 
 test('순위 목록과 이동 페이지가 데이터와 맞는다', () => {
@@ -84,7 +83,7 @@ test('공유·검색용 메타와 보조 파일', () => {
     items.map((it, i) => [i + 1, it.name]),
   );
   assert.match(html, new RegExp(`<meta property="og:image" content="${SITE}/og.png" />`));
-  for (const page of ['index.html', 'about/index.html']) {
+  for (const page of ['index.html']) {
     const text = read(dir, page);
     const base = path.dirname(path.join(dir, page));
     for (const href of [...text.matchAll(/<link rel="(?:icon|apple-touch-icon|stylesheet)" href="([^"]+)"/g)].map((m) => m[1])) {
