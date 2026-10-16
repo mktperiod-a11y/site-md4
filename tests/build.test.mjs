@@ -3,7 +3,18 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
-import { build, displayWidth, escape, loadData, loadFaq, pick, PLACEHOLDER, ro, wrap } from '../scripts/build.mjs';
+import {
+  build,
+  displayWidth,
+  escape,
+  loadData,
+  loadFaq,
+  pick,
+  PLACEHOLDER,
+  rankRow,
+  ro,
+  wrap,
+} from '../scripts/build.mjs';
 
 const SITE = 'https://example.test/sub';
 const MAX_WIDTH = 140;
@@ -90,7 +101,11 @@ test('공유·검색용 메타와 보조 파일', () => {
   for (const page of ['index.html']) {
     const text = read(dir, page);
     const base = path.dirname(path.join(dir, page));
-    for (const href of [...text.matchAll(/<link rel="(?:icon|apple-touch-icon|stylesheet)" href="([^"]+)"/g)].map((m) => m[1])) {
+    const local = [
+      ...[...text.matchAll(/<link rel="(?:icon|apple-touch-icon|stylesheet)" href="([^"]+)"/g)].map((m) => m[1]),
+      ...[...text.matchAll(/<img src="([^"]+)"/g)].map((m) => m[1]),
+    ];
+    for (const href of local) {
       assert.ok(fs.existsSync(path.join(base, href)), `${page}: ${href} 없음`);
     }
   }
@@ -161,6 +176,14 @@ test('이름의 HTML 특수 문자를 이스케이프한다', () => {
   const data = loadData();
   const dir = buildTo(SITE, { ...data, required: [], items: [{ ...data.items[0], name: '<b>"A&B"</b>' }] });
   assert.match(read(dir, 'index.html'), /<h2>&lt;b&gt;&quot;A&amp;B&quot;&lt;\/b&gt;<\/h2>/);
+});
+
+test('로고가 있으면 이니셜 대신 원 안에 사진을 넣는다', () => {
+  const it = loadData().items[0];
+  assert.ok(rankRow(it, 0, 'logos/a.webp').includes(
+    '<span class="mark" aria-hidden="true"><img src="logos/a.webp" alt="" width="44" height="44" /></span>',
+  ));
+  assert.ok(rankRow(it, 0).includes(`<span class="mark" aria-hidden="true">${escape(it.mark)}</span>`));
 });
 
 test('문장 줄바꿈과 조사', () => {
