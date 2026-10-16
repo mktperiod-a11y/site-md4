@@ -163,11 +163,6 @@ summary:focus-visible {
   color: var(--mint-deep);
 }
 
-.board-head small {
-  color: var(--sub);
-  font-size: 13px;
-}
-
 .cols,
 .row {
   display: grid;
@@ -244,12 +239,20 @@ summary:focus-visible {
   place-items: center;
   width: 44px;
   height: 44px;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 50%;
   background: #fff;
   color: var(--mint-deep);
   font-size: 15px;
   font-weight: 800;
+}
+
+.mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .service h2 {

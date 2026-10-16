@@ -10,6 +10,8 @@ export const PLACEHOLDER = 'https://site-url.invalid';
 const TEXT = /\.(html|txt|xml|json|svg|css|js|webmanifest)$/;
 const SLUG = /^[a-z0-9-]+$/;
 const PARTIALS = '_partials';
+const LOGOS = 'logos';
+const LOGO_TYPES = ['webp', 'png', 'svg'];
 const normalize = (name) => name.normalize('NFKC').replace(/\s+/g, '').toLowerCase();
 
 export function loadData(file = 'data/services.json') {
@@ -102,13 +104,20 @@ export function wrap(text, indent, width = 100) {
   return lines.map((l) => indent + l).join('\n');
 }
 
-function rankRow(it, i) {
+// src/logos/<slug>.(webp|png|svg)가 있으면 그 경로, 없으면 undefined
+function findLogo(slug) {
+  const ext = LOGO_TYPES.find((e) => fs.existsSync(path.join('src', LOGOS, `${slug}.${e}`)));
+  return ext && `${LOGOS}/${slug}.${ext}`;
+}
+
+export function rankRow(it, i, logo) {
   const name = escape(it.name);
   const tags = it.tags.map((t) => `<span>#${escape(t)}</span>`).join(' ');
+  const mark = logo ? `<img src="${escape(logo)}" alt="" width="44" height="44" />` : escape(it.mark);
   return `            <li class="row${i < 3 ? ' top' : ''}">
               <span class="no">${i + 1}</span>
               <div class="service">
-                <span class="mark" aria-hidden="true">${escape(it.mark)}</span>
+                <span class="mark" aria-hidden="true">${mark}</span>
                 <div>
                   <h2>${name}</h2>
                   <p class="tags">${tags}</p>
@@ -278,7 +287,7 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
     DESCRIPTION: escape(
       `웹하드 순위 2026 TOP ${items.length}. ${top3.join(', ')} 등 혜택과 편의성을 한눈에 비교해요.`,
     ),
-    RANKING: items.map(rankRow).join('\n'),
+    RANKING: items.map((it, i) => rankRow(it, i, findLogo(it.slug))).join('\n'),
     FAQ: faq.map(faqItem).join('\n'),
     JSONLD: jsonLd({ updatedAt, items }, faq),
   };
