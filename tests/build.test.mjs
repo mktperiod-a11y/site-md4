@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
-import { build, displayWidth, escape, loadData, loadFaq, PLACEHOLDER, ro, wrap } from '../scripts/build.mjs';
+import { build, displayWidth, escape, loadData, loadFaq, pick, PLACEHOLDER, ro, wrap } from '../scripts/build.mjs';
 
 const SITE = 'https://example.test/sub';
 const MAX_WIDTH = 140;
@@ -35,7 +35,9 @@ test('사이트 주소 자리표시와 템플릿 자리가 남지 않는다', ()
 });
 
 test('순위 목록과 이동 페이지가 데이터와 맞는다', () => {
-  const { items, updatedAt } = loadData();
+  const data = loadData();
+  const { updatedAt } = data;
+  const items = pick(data);
   const dir = buildTo();
   const html = read(dir, 'index.html');
   const rows = [...html.matchAll(/<li class="row[^"]*"[^>]*>[\s\S]*?<h2>([^<]+)<\/h2>[\s\S]*?href="go\/([^/]+)\/"/g)];
@@ -44,7 +46,7 @@ test('순위 목록과 이동 페이지가 데이터와 맞는다', () => {
     items.map((it) => [escape(it.name), it.slug]),
   );
   assert.equal((html.match(/<li class="row top"/g) ?? []).length, Math.min(3, items.length));
-  assert.match(html, new RegExp(`<h1>웹하드 순위 TOP ${items.length}</h1>`));
+  assert.match(html, new RegExp(`<h1>웹하드 순위 <em>TOP ${items.length}</em></h1>`));
   assert.match(html, new RegExp(`<time datetime="${updatedAt}">${updatedAt.replaceAll('-', '.')}</time>`));
   for (const it of items) {
     const go = read(dir, `go/${it.slug}/index.html`);
@@ -70,7 +72,9 @@ test('자주 묻는 질문이 화면과 구조화 데이터에 함께 들어간�
 });
 
 test('공유·검색용 메타와 보조 파일', () => {
-  const { items, updatedAt } = loadData();
+  const data = loadData();
+  const { updatedAt } = data;
+  const items = pick(data);
   const dir = buildTo();
   const html = read(dir, 'index.html');
   const ld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
@@ -113,6 +117,31 @@ test('페이지 소스가 세로로 읽히고 주석이 없다', () => {
   }
 });
 
+test('보여줄 수, 뺄 곳, 넣을 곳을 지킨다', () => {
+  const data = loadData();
+  const shown = pick(data);
+  assert.equal(shown.length, data.shown);
+  const names = shown.map((it) => it.name);
+  for (const name of data.required) assert.ok(names.includes(name), `${name}이 빠짐`);
+  for (const name of data.blocked) assert.ok(!names.includes(name), `${name}이 들어감`);
+
+  const item = (name) => ({ ...data.items[0], name, slug: `s${name.charCodeAt(0)}` });
+  const items = ['가', '나', '다', '라', '마'].map(item);
+  const names3 = (patch) => pick({ ...data, items, shown: 3, blocked: [], required: [], ...patch }).map((it) => it.name);
+  assert.deepEqual(names3({}), ['가', '나', '다']);
+  assert.deepEqual(names3({ required: ['마'] }), ['가', '나', '마']);
+  assert.deepEqual(names3({ blocked: [' 나 '], required: ['마'] }), ['가', '다', '마']);
+
+  const base = { ...data, items, shown: 3, blocked: [], required: [] };
+  assert.throws(() => buildTo(SITE, { ...base, required: ['바'] }), /items에 없습니다/);
+  assert.throws(() => buildTo(SITE, { ...base, required: ['가'], blocked: ['가'] }), /함께/);
+  assert.throws(() => buildTo(SITE, { ...base, shown: 1, required: ['가', '나'] }), /shown보다/);
+  assert.throws(() => buildTo(SITE, { ...base, shown: 0 }), /shown/);
+
+  const dir = buildTo(SITE, { ...base, required: ['마'] });
+  assert.deepEqual(fs.readdirSync(path.join(dir, 'go')).sort(), ['s44032', 's45208', 's47560'].sort());
+});
+
 test('SITE_URL이 없으면 자리표시를 그대로 둔다', () => {
   const dir = buildTo('');
   assert.ok(read(dir, 'index.html').includes(`${PLACEHOLDER}/`));
@@ -130,7 +159,7 @@ test('잘못된 데이터는 빌드를 멈춘다', () => {
 
 test('이름의 HTML 특수 문자를 이스케이프한다', () => {
   const data = loadData();
-  const dir = buildTo(SITE, { ...data, items: [{ ...data.items[0], name: '<b>"A&B"</b>' }] });
+  const dir = buildTo(SITE, { ...data, required: [], items: [{ ...data.items[0], name: '<b>"A&B"</b>' }] });
   assert.match(read(dir, 'index.html'), /<h2>&lt;b&gt;&quot;A&amp;B&quot;&lt;\/b&gt;<\/h2>/);
 });
 

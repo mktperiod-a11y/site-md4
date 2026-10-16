@@ -1,5 +1,8 @@
 {
   "updatedAt": "2026-07-15",
+  "shown": 10,
+  "blocked": ["미투디스크", "파일캐스트", "파일이즈"],
+  "required": ["예스파일", "파일보고", "애플파일"],
   "items": [
     {
       "slug": "ondisk",
@@ -80,6 +83,36 @@
       "benefit": "가입 혜택 확인",
       "desc": "다운로드 중심의 단순한 이용 흐름과 이벤트를 확인하기 좋은 서비스",
       "tags": ["다운로드", "간편 기능"]
+    },
+    {
+      "slug": "yesfile",
+      "name": "예스파일",
+      "url": "https://www.yesfile.com/",
+      "mark": "Y",
+      "score": "4.0",
+      "benefit": "정액제 이용권 확인",
+      "desc": "웹툰·웹소설 콘텐츠까지 함께 볼 수 있는 정액제 중심 서비스",
+      "tags": ["웹툰·웹소설", "정액제"]
+    },
+    {
+      "slug": "filebogo",
+      "name": "파일보고",
+      "url": "https://www.filebogo.com/",
+      "mark": "보",
+      "score": "3.9",
+      "benefit": "신규 가입 혜택 확인",
+      "desc": "다시보기 콘텐츠를 중심으로 구성한 신규 웹하드",
+      "tags": ["다시보기", "신규 서비스"]
+    },
+    {
+      "slug": "applefile",
+      "name": "애플파일",
+      "url": "https://www.applefile.com/",
+      "mark": "A",
+      "score": "3.8",
+      "benefit": "정액제 혜택 확인",
+      "desc": "자료가 매일 올라오는 정액제 중심 서비스",
+      "tags": ["매일 업데이트", "정액제"]
     }
   ]
 }
