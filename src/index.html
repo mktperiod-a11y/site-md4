@@ -38,31 +38,58 @@
   </head>
   <body>
 {{HEADER}}
-    <main class="wrap" id="main">
-      <div class="title">
-        <h1>웹하드 순위 2026 TOP {{COUNT}}</h1>
-        <p>
-          {{SUMMARY}} ·
-          <time datetime="{{UPDATED_ISO}}">{{UPDATED}}</time> 기준
-        </p>
-      </div>
-      <ol class="rank" id="ranking">
+    <main id="main">
+      <div class="wrap">
+        <div class="intro">
+          <div>
+            <p class="eyebrow">CURATED WEBHARD GUIDE</p>
+            <h1>웹하드 순위 <em>2026</em> TOP {{COUNT}}</h1>
+            <p class="summary">
+              {{SUMMARY}}
+            </p>
+          </div>
+          <aside class="note" aria-label="에디터 노트">
+            <span class="note-tag">EDITOR'S NOTE</span>
+            <p>
+              첫 가입 혜택만큼 포인트 유효기간과 자동 연장 여부가 중요해요. 결제 전에 꼭
+              확인하세요.
+            </p>
+            <div class="note-foot">
+              <span>LAST UPDATED</span>
+              <time datetime="{{UPDATED_ISO}}">{{UPDATED}}</time>
+            </div>
+          </aside>
+        </div>
+        <ol class="rank" id="ranking">
 {{RANKING}}
-      </ol>
-      <p class="note">혜택과 이용 조건은 바뀔 수 있어요. 결제 전 공식 안내를 확인하세요.</p>
+        </ol>
+        <p class="caution">※ 혜택과 이용 조건은 바뀔 수 있어요. 결제 전 공식 안내를 확인하세요.</p>
+      </div>
 
-      <section class="section" id="check">
-        <h2>고르기 전 체크포인트</h2>
-        <ul class="checks">
-          <li><b>포인트 유효기간</b><span>가입 포인트를 언제까지 쓰는지</span></li>
-          <li><b>검색·분류</b><span>원하는 자료를 찾기 쉬운지</span></li>
-          <li><b>모바일 지원</b><span>앱·모바일 웹 이용 환경</span></li>
-          <li><b>자동 결제·해지</b><span>자동 연장 여부와 해지 방법</span></li>
-        </ul>
-      </section>
+      <div class="band">
+        <section class="wrap section" id="check">
+          <p class="eyebrow">HOW TO CHOOSE</p>
+          <h2 class="section-title">고르기 전 체크포인트</h2>
+          <ol class="steps">
+            <li>
+              <b>01</b><strong>포인트 유효기간</strong><span>가입 포인트를 언제까지 쓰는지</span>
+            </li>
+            <li>
+              <b>02</b><strong>검색·분류</strong><span>원하는 자료를 찾기 쉬운지</span>
+            </li>
+            <li>
+              <b>03</b><strong>모바일 지원</strong><span>앱·모바일 웹 이용 환경</span>
+            </li>
+            <li>
+              <b>04</b><strong>자동 결제·해지</strong><span>자동 연장 여부와 해지 방법</span>
+            </li>
+          </ol>
+        </section>
+      </div>
 
-      <section class="section faq" id="faq">
-        <h2>자주 묻는 질문</h2>
+      <section class="wrap section faq" id="faq">
+        <p class="eyebrow">FAQ</p>
+        <h2 class="section-title">자주 묻는 질문</h2>
 {{FAQ}}
       </section>
     </main>

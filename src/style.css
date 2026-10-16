@@ -1,12 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap");
+
 :root {
+  --navy: #102a2e;
+  --ink: #183034;
+  --muted: #5f6b68;
+  --paper: #fbf9f4;
+  --cream: #f4efe4;
+  --line: #e6e1d6;
   --mint: #22c5a5;
   --mint-text: #0f7a66;
-  --mint-soft: #e8f8f4;
-  --ink: #2b3a42;
-  --muted: #5d6a72;
-  --line: #e7e2d8;
-  --soft: #f7f3eb;
-  --dot: #f29b64;
+  --mint-rank: #139a80;
+  --mint-soft: #e6f7f2;
+  --orange: #f29b64;
+  --serif: Georgia, "Noto Serif KR", "Apple SD Gothic Neo", serif;
 }
 
 * {
@@ -19,7 +25,7 @@ html {
 
 body {
   margin: 0;
-  background: #fff;
+  background: var(--paper);
   color: var(--ink);
   font-family:
     -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic",
@@ -36,12 +42,12 @@ a {
 
 a:focus-visible,
 summary:focus-visible {
-  outline: 3px solid var(--dot);
+  outline: 3px solid var(--orange);
   outline-offset: 3px;
 }
 
 .wrap {
-  width: min(980px, calc(100% - 32px));
+  width: min(1000px, calc(100% - 32px));
   margin: 0 auto;
 }
 
@@ -53,13 +59,31 @@ summary:focus-visible {
   transform: translateY(-160%);
   padding: 10px 14px;
   border-radius: 8px;
-  background: var(--ink);
+  background: var(--navy);
   color: #fff;
   font-weight: 700;
 }
 
 .skip-link:focus {
   transform: none;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  color: var(--mint-text);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--mint);
 }
 
 .site-header {
@@ -75,7 +99,7 @@ summary:focus-visible {
   display: flex;
   align-items: center;
   gap: 20px;
-  height: 60px;
+  height: 62px;
 }
 
 .logo {
@@ -102,32 +126,82 @@ summary:focus-visible {
 }
 
 .site-nav a:hover {
-  background: var(--soft);
+  background: var(--cream);
   color: var(--ink);
 }
 
-.title {
-  padding: 28px 0 18px;
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 40px;
+  align-items: end;
+  padding: 36px 0 24px;
 }
 
-.title h1 {
+.intro h1 {
   margin: 0;
-  font-size: 28px;
-  letter-spacing: -1px;
+  font-family: var(--serif);
+  font-size: 40px;
+  line-height: 1.2;
+  letter-spacing: -1.5px;
 }
 
-.title p {
-  margin: 6px 0 0;
+.intro h1 em {
+  color: var(--mint-text);
+  font-style: normal;
+}
+
+.summary {
+  margin: 10px 0 0;
   color: var(--muted);
   font-size: 15px;
 }
 
-.title strong {
+.summary strong {
   color: var(--ink);
 }
 
-.title time {
-  color: var(--mint-text);
+.note {
+  position: relative;
+  padding: 22px 22px 16px;
+  border: 1px solid var(--line);
+  border-radius: 4px 26px 4px 26px;
+  background: #fff;
+  box-shadow: 0 14px 32px #102a2e12;
+}
+
+.note-tag {
+  position: absolute;
+  right: 20px;
+  top: -10px;
+  padding: 4px 9px;
+  background: var(--orange);
+  color: var(--navy);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.note p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.note-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+.note-foot time {
+  color: var(--ink);
   font-weight: 700;
 }
 
@@ -136,13 +210,14 @@ summary:focus-visible {
   padding: 0;
   list-style: none;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 4px 22px 4px 22px;
+  background: #fff;
   overflow: hidden;
 }
 
 .row {
   display: grid;
-  grid-template-columns: 40px 44px minmax(0, 1fr) 220px 52px 96px;
+  grid-template-columns: 52px 44px minmax(0, 1fr) 220px 52px 96px;
   gap: 14px;
   align-items: center;
   padding: 14px 18px;
@@ -154,22 +229,23 @@ summary:focus-visible {
 }
 
 .row:hover {
-  background: var(--soft);
+  background: var(--paper);
 }
 
 .row.top {
-  background: linear-gradient(90deg, var(--mint-soft), #fff 60%);
+  background: linear-gradient(90deg, var(--mint-soft), #fff 62%);
 }
 
 .no {
-  color: #7b8990;
-  font-size: 21px;
-  font-weight: 800;
+  color: #7b8b88;
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
   text-align: center;
 }
 
 .top .no {
-  color: var(--mint-text);
+  color: var(--mint-rank);
 }
 
 .mark {
@@ -223,7 +299,7 @@ summary:focus-visible {
   min-height: 40px;
   border-radius: 9px;
   background: var(--mint);
-  color: var(--ink);
+  color: var(--navy);
   font-size: 14px;
   font-weight: 800;
 }
@@ -232,43 +308,62 @@ summary:focus-visible {
   background: #1db394;
 }
 
-.note {
+.caution {
   margin: 10px 2px 0;
   color: var(--muted);
   font-size: 13px;
 }
 
 .section {
-  padding-top: 52px;
+  padding-top: 56px;
 }
 
-.section > h2 {
-  margin: 0 0 14px;
-  font-size: 21px;
-  letter-spacing: -0.5px;
+.section-title {
+  margin: 0 0 18px;
+  font-family: var(--serif);
+  font-size: 28px;
+  letter-spacing: -1px;
 }
 
-.checks {
+.band {
+  margin-top: 56px;
+  padding: 44px 0 48px;
+  background: var(--cream);
+}
+
+.band .section {
+  padding-top: 0;
+}
+
+.steps {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.checks li {
-  padding: 16px;
-  border-radius: 12px;
-  background: var(--soft);
+.steps li {
+  padding: 18px;
+  border-radius: 14px;
+  background: #fff;
 }
 
-.checks b {
+.steps b {
   display: block;
+  color: #c65a14;
+  font-family: var(--serif);
+  font-size: 20px;
+}
+
+.steps strong {
+  display: block;
+  margin: 8px 0 4px;
   font-size: 15px;
 }
 
-.checks span {
+.steps span {
   color: var(--muted);
   font-size: 13px;
 }
@@ -297,9 +392,10 @@ summary:focus-visible {
 }
 
 .faq summary::before {
-  content: "Q";
+  content: "Q.";
   color: var(--mint-text);
-  font-weight: 800;
+  font-family: var(--serif);
+  font-weight: 700;
 }
 
 .faq summary::after {
@@ -316,7 +412,7 @@ summary:focus-visible {
 
 .faq details p {
   margin: 0;
-  padding: 0 4px 18px 26px;
+  padding: 0 4px 18px 30px;
   color: var(--muted);
   font-size: 15px;
   line-height: 1.75;
@@ -327,9 +423,14 @@ summary:focus-visible {
   padding-bottom: 8px;
 }
 
+.doc .intro {
+  display: block;
+}
+
 .doc h2 {
   margin: 36px 0 8px;
-  font-size: 19px;
+  font-family: var(--serif);
+  font-size: 21px;
 }
 
 .doc p,
@@ -345,10 +446,14 @@ summary:focus-visible {
 
 .site-footer {
   margin-top: 72px;
-  padding: 40px 0 28px;
-  background: var(--soft);
-  color: var(--muted);
+  padding: 44px 0 30px;
+  background: var(--navy);
+  color: #c2cfcc;
   font-size: 14px;
+}
+
+.band + .site-footer {
+  margin-top: 0;
 }
 
 .foot-grid {
@@ -358,12 +463,12 @@ summary:focus-visible {
 }
 
 .foot-brand p {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
 }
 
 .foot-title {
   margin: 0 0 10px;
-  color: var(--ink);
+  color: #fff;
   font-size: 13px;
   font-weight: 800;
 }
@@ -379,14 +484,14 @@ summary:focus-visible {
 }
 
 .site-footer ul a:hover {
-  color: var(--ink);
+  color: #fff;
   text-decoration: underline;
 }
 
 .foot-legal {
   margin-top: 28px;
   padding-top: 18px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid #ffffff24;
   font-size: 13px;
 }
 
@@ -399,16 +504,26 @@ summary:focus-visible {
     display: none;
   }
 
-  .title {
-    padding: 20px 0 14px;
+  .intro {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 22px 0 18px;
   }
 
-  .title h1 {
-    font-size: 23px;
+  .intro h1 {
+    font-size: 30px;
+  }
+
+  .note {
+    padding: 16px 16px 12px;
+  }
+
+  .note p {
+    font-size: 13px;
   }
 
   .row {
-    grid-template-columns: 22px 38px minmax(0, 1fr) auto;
+    grid-template-columns: 30px 38px minmax(0, 1fr) auto;
     grid-template-areas:
       "no mark name score"
       "no mark benefit go";
@@ -419,8 +534,8 @@ summary:focus-visible {
   .no {
     grid-area: no;
     align-self: start;
-    padding-top: 8px;
-    font-size: 18px;
+    padding-top: 4px;
+    font-size: 21px;
   }
 
   .mark {
@@ -451,7 +566,11 @@ summary:focus-visible {
     font-size: 13px;
   }
 
-  .checks {
+  .section-title {
+    font-size: 24px;
+  }
+
+  .steps {
     grid-template-columns: 1fr 1fr;
   }
 

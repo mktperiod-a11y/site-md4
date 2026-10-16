@@ -79,24 +79,24 @@ export function wrap(text, indent, width = 100) {
 function rankRow(it, i) {
   const name = escape(it.name);
   const tags = it.tags.map((t) => `<span>#${escape(t)}</span>`).join(' ');
-  return `        <li class="row${i < 3 ? ' top' : ''}" style="--hue: ${it.hue}">
-          <span class="no">${i + 1}</span>
-          <span class="mark" aria-hidden="true">${escape(it.mark)}</span>
-          <div class="name">
-            <h2>${name}</h2>
-            <p class="tags">${tags}</p>
-          </div>
-          <span class="benefit">${escape(it.benefit)}</span>
-          <span class="score" aria-label="별점 ${escape(it.score)}">★ ${escape(it.score)}</span>
-          <a
-            class="go"
-            href="go/${it.slug}/"
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
-            aria-label="${name} 바로가기 (새 창)"
-            >바로가기</a
-          >
-        </li>`;
+  return `          <li class="row${i < 3 ? ' top' : ''}" style="--hue: ${it.hue}">
+            <span class="no">${String(i + 1).padStart(2, '0')}</span>
+            <span class="mark" aria-hidden="true">${escape(it.mark)}</span>
+            <div class="name">
+              <h2>${name}</h2>
+              <p class="tags">${tags}</p>
+            </div>
+            <span class="benefit">${escape(it.benefit)}</span>
+            <span class="score" aria-label="별점 ${escape(it.score)}">★ ${escape(it.score)}</span>
+            <a
+              class="go"
+              href="go/${it.slug}/"
+              target="_blank"
+              rel="noopener noreferrer sponsored nofollow"
+              aria-label="${name} 바로가기 (새 창)"
+              >바로가기</a
+            >
+          </li>`;
 }
 
 function faqItem(f, i) {
@@ -252,7 +252,7 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
     SUMMARY: items
       .slice(0, 3)
       .map((it, i) => `${i + 1}위 <strong>${escape(it.name)}</strong>`)
-      .join(' ·\n          '),
+      .join(' ·\n              '),
     RANKING: items.map(rankRow).join('\n'),
     FAQ: faq.map(faqItem).join('\n'),
     JSONLD: jsonLd(data, faq),

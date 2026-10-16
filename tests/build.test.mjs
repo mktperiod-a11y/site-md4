@@ -45,7 +45,7 @@ test('순위 목록과 이동 페이지가 데이터와 맞는다', () => {
     items.map((it) => [escape(it.name), it.slug]),
   );
   assert.equal((html.match(/<li class="row top"/g) ?? []).length, Math.min(3, items.length));
-  assert.match(html, new RegExp(`<h1>웹하드 순위 2026 TOP ${items.length}</h1>`));
+  assert.match(html, new RegExp(`<h1>웹하드 순위 <em>2026</em> TOP ${items.length}</h1>`));
   assert.match(html, new RegExp(`<time datetime="${updatedAt}">${updatedAt.replaceAll('-', '.')}</time>`));
   for (const it of items) {
     const go = read(dir, `go/${it.slug}/index.html`);
