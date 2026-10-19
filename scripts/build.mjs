@@ -106,13 +106,13 @@ export function changeSummary(items, n = items.length) {
     else if (it.prevRank < i + 1) tally.down += 1;
   });
   const total = tally.up + tally.down + tally.fresh;
-  if (!total) return '<p class="changes">이번 점검 순위 변동 없음</p>';
+  if (!total) return '<p class="changes">이번 주 순위 변동 없음</p>';
   const parts = [
     tally.up && `<span class="up">▲ 상승 ${tally.up}</span>`,
     tally.down && `<span class="down">▼ 하락 ${tally.down}</span>`,
     tally.fresh && `<span class="new">NEW ${tally.fresh}</span>`,
   ].filter(Boolean);
-  return `<p class="changes">이번 점검 변동 <b>${total}곳</b> ${parts.join(' ')}</p>`;
+  return `<p class="changes">이번 주 변동 <b>${total}곳</b> ${parts.join(' ')}</p>`;
 }
 
 // blocked와 archived는 빼고, required를 먼저 넣은 뒤 items 순서대로 shown개까지 채운다. 보여주는 순서는 items 순서다.
