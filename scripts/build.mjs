@@ -177,8 +177,10 @@ export function rankRow(it, i, logo) {
                 ${mark}
                 <h2>${name}</h2>
               </div>
-              <p class="tags">${tags}</p>
-              <span class="benefit">${escape(it.benefit)}</span>
+              <div class="deal">
+                <span class="benefit">${escape(it.benefit)}</span>
+                <p class="tags">${tags}</p>
+              </div>
               <span class="score" aria-label="별점 ${escape(it.score)}">${escape(it.score)}</span>
               <a
                 class="go"
