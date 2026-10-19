@@ -340,9 +340,22 @@ summary:focus-visible {
 }
 
 .checked {
+  display: flex;
+  align-items: center;
   color: var(--sub);
   font-size: 13px;
   font-weight: 500;
+}
+
+.checked::before {
+  width: 14px;
+  height: 14px;
+  margin-right: 5px;
+  background: currentColor;
+  content: "";
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' \
+stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' \
+r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .checked time {
@@ -352,17 +365,14 @@ summary:focus-visible {
 }
 
 .checked .ago {
-  margin-left: 6px;
-  padding: 1px 7px;
-  border-radius: 99px;
-  background: var(--mint-soft);
-  color: var(--mint-deep);
-  font-size: 12px;
-  font-weight: 700;
+  color: var(--ink);
+  font-weight: 600;
 }
 
+.checked .ago::before,
 .checked .cycle::before {
   margin: 0 6px;
+  color: var(--sub);
   content: "·";
 }
 
@@ -398,8 +408,8 @@ summary:focus-visible {
 }
 
 .changes .new {
-  background: #efe8ff;
-  color: #6a2cf0;
+  background: #dbf6ef;
+  color: #00806a;
 }
 
 .cols {
@@ -525,8 +535,8 @@ summary:focus-visible {
 .move.new {
   padding: 2px 5px;
   border-radius: 4px;
-  background: #efe8ff;
-  color: #6a2cf0;
+  background: #dbf6ef;
+  color: #00806a;
   font-size: 10px;
 }
 
