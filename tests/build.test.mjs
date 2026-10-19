@@ -109,7 +109,6 @@ test('공유·검색용 메타와 보조 파일', () => {
     const local = [
       ...[...text.matchAll(/<link rel="(?:icon|apple-touch-icon|stylesheet)" href="([^"]+)"/g)].map((m) => m[1]),
       ...[...text.matchAll(/<img src="([^"]+)"/g)].map((m) => m[1]),
-      ...[...text.matchAll(/<source media="[^"]*" srcset="([^"]+)"/g)].map((m) => m[1]),
     ];
     for (const href of local) {
       assert.ok(fs.existsSync(path.join(base, href)), `${page}: ${href} 없음`);
@@ -188,13 +187,15 @@ test('이름의 HTML 특수 문자를 이스케이프한다', () => {
   assert.match(read(dir, 'index.html'), /<h2>&lt;b&gt;&quot;A&amp;B&quot;&lt;\/b&gt;<\/h2>/);
 });
 
-test('로고가 있으면 이니셜 대신 로고를 넣고, 모바일에는 정사각형 아이콘을 쓴다', () => {
+test('데스크톱은 가로 로고, 모바일은 앱 아이콘을 쓰고 없는 쪽은 이니셜을 보여준다', () => {
   const it = loadData().items[0];
-  const row = rankRow(it, 0, { wide: 'logos/a.webp', app: 'logos/app/a.webp' });
-  assert.ok(row.includes('<picture class="mark logo" aria-hidden="true">'));
-  assert.ok(row.includes('<source media="(max-width: 860px)" srcset="logos/app/a.webp" />'));
-  assert.ok(row.includes('<img src="logos/a.webp" alt="" width="132" height="40" />'));
-  assert.ok(!rankRow(it, 0, { wide: 'logos/a.webp' }).includes('<source'));
+  const initial = (cls) => `<span class="mark${cls}" aria-hidden="true">${escape(it.mark)}</span>`;
+  const both = rankRow(it, 0, { wide: 'logos/a.webp', app: 'logos/app/a.webp' });
+  assert.ok(both.includes('<img src="logos/a.webp" alt="" width="132" height="40" loading="lazy" />'));
+  assert.ok(both.includes('<img src="logos/app/a.webp" alt="" width="40" height="40" loading="lazy" />'));
+  assert.ok(!both.includes(initial(' for-desk')) && !both.includes(initial(' for-app')));
+  assert.ok(rankRow(it, 0, { wide: 'logos/a.webp' }).includes(initial(' for-app')));
+  assert.ok(rankRow(it, 0, { app: 'logos/app/a.webp' }).includes(initial(' for-desk')));
   assert.ok(rankRow(it, 0).includes(`<span class="mark" aria-hidden="true">${escape(it.mark)}</span>`));
 });
 
