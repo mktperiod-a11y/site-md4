@@ -142,7 +142,8 @@ summary:focus-visible {
 .banner {
   position: relative;
   overflow: hidden;
-  padding: 80px 0 48px;
+  padding: 80px 0 56px;
+  text-align: left;
   background:
     radial-gradient(55% 90% at 50% 120%, #0d3a33, #0d3a3300 70%),
     radial-gradient(32% 60% at 96% 0%, #0f2c4d, #0f2c4d00 70%),
@@ -188,7 +189,7 @@ summary:focus-visible {
 
 .k1 {
   top: -34px;
-  left: calc(50% - 250px);
+  left: calc(50% + 40px);
   width: 92px;
   height: 92px;
   background: radial-gradient(circle at 35% 30%, #a6f8e4, #2fcfae 55%, #0a7a67);
@@ -196,14 +197,14 @@ summary:focus-visible {
 
 .k2 {
   top: 26px;
-  right: calc(50% - 330px);
+  right: calc(50% - 600px);
   width: 58px;
   height: 58px;
 }
 
 .k3 {
   bottom: -46px;
-  left: calc(50% + 90px);
+  left: calc(50% - 380px);
   width: 120px;
   height: 120px;
   opacity: 0.45;
@@ -226,17 +227,25 @@ summary:focus-visible {
   filter: drop-shadow(0 2px 4px #0000004d);
 }
 
+.art-stage {
+  position: absolute;
+  top: 0;
+  left: calc(50% + 20px);
+  width: 560px;
+  height: 100%;
+}
+
 .rankup {
-  top: 64px;
-  left: calc(50% - 610px);
-  width: 220px;
-  height: 210px;
+  top: 40px;
+  left: 0;
+  width: 190px;
+  height: 181px;
   rotate: -12deg;
 }
 
 .play {
-  top: 84px;
-  right: calc(50% - 610px);
+  top: 70px;
+  left: 260px;
   width: 280px;
   height: 250px;
   rotate: -8deg;
@@ -244,16 +253,16 @@ summary:focus-visible {
 
 .rating {
   top: 236px;
-  left: calc(50% - 400px);
-  width: 112px;
-  height: 108px;
+  left: 150px;
+  width: 104px;
+  height: 100px;
   rotate: 10deg;
 }
 
 .hero-top {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
   margin: 32px 0 0;
   padding: 0;
@@ -314,6 +323,18 @@ summary:focus-visible {
   color: var(--mint-deep);
 }
 
+.board-head .checked {
+  color: var(--sub);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.board-head .checked time {
+  margin-left: 4px;
+  color: var(--ink);
+  font-weight: 700;
+}
+
 .cols,
 .row {
   display: grid;
@@ -323,13 +344,14 @@ summary:focus-visible {
 }
 
 .cols {
-  margin-bottom: 8px;
-  padding: 12px 24px;
-  border-radius: 12px;
-  background: #fff;
-  color: var(--sub);
+  padding: 13px 24px;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: #eef3f2;
+  color: var(--ink);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .cols span:first-child,
@@ -338,31 +360,63 @@ summary:focus-visible {
 }
 
 .rank {
-  display: grid;
-  gap: 8px;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: #fff;
   list-style: none;
 }
 
 .row {
-  padding: 18px 24px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: #fff;
-  transition:
-    border-color 0.15s,
-    box-shadow 0.15s;
+  padding: 16px 24px;
+  transition: background 0.15s;
+}
+
+.row + .row {
+  border-top: 1px solid var(--line);
 }
 
 .row:hover {
-  border-color: #bfe9de;
-  box-shadow: 0 8px 24px #26323a0f;
+  background: #f9fcfb;
 }
 
 .row:target {
-  border-color: var(--mint);
-  box-shadow: 0 0 0 3px #22c5a540;
+  background: var(--mint-soft);
+  box-shadow: inset 4px 0 0 var(--mint);
+}
+
+.rank-no {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+}
+
+.move {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.move.up {
+  color: #d9480f;
+}
+
+.move.down {
+  color: #1c6dd0;
+}
+
+.move.same {
+  color: #9aa4aa;
+}
+
+.move.new {
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: #fff1e6;
+  color: #c2410c;
+  font-size: 10px;
 }
 
 .no {
@@ -434,12 +488,19 @@ summary:focus-visible {
 }
 
 .tags {
-  margin: 2px 0 0;
-  color: var(--sub);
-  font-size: 13px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 5px 0 0;
 }
 
 .tags span {
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--mint-soft);
+  color: var(--mint-deep);
+  font-size: 12px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -530,21 +591,30 @@ summary:focus-visible {
 }
 
 .checks svg {
-  width: 36px;
-  height: 36px;
-  padding: 7px;
-  border-radius: 10px;
-  background: var(--mint-soft);
-  color: var(--mint-deep);
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 4px;
+  border-radius: 50%;
+  background: var(--mint-deep);
+  fill: none;
+  stroke: #fff;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .checks b {
-  display: block;
-  margin: 16px 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 6px;
   font-size: 17px;
 }
 
 .checks span {
+  display: block;
+  padding-left: 30px;
   color: var(--sub);
   font-size: 14px;
 }
@@ -658,27 +728,21 @@ summary:focus-visible {
 }
 
 @media (max-width: 1200px) {
-  .rankup {
-    left: -24px;
-    scale: 0.78;
-    transform-origin: top left;
-  }
-
-  .play {
-    right: 8px;
-    scale: 0.78;
-    transform-origin: top right;
-  }
-
-  .rating {
-    left: 8%;
+  .art-stage {
+    right: 0;
+    left: auto;
+    scale: 0.8;
+    transform-origin: right center;
   }
 }
 
 @media (max-width: 1024px) {
-  .rankup,
-  .play {
-    scale: 0.62;
+  .art-stage {
+    scale: 0.6;
+  }
+
+  .rating {
+    display: none;
   }
 }
 
@@ -709,22 +773,15 @@ summary:focus-visible {
     padding: 104px 0 32px;
   }
 
-  .rating,
   .k3 {
     display: none;
   }
 
-  .rankup {
-    top: 14px;
-    left: 18px;
-    scale: 0.36;
-    transform-origin: top left;
-  }
-
-  .play {
+  .art-stage {
     top: 6px;
-    right: 14px;
-    scale: 0.38;
+    right: 8px;
+    height: 330px;
+    scale: 0.32;
     transform-origin: top right;
   }
 
@@ -769,6 +826,15 @@ summary:focus-visible {
     display: none;
   }
 
+  .rank {
+    display: grid;
+    gap: 10px;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+
   .row {
     grid-template-columns: 32px minmax(0, 1fr) auto;
     grid-template-areas:
@@ -776,14 +842,20 @@ summary:focus-visible {
       "no benefit go";
     gap: 10px 12px;
     padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #fff;
+  }
+
+  .rank-no {
+    grid-area: no;
+    align-self: start;
+    margin-top: 6px;
   }
 
   .no {
-    grid-area: no;
-    align-self: start;
     width: 28px;
     height: 28px;
-    margin-top: 8px;
     font-size: 13px;
   }
 

@@ -9,6 +9,7 @@ import {
   escape,
   loadData,
   loadFaq,
+  moveHtml,
   pick,
   PLACEHOLDER,
   rankRow,
@@ -145,7 +146,7 @@ test('보여줄 수, 뺄 곳, 넣을 곳을 지킨다', () => {
   for (const name of data.required) assert.ok(names.includes(name), `${name}이 빠짐`);
   for (const name of [...data.blocked, ...data.archived]) assert.ok(!names.includes(name), `${name}이 들어감`);
 
-  const item = (name) => ({ ...data.items[0], name, slug: `s${name.charCodeAt(0)}` });
+  const item = (name) => ({ ...data.items[0], name, slug: `s${name.charCodeAt(0)}`, maxRank: undefined });
   const items = ['가', '나', '다', '라', '마'].map(item);
   const names3 = (patch) =>
     pick({ ...data, items, shown: 3, blocked: [], required: [], archived: [], ...patch }).map((it) => it.name);
@@ -164,6 +165,25 @@ test('보여줄 수, 뺄 곳, 넣을 곳을 지킨다', () => {
 
   const dir = buildTo(SITE, { ...base, required: ['마'] });
   assert.deepEqual(fs.readdirSync(path.join(dir, 'go')).sort(), ['s44032', 's45208', 's47560'].sort());
+});
+
+test('별점 하한과 최대 순위를 지키고, 이전 순위와 비교해 표시한다', () => {
+  const data = loadData();
+  const items = pick(data);
+  assert.ok(items.every((it) => Number(it.score) >= data.scoreFloor));
+  for (const it of data.items.filter((x) => x.maxRank)) assert.ok(items.indexOf(it) + 1 <= it.maxRank, it.name);
+
+  const low = { ...data, items: data.items.map((it, i) => (i === 0 ? { ...it, score: '3.0' } : it)) };
+  assert.throws(() => buildTo(SITE, low), /하한/);
+  const late = { ...data, items: [...data.items.slice(1, 6), data.items[0], ...data.items.slice(6)] };
+  assert.throws(() => buildTo(SITE, late), /위 안에 있어야/);
+
+  const it = data.items[0];
+  assert.equal(moveHtml({ ...it, prevRank: undefined }, 1), '');
+  assert.match(moveHtml({ ...it, prevRank: null }, 1), />NEW</);
+  assert.match(moveHtml({ ...it, prevRank: 3 }, 1), />▲2</);
+  assert.match(moveHtml({ ...it, prevRank: 1 }, 4), />▼3</);
+  assert.match(moveHtml({ ...it, prevRank: 2 }, 2), />-</);
 });
 
 test('SITE_URL이 없으면 자리표시를 그대로 둔다', () => {

@@ -61,7 +61,39 @@ export function validate(data) {
     if (archived.has(normalize(name))) throw new Error(`${name}이(가) required와 archived에 함께 있습니다`);
   }
   if ((data.required ?? []).length > shown) throw new Error('required가 shown보다 많습니다');
+  if (data.scoreFloor !== undefined && typeof data.scoreFloor !== 'number') throw new Error('scoreFloor는 숫자여야 합니다');
+  for (const [i, it] of data.items.entries()) {
+    if (it.maxRank !== undefined && !(Number.isInteger(it.maxRank) && it.maxRank >= 1)) {
+      throw new Error(`items[${i}].maxRank는 1 이상의 정수여야 합니다`);
+    }
+    if (it.prevRank !== undefined && it.prevRank !== null && !(Number.isInteger(it.prevRank) && it.prevRank >= 1)) {
+      throw new Error(`items[${i}].prevRank는 1 이상의 정수나 null이어야 합니다`);
+    }
+  }
+  const items = pick(data);
+  for (const it of items) {
+    if (data.scoreFloor !== undefined && Number(it.score) < data.scoreFloor) {
+      throw new Error(`${it.name}의 별점 ${it.score}이(가) 하한 ${data.scoreFloor}보다 낮습니다`);
+    }
+  }
+  const hidden = new Set([...(data.blocked ?? []), ...(data.archived ?? [])].map(normalize));
+  for (const it of data.items) {
+    if (it.maxRank === undefined || hidden.has(normalize(it.name))) continue;
+    const rank = items.indexOf(it) + 1;
+    if (!rank || rank > it.maxRank) throw new Error(`${it.name}은(는) ${it.maxRank}위 안에 있어야 합니다`);
+  }
   return data;
+}
+
+// 이전 순위와 비교한 표시. prevRank가 없으면 표시하지 않고, null이면 새로 들어온 업체다.
+export function moveHtml(it, rank) {
+  if (it.prevRank === undefined) return '';
+  if (it.prevRank === null) return '<span class="move new">NEW</span>';
+  const diff = it.prevRank - rank;
+  if (!diff) return '<span class="move same" aria-label="순위 변동 없음">-</span>';
+  return diff > 0
+    ? `<span class="move up" aria-label="${diff}계단 상승">▲${diff}</span>`
+    : `<span class="move down" aria-label="${-diff}계단 하락">▼${-diff}</span>`;
 }
 
 // blocked와 archived는 빼고, required를 먼저 넣은 뒤 items 순서대로 shown개까지 채운다. 보여주는 순서는 items 순서다.
@@ -138,7 +170,9 @@ export function rankRow(it, i, logo) {
   const tags = it.tags.map((t) => `<span>#${escape(t)}</span>`).join(' ');
   const mark = markHtml(it, logo);
   return `            <li class="row${i < 3 ? ' top' : ''}" id="rank-${i + 1}">
-              <span class="no">${i + 1}</span>
+              <span class="rank-no">
+                <span class="no">${i + 1}</span>${moveHtml(it, i + 1) && `\n                ${moveHtml(it, i + 1)}`}
+              </span>
               <div class="service">
                 ${mark}
                 <div>
