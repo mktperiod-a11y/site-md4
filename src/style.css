@@ -372,25 +372,24 @@ summary:focus-visible {
 }
 
 .changes span {
-  padding: 1px 8px;
+  padding: 3px 10px;
   border-radius: 99px;
+  color: #fff;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
+  box-shadow: 0 2px 6px #00000014;
 }
 
 .changes .up {
-  background: #fff1ea;
-  color: #d9480f;
+  background: #e03131;
 }
 
 .changes .down {
-  background: #eaf2fc;
-  color: #1c6dd0;
+  background: #1c6dd0;
 }
 
 .changes .new {
-  background: #fff1e6;
-  color: #c2410c;
+  background: #c2410c;
 }
 
 .cols {
