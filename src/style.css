@@ -450,10 +450,19 @@ summary:focus-visible {
 }
 
 .service {
-  display: flex;
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  grid-template-areas:
+    "mark meta"
+    "title meta";
   align-items: center;
-  gap: 14px;
+  gap: 6px 20px;
   min-width: 0;
+}
+
+.service .mark {
+  grid-area: mark;
+  justify-self: center;
 }
 
 .mark {
@@ -494,16 +503,20 @@ summary:focus-visible {
   margin-inline: 34px;
 }
 
-.name {
+.meta {
   display: grid;
-  gap: 2px;
+  grid-area: meta;
+  gap: 4px;
   min-width: 0;
 }
 
 .service h2 {
+  grid-area: title;
   margin: 0;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .tags {
@@ -882,8 +895,24 @@ summary:focus-visible {
   }
 
   .service {
-    grid-area: service;
-    gap: 10px;
+    grid-template-columns: 40px minmax(0, 1fr);
+    grid-template-areas:
+      "mark title"
+      "mark meta";
+    gap: 2px 10px;
+  }
+
+  .service .mark {
+    align-self: start;
+  }
+
+  .service h2 {
+    font-size: 16px;
+    text-align: left;
+  }
+
+  .meta {
+    gap: 2px;
   }
 
   .mark,
