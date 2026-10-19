@@ -973,8 +973,8 @@ summary:focus-visible {
   }
 }
 
-@media (max-width: 480px) {
-  .tags span + span {
+@media (max-width: 452px) {
+  .benefit {
     display: none;
   }
 }
