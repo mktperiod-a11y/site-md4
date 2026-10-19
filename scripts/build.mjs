@@ -109,17 +109,26 @@ export function wrap(text, indent, width = 100) {
   return lines.map((l) => indent + l).join('\n');
 }
 
-// src/logos/<slug>.(webp|png|svg)가 있으면 그 경로, 없으면 undefined
+// src/logos/<slug>.(webp|png|svg)가 있으면 { wide, app } 경로를 준다. app은 모바일용 정사각형(src/logos/app/)이다.
 function findLogo(slug) {
-  const ext = LOGO_TYPES.find((e) => fs.existsSync(path.join('src', LOGOS, `${slug}.${e}`)));
-  return ext && `${LOGOS}/${slug}.${ext}`;
+  const find = (dir) => {
+    const ext = LOGO_TYPES.find((e) => fs.existsSync(path.join('src', dir, `${slug}.${e}`)));
+    return ext && `${dir}/${slug}.${ext}`;
+  };
+  const wide = find(LOGOS);
+  return wide && { wide, app: find(`${LOGOS}/app`) };
 }
 
 export function rankRow(it, i, logo) {
   const name = escape(it.name);
   const tags = it.tags.map((t) => `<span>#${escape(t)}</span>`).join(' ');
+  const source = logo?.app
+    ? `\n                  <source media="(max-width: 860px)" srcset="${escape(logo.app)}" />`
+    : '';
   const mark = logo
-    ? `<span class="mark logo" aria-hidden="true"><img src="${escape(logo)}" alt="" width="100" height="40" /></span>`
+    ? `<picture class="mark logo" aria-hidden="true">${source}
+                  <img src="${escape(logo.wide)}" alt="" width="132" height="40" />
+                </picture>`
     : `<span class="mark" aria-hidden="true">${escape(it.mark)}</span>`;
   return `            <li class="row${i < 3 ? ' top' : ''}" id="rank-${i + 1}">
               <span class="no">${i + 1}</span>
