@@ -369,9 +369,16 @@ summary:focus-visible {
     box-shadow 0.15s;
 }
 
-.row:hover {
-  border-color: #bfe9de;
-  box-shadow: 0 8px 24px #26323a0f;
+@media (hover: hover) {
+  .row:hover {
+    border-color: #bfe9de;
+    box-shadow: 0 8px 24px #26323a0f;
+  }
+
+  .go:hover {
+    box-shadow: 0 6px 14px #050a0c33;
+    transform: translateY(-1px);
+  }
 }
 
 .row:target {
@@ -591,18 +598,13 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
   color: #fff;
   font-size: 14px;
   font-weight: 700;
-}
-
-.go:hover {
-  background: #3a464e;
+  transition:
+    box-shadow 0.15s,
+    transform 0.15s;
 }
 
 .top .go {
   background: var(--night);
-}
-
-.top .go:hover {
-  background: #1b2a30;
 }
 
 .caution {
