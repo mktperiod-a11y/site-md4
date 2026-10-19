@@ -174,105 +174,81 @@ summary:focus-visible {
   pointer-events: none;
 }
 
-.orb {
+.art-defs {
+  position: absolute;
+}
+
+.bokeh {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(140deg, #7cf0d5, #0e9a80);
+  filter: blur(18px);
+  opacity: 0.7;
 }
 
-.o2,
-.o4 {
-  background: linear-gradient(140deg, #9edbff, #2f7fd8);
-}
-
-.glass {
-  position: absolute;
-  display: grid;
-  place-items: center;
-  border: 1px solid #ffffff4d;
-  border-radius: 30%;
-  background: linear-gradient(145deg, #ffffff42, #ffffff0a);
-  box-shadow:
-    inset 0 1px 1px #ffffff80,
-    0 24px 48px #00000059;
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-}
-
-.glass svg {
-  width: 44%;
-  height: 44%;
-  fill: none;
-  stroke: #fff;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 2px 6px #00000040);
-}
-
-.glass .fill {
-  fill: #fff;
-  stroke: none;
-}
-
-.o1 {
-  top: 64px;
-  left: calc(50% - 570px);
-  width: 92px;
-  height: 92px;
-}
-
-.g1 {
-  top: 92px;
-  left: calc(50% - 528px);
-  width: 120px;
-  height: 120px;
-  rotate: -10deg;
-}
-
-.o2 {
-  top: 262px;
-  left: calc(50% - 392px);
-  width: 44px;
-  height: 44px;
-}
-
-.g2 {
-  top: 270px;
-  left: calc(50% - 432px);
-  width: 76px;
-  height: 76px;
-  rotate: 8deg;
-}
-
-.o3 {
-  top: 50px;
-  right: calc(50% - 572px);
-  width: 104px;
-  height: 104px;
-}
-
-.g3 {
-  top: 78px;
-  right: calc(50% - 536px);
+.k1 {
+  top: -54px;
+  left: calc(50% - 330px);
   width: 128px;
   height: 128px;
-  rotate: 9deg;
+  background: #2fcfae;
 }
 
-.o4 {
-  top: 252px;
-  right: calc(50% - 414px);
-  width: 48px;
-  height: 48px;
+.k2 {
+  top: 8px;
+  right: calc(50% - 300px);
+  width: 76px;
+  height: 76px;
+  background: #4aa3f2;
 }
 
-.g4 {
-  top: 266px;
-  right: calc(50% - 456px);
-  width: 80px;
-  height: 80px;
-  rotate: -8deg;
+.k3 {
+  right: calc(50% - 160px);
+  bottom: -70px;
+  width: 150px;
+  height: 150px;
+  background: #1e5fc8;
+  opacity: 0.45;
+}
+
+.sym {
+  position: absolute;
+  overflow: visible;
+  filter: drop-shadow(0 18px 30px #00000066);
+}
+
+.sym .rim {
+  fill: none;
+  stroke: url(#art-rim);
+  stroke-width: 1.5;
+}
+
+.sym .glyph {
+  fill: #fff;
+  filter: drop-shadow(0 2px 4px #0000004d);
+}
+
+.rankup {
+  top: 64px;
+  left: calc(50% - 610px);
+  width: 220px;
+  height: 210px;
+  rotate: -12deg;
+}
+
+.player {
+  top: 150px;
+  right: calc(50% - 620px);
+  width: 270px;
+  height: 190px;
+  rotate: -6deg;
+}
+
+.rating {
+  top: 236px;
+  left: calc(50% - 400px);
+  width: 112px;
+  height: 108px;
+  rotate: 10deg;
 }
 
 .hero-top {
@@ -427,6 +403,12 @@ summary:focus-visible {
   color: var(--mint-deep);
   font-size: 15px;
   font-weight: 800;
+}
+
+.mark.logo {
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
 }
 
 .mark img {
@@ -666,6 +648,31 @@ summary:focus-visible {
   margin: 4px 0;
 }
 
+@media (max-width: 1200px) {
+  .rankup {
+    left: -24px;
+    scale: 0.78;
+    transform-origin: top left;
+  }
+
+  .player {
+    right: 16px;
+    scale: 0.78;
+    transform-origin: top right;
+  }
+
+  .rating {
+    left: 8%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .rankup,
+  .player {
+    scale: 0.62;
+  }
+}
+
 @media (max-width: 860px) {
   .site-nav {
     display: none;
@@ -690,40 +697,39 @@ summary:focus-visible {
   }
 
   .banner {
-    padding: 48px 0 32px;
+    padding: 104px 0 32px;
   }
 
-  .o2,
-  .o4,
-  .g2,
-  .g4 {
+  .rating,
+  .k3 {
     display: none;
   }
 
-  .o1 {
-    top: 18px;
-    left: -26px;
-    width: 52px;
-    height: 52px;
+  .rankup {
+    top: 14px;
+    left: 18px;
+    scale: 0.36;
+    transform-origin: top left;
   }
 
-  .g1 {
-    top: 30px;
-    left: -14px;
-    width: 64px;
-    height: 64px;
+  .player {
+    top: 20px;
+    right: 12px;
+    scale: 0.36;
+    transform-origin: top right;
   }
 
-  .o3 {
-    top: 12px;
-    right: -26px;
-    width: 52px;
-    height: 52px;
+  .k1 {
+    top: -60px;
+    left: 30%;
+    width: 90px;
+    height: 90px;
   }
 
-  .g3 {
-    top: 30px;
-    right: -14px;
+  .k2 {
+    top: auto;
+    right: 4%;
+    bottom: -20px;
     width: 64px;
     height: 64px;
   }
@@ -781,6 +787,12 @@ summary:focus-visible {
     width: 40px;
     height: 40px;
     font-size: 14px;
+  }
+
+  .mark.logo {
+    width: 80px;
+    height: 32px;
+    border-radius: 8px;
   }
 
   .score {
@@ -842,12 +854,11 @@ summary:focus-visible {
     scroll-behavior: smooth;
   }
 
-  .glass {
+  .sym {
     animation: float 7s ease-in-out infinite;
   }
 
-  .g2,
-  .g3 {
+  .player {
     animation-delay: -3.5s;
   }
 }
