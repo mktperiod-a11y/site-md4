@@ -356,7 +356,7 @@ summary:focus-visible {
   grid-template-columns: 40px minmax(0, 1fr) auto;
   grid-template-areas:
     "no service score"
-    "no deal go";
+    ". tags go";
   gap: 16px;
   align-items: center;
   padding: 22px 24px;
@@ -380,8 +380,6 @@ summary:focus-visible {
 
 .rank-no {
   grid-area: no;
-  align-self: start;
-  margin-top: 6px;
 }
 
 .service {
@@ -392,19 +390,8 @@ summary:focus-visible {
   grid-area: score;
 }
 
-.deal {
-  display: flex;
-  grid-area: deal;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  padding-top: 14px;
-  border-top: 1px dashed var(--line);
-}
-
 .go {
   grid-area: go;
-  align-self: end;
   padding: 0 20px;
 }
 
@@ -502,6 +489,12 @@ summary:focus-visible {
   margin-inline: 44px;
 }
 
+.name {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
 .service h2 {
   margin: 0;
   font-size: 17px;
@@ -510,8 +503,8 @@ summary:focus-visible {
 
 .tags {
   display: flex;
-  flex: 0 1 auto;
   flex-wrap: wrap;
+  grid-area: tags;
   gap: 6px;
   min-width: 0;
   height: 24px;
@@ -531,12 +524,17 @@ summary:focus-visible {
 }
 
 .benefit {
-  flex: 0 10000 auto;
-  min-width: 0;
+  margin: 0;
   overflow: hidden;
-  font-size: 15px;
-  font-weight: 600;
+  color: var(--mint-deep);
+  font-size: 14px;
+  font-weight: 700;
   white-space: nowrap;
+}
+
+.benefit.unchecked {
+  color: var(--sub);
+  font-weight: 500;
 }
 
 .score {
@@ -770,6 +768,15 @@ summary:focus-visible {
   .rating {
     display: none;
   }
+
+  .mark.logo {
+    width: 104px;
+    height: 32px;
+  }
+
+  .rank:has(.mark.logo) .mark:not(.logo) {
+    margin-inline: 30px;
+  }
 }
 
 @media (max-width: 860px) {
@@ -857,21 +864,11 @@ summary:focus-visible {
     gap: 10px;
   }
 
-  .deal {
-    gap: 8px;
-    padding-top: 0;
-    border-top: 0;
-  }
-
-  .go {
-    align-self: center;
-  }
-
   .row {
     grid-template-columns: 32px minmax(0, 1fr) auto;
     grid-template-areas:
       "no service score"
-      "no deal go";
+      ". tags go";
     gap: 10px 12px;
     padding: 16px;
     border: 1px solid var(--line);
@@ -879,11 +876,6 @@ summary:focus-visible {
     background: #fff;
   }
 
-  .rank-no {
-    grid-area: no;
-    align-self: start;
-    margin-top: 6px;
-  }
 
   .no {
     width: 28px;
@@ -929,7 +921,7 @@ summary:focus-visible {
   }
 
   .benefit {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .go {
@@ -970,12 +962,6 @@ summary:focus-visible {
 
   .foot-brand {
     grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 452px) {
-  .benefit {
-    display: none;
   }
 }
 
