@@ -353,13 +353,11 @@ summary:focus-visible {
 
 .row {
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr);
-  grid-template-areas:
-    "no service"
-    "act act";
-  gap: 18px 16px;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  grid-template-areas: "no service act";
+  gap: 16px;
   align-items: center;
-  padding: 22px 24px 18px;
+  padding: 22px 24px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #fff;
@@ -388,17 +386,18 @@ summary:focus-visible {
 
 .act {
   display: flex;
+  flex-direction: column;
   grid-area: act;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
+  gap: 8px;
+  min-width: 136px;
+}
+
+.act .tags {
+  justify-content: flex-end;
 }
 
 .go {
   flex: none;
-  padding: 0 22px;
 }
 
 .rank-no {
@@ -473,8 +472,8 @@ summary:focus-visible {
 }
 
 .mark.logo {
-  width: 132px;
-  height: 40px;
+  width: 112px;
+  height: 34px;
   border: 0;
   border-radius: 0;
   background: none;
@@ -492,7 +491,7 @@ summary:focus-visible {
 }
 
 .rank:has(.mark.logo) .mark:not(.logo) {
-  margin-inline: 44px;
+  margin-inline: 34px;
 }
 
 .name {
@@ -505,13 +504,6 @@ summary:focus-visible {
   margin: 0;
   font-size: 17px;
   font-weight: 700;
-}
-
-.name-line {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
 }
 
 .tags {
@@ -536,13 +528,8 @@ summary:focus-visible {
 }
 
 .benefit {
-  justify-self: start;
-  max-width: 100%;
-  margin: 4px 0 0;
-  padding: 4px 10px;
+  margin: 0;
   overflow: hidden;
-  border-radius: 8px;
-  background: var(--mint-soft);
   color: var(--mint-deep);
   font-size: 14px;
   font-weight: 700;
@@ -550,17 +537,13 @@ summary:focus-visible {
 }
 
 .benefit.unchecked {
-  padding-inline: 0;
-  background: none;
   color: var(--sub);
   font-weight: 500;
 }
 
 .score {
-  flex: none;
-  color: var(--sub);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 .score::before {
@@ -789,13 +772,8 @@ summary:focus-visible {
     display: none;
   }
 
-  .mark.logo {
-    width: 104px;
-    height: 32px;
-  }
-
-  .rank:has(.mark.logo) .mark:not(.logo) {
-    margin-inline: 30px;
+  .rank {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -936,7 +914,7 @@ summary:focus-visible {
   }
 
   .score {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .benefit {
@@ -944,7 +922,16 @@ summary:focus-visible {
   }
 
   .act {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
     padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+
+  .act .tags {
+    justify-content: flex-start;
   }
 
   .go {
