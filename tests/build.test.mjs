@@ -187,10 +187,10 @@ test('이름의 HTML 특수 문자를 이스케이프한다', () => {
   assert.match(read(dir, 'index.html'), /<h2>&lt;b&gt;&quot;A&amp;B&quot;&lt;\/b&gt;<\/h2>/);
 });
 
-test('로고가 있으면 이니셜 대신 원 안에 사진을 넣는다', () => {
+test('로고가 있으면 이니셜 대신 로고 칸에 넣는다', () => {
   const it = loadData().items[0];
   assert.ok(rankRow(it, 0, 'logos/a.webp').includes(
-    '<span class="mark" aria-hidden="true"><img src="logos/a.webp" alt="" width="44" height="44" /></span>',
+    '<span class="mark logo" aria-hidden="true"><img src="logos/a.webp" alt="" width="100" height="40" /></span>',
   ));
   assert.ok(rankRow(it, 0).includes(`<span class="mark" aria-hidden="true">${escape(it.mark)}</span>`));
 });

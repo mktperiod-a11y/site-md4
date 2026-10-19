@@ -118,11 +118,13 @@ function findLogo(slug) {
 export function rankRow(it, i, logo) {
   const name = escape(it.name);
   const tags = it.tags.map((t) => `<span>#${escape(t)}</span>`).join(' ');
-  const mark = logo ? `<img src="${escape(logo)}" alt="" width="44" height="44" />` : escape(it.mark);
+  const mark = logo
+    ? `<span class="mark logo" aria-hidden="true"><img src="${escape(logo)}" alt="" width="100" height="40" /></span>`
+    : `<span class="mark" aria-hidden="true">${escape(it.mark)}</span>`;
   return `            <li class="row${i < 3 ? ' top' : ''}" id="rank-${i + 1}">
               <span class="no">${i + 1}</span>
               <div class="service">
-                <span class="mark" aria-hidden="true">${mark}</span>
+                ${mark}
                 <div>
                   <h2>${name}</h2>
                   <p class="tags">${tags}</p>
