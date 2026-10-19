@@ -144,9 +144,9 @@ summary:focus-visible {
   overflow: hidden;
   padding: 80px 0 48px;
   background:
-    radial-gradient(40% 75% at 14% 22%, #12705f, #12705f00 70%),
-    radial-gradient(38% 75% at 88% 82%, #155a6e, #155a6e00 70%),
-    #0c1b20;
+    radial-gradient(55% 90% at 50% 120%, #0d3a33, #0d3a3300 70%),
+    radial-gradient(32% 60% at 96% 0%, #0f2c4d, #0f2c4d00 70%),
+    #050a0c;
   color: #fff;
 }
 
@@ -181,32 +181,31 @@ summary:focus-visible {
 .bokeh {
   position: absolute;
   border-radius: 50%;
-  filter: blur(18px);
-  opacity: 0.7;
+  background: radial-gradient(circle at 35% 30%, #b3e1ff, #4aa3f2 55%, #1e5fc8);
+  filter: blur(12px);
+  opacity: 0.75;
 }
 
 .k1 {
-  top: -54px;
-  left: calc(50% - 330px);
-  width: 128px;
-  height: 128px;
-  background: #2fcfae;
+  top: -34px;
+  left: calc(50% - 250px);
+  width: 92px;
+  height: 92px;
+  background: radial-gradient(circle at 35% 30%, #a6f8e4, #2fcfae 55%, #0a7a67);
 }
 
 .k2 {
-  top: 8px;
-  right: calc(50% - 300px);
-  width: 76px;
-  height: 76px;
-  background: #4aa3f2;
+  top: 26px;
+  right: calc(50% - 330px);
+  width: 58px;
+  height: 58px;
 }
 
 .k3 {
-  right: calc(50% - 160px);
-  bottom: -70px;
-  width: 150px;
-  height: 150px;
-  background: #1e5fc8;
+  bottom: -46px;
+  left: calc(50% + 90px);
+  width: 120px;
+  height: 120px;
   opacity: 0.45;
 }
 
@@ -235,12 +234,12 @@ summary:focus-visible {
   rotate: -12deg;
 }
 
-.player {
-  top: 150px;
-  right: calc(50% - 620px);
-  width: 270px;
-  height: 190px;
-  rotate: -6deg;
+.cloud {
+  top: 92px;
+  right: calc(50% - 600px);
+  width: 260px;
+  height: 230px;
+  rotate: 6deg;
 }
 
 .rating {
@@ -406,16 +405,18 @@ summary:focus-visible {
 }
 
 .mark.logo {
-  width: 100px;
+  width: 132px;
   height: 40px;
-  border-radius: 10px;
+  border: 0;
+  border-radius: 0;
+  background: none;
 }
 
 .mark img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .service h2 {
@@ -655,8 +656,8 @@ summary:focus-visible {
     transform-origin: top left;
   }
 
-  .player {
-    right: 16px;
+  .cloud {
+    right: 8px;
     scale: 0.78;
     transform-origin: top right;
   }
@@ -668,7 +669,7 @@ summary:focus-visible {
 
 @media (max-width: 1024px) {
   .rankup,
-  .player {
+  .cloud {
     scale: 0.62;
   }
 }
@@ -712,10 +713,10 @@ summary:focus-visible {
     transform-origin: top left;
   }
 
-  .player {
-    top: 20px;
-    right: 12px;
-    scale: 0.36;
+  .cloud {
+    top: 6px;
+    right: 14px;
+    scale: 0.38;
     transform-origin: top right;
   }
 
@@ -790,9 +791,14 @@ summary:focus-visible {
   }
 
   .mark.logo {
-    width: 80px;
-    height: 32px;
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+  }
+
+  .mark.logo img {
+    object-fit: cover;
   }
 
   .score {
@@ -858,7 +864,7 @@ summary:focus-visible {
     animation: float 7s ease-in-out infinite;
   }
 
-  .player {
+  .cloud {
     animation-delay: -3.5s;
   }
 }
