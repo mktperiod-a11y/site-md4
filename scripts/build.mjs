@@ -178,20 +178,24 @@ export function rankRow(it, i, logo) {
               <div class="service">
                 ${mark}
                 <div class="name">
-                  <h2>${name}</h2>
+                  <div class="name-line">
+                    <h2>${name}</h2>
+                    <span class="score" aria-label="별점 ${escape(it.score)}">${escape(it.score)}</span>
+                  </div>
                   <p class="benefit${it.benefit === UNCHECKED ? ' unchecked' : ''}">${escape(it.benefit)}</p>
                 </div>
               </div>
-              <p class="tags">${tags}</p>
-              <span class="score" aria-label="별점 ${escape(it.score)}">${escape(it.score)}</span>
-              <a
-                class="go"
-                href="go/${it.slug}/"
-                target="_blank"
-                rel="noopener noreferrer sponsored nofollow"
-                aria-label="${name} 바로가기 (새 창)"
-                >바로가기</a
-              >
+              <div class="act">
+                <p class="tags">${tags}</p>
+                <a
+                  class="go"
+                  href="go/${it.slug}/"
+                  target="_blank"
+                  rel="noopener noreferrer sponsored nofollow"
+                  aria-label="${name} 바로가기 (새 창)"
+                  >바로가기</a
+                >
+              </div>
             </li>`;
 }
 
