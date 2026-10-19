@@ -3,6 +3,7 @@
   "shown": 10,
   "blocked": ["미투디스크", "파일캐스트", "파일이즈"],
   "required": ["예스파일", "파일보고", "애플파일"],
+  "archived": ["꿀파일"],
   "items": [
     {
       "slug": "ondisk",
@@ -33,6 +34,16 @@
       "benefit": "공식 혜택 확인",
       "desc": "기본 기능과 입문자 중심의 이용 흐름을 비교하기 좋은 서비스",
       "tags": ["입문형", "간편 이용"]
+    },
+    {
+      "slug": "yesfile",
+      "name": "예스파일",
+      "url": "https://www.yesfile.com/",
+      "mark": "Y",
+      "score": "4.5",
+      "benefit": "정액제 이용권 확인",
+      "desc": "웹툰·웹소설 콘텐츠까지 함께 볼 수 있는 정액제 중심 서비스",
+      "tags": ["웹툰·웹소설", "정액제"]
     },
     {
       "slug": "ggulfile",
@@ -83,16 +94,6 @@
       "benefit": "가입 혜택 확인",
       "desc": "다운로드 중심의 단순한 이용 흐름과 이벤트를 확인하기 좋은 서비스",
       "tags": ["다운로드", "간편 기능"]
-    },
-    {
-      "slug": "yesfile",
-      "name": "예스파일",
-      "url": "https://www.yesfile.com/",
-      "mark": "Y",
-      "score": "4.0",
-      "benefit": "정액제 이용권 확인",
-      "desc": "웹툰·웹소설 콘텐츠까지 함께 볼 수 있는 정액제 중심 서비스",
-      "tags": ["웹툰·웹소설", "정액제"]
     },
     {
       "slug": "filebogo",

@@ -43,7 +43,7 @@ export function validate(data) {
   }
   const shown = data.shown ?? data.items.length;
   if (!Number.isInteger(shown) || shown < 1) throw new Error('shown은 1 이상의 정수여야 합니다');
-  for (const key of ['blocked', 'required']) {
+  for (const key of ['blocked', 'required', 'archived']) {
     const list = data[key] ?? [];
     if (!Array.isArray(list) || !list.every((n) => typeof n === 'string' && n.trim())) {
       throw new Error(`${key}는 업체 이름 배열이어야 합니다`);
@@ -51,19 +51,24 @@ export function validate(data) {
   }
   const names = new Set(data.items.map((it) => normalize(it.name)));
   const blocked = new Set((data.blocked ?? []).map(normalize));
+  const archived = new Set((data.archived ?? []).map(normalize));
+  for (const name of data.archived ?? []) {
+    if (!names.has(normalize(name))) throw new Error(`archived의 ${name}이(가) items에 없습니다`);
+  }
   for (const name of data.required ?? []) {
     if (!names.has(normalize(name))) throw new Error(`required의 ${name}이(가) items에 없습니다`);
     if (blocked.has(normalize(name))) throw new Error(`${name}이(가) required와 blocked에 함께 있습니다`);
+    if (archived.has(normalize(name))) throw new Error(`${name}이(가) required와 archived에 함께 있습니다`);
   }
   if ((data.required ?? []).length > shown) throw new Error('required가 shown보다 많습니다');
   return data;
 }
 
-// blocked는 빼고, required를 먼저 넣은 뒤 items 순서대로 shown개까지 채운다. 보여주는 순서는 items 순서다.
+// blocked와 archived는 빼고, required를 먼저 넣은 뒤 items 순서대로 shown개까지 채운다. 보여주는 순서는 items 순서다.
 export function pick(data) {
-  const blocked = new Set((data.blocked ?? []).map(normalize));
+  const hidden = new Set([...(data.blocked ?? []), ...(data.archived ?? [])].map(normalize));
   const required = new Set((data.required ?? []).map(normalize));
-  const allowed = data.items.filter((it) => !blocked.has(normalize(it.name)));
+  const allowed = data.items.filter((it) => !hidden.has(normalize(it.name)));
   const limit = data.shown ?? allowed.length;
   const chosen = new Set(allowed.filter((it) => required.has(normalize(it.name))));
   for (const it of allowed) if (chosen.size < limit) chosen.add(it);
@@ -114,7 +119,7 @@ export function rankRow(it, i, logo) {
   const name = escape(it.name);
   const tags = it.tags.map((t) => `<span>#${escape(t)}</span>`).join(' ');
   const mark = logo ? `<img src="${escape(logo)}" alt="" width="44" height="44" />` : escape(it.mark);
-  return `            <li class="row${i < 3 ? ' top' : ''}">
+  return `            <li class="row${i < 3 ? ' top' : ''}" id="rank-${i + 1}">
               <span class="no">${i + 1}</span>
               <div class="service">
                 <span class="mark" aria-hidden="true">${mark}</span>
@@ -288,6 +293,10 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
       `웹하드 순위 2026 TOP ${items.length}. ${top3.join(', ')} 등 혜택과 편의성을 한눈에 비교해요.`,
     ),
     RANKING: items.map((it, i) => rankRow(it, i, findLogo(it.slug))).join('\n'),
+    TOP3: items
+      .slice(0, 3)
+      .map((it, i) => `            <li>\n              <a href="#rank-${i + 1}"><b>${i + 1}</b>${escape(it.name)}</a>\n            </li>`)
+      .join('\n'),
     FAQ: faq.map(faqItem).join('\n'),
     JSONLD: jsonLd({ updatedAt, items }, faq),
   };

@@ -40,10 +40,44 @@
   <body>
 {{HEADER}}
     <main id="main">
-      <section class="hero wrap">
-        <span class="badge"><time datetime="{{UPDATED_ISO}}">{{UPDATED}}</time> 기준</span>
-        <h1>웹하드 순위 <em>TOP {{COUNT}}</em></h1>
-        <p>가입 혜택과 이용 편의성을 기준으로 비교한 2026년 신규 웹하드 순위예요.</p>
+      <section class="hero banner">
+        <div class="hero-art" aria-hidden="true">
+          <span class="orb o1"></span>
+          <span class="orb o2"></span>
+          <span class="orb o3"></span>
+          <span class="orb o4"></span>
+          <span class="glass g1">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h5.1l2 2h7.9A1.5 1.5 0 0 1 21 9.5v8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z" />
+              <path d="M12 10.5v5.5m0 0-2.3-2.3M12 16l2.3-2.3" />
+            </svg>
+          </span>
+          <span class="glass g2">
+            <svg viewBox="0 0 24 24">
+              <path class="fill" d="M9 7.2v9.6a.8.8 0 0 0 1.2.7l7.6-4.8a.8.8 0 0 0 0-1.4l-7.6-4.8a.8.8 0 0 0-1.2.7z" />
+            </svg>
+          </span>
+          <span class="glass g3">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 8.5 8 12l4-6 4 6 4-3.5-1.6 9H5.6z" />
+              <path d="M6 20.5h12" />
+            </svg>
+          </span>
+          <span class="glass g4">
+            <svg viewBox="0 0 24 24">
+              <path d="M4.5 11h15v8.5h-15zM3.5 7.5h17V11h-17zM12 7.5v12" />
+              <path d="M12 7.5C10.5 5 7.5 4.5 7.5 6.3S10.5 7.5 12 7.5zm0 0c1.5-2.5 4.5-3 4.5-1.2S13.5 7.5 12 7.5z" />
+            </svg>
+          </span>
+        </div>
+        <div class="wrap hero-body">
+          <span class="badge"><time datetime="{{UPDATED_ISO}}">{{UPDATED}}</time> 기준</span>
+          <h1>웹하드 순위 <em>TOP {{COUNT}}</em></h1>
+          <p>가입 혜택과 이용 편의성을 기준으로 비교한 2026년 신규 웹하드 순위예요.</p>
+          <ol class="hero-top" aria-label="1~3위 바로 보기">
+{{TOP3}}
+          </ol>
+        </div>
       </section>
 
       <section class="board" aria-labelledby="board-title">
