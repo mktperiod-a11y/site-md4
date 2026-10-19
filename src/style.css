@@ -845,7 +845,7 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 800px) {
   .rank {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1024,6 +1024,23 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
 
   .go {
     font-size: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .row {
+    gap: 6px 8px;
+    padding: 16px 14px;
+  }
+
+  .score,
+  .benefit,
+  .tags {
+    padding-left: 10px;
+  }
+
+  .tags span {
+    padding: 3px 8px;
   }
 }
 
