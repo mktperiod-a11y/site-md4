@@ -355,7 +355,7 @@ summary:focus-visible {
   display: grid;
   grid-template-columns: 40px 112px minmax(0, 1fr) 104px;
   grid-template-areas:
-    "no mark score go"
+    "no . score go"
     "no mark benefit go"
     "no title tags go";
   gap: 0 16px;
@@ -417,11 +417,13 @@ summary:focus-visible {
 
 .rank-no {
   display: grid;
+  position: relative;
   justify-items: center;
-  gap: 3px;
 }
 
 .move {
+  position: absolute;
+  top: calc(100% + 3px);
   font-size: 11px;
   font-weight: 700;
   line-height: 1;
@@ -467,8 +469,6 @@ summary:focus-visible {
 .service .mark {
   grid-area: mark;
   justify-self: center;
-  align-self: end;
-  margin-bottom: 6px;
 }
 
 .mark {
@@ -931,10 +931,6 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
       "mark meta";
     gap: 2px 10px;
     min-width: 0;
-  }
-
-  .service .mark {
-    margin-bottom: 0;
   }
 
   .score,
