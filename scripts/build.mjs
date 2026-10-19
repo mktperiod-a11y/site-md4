@@ -177,8 +177,8 @@ export function rankRow(it, i, logo) {
               </span>
               <div class="service">
                 ${mark}
-                <div class="name">
-                  <h2>${name}</h2>
+                <h2>${name}</h2>
+                <div class="meta">
                   <span class="score" aria-label="별점 ${escape(it.score)}">${escape(it.score)}</span>
                   <p class="benefit${it.benefit === UNCHECKED ? ' unchecked' : ''}">${escape(it.benefit)}</p>
                 </div>
