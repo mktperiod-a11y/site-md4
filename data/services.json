@@ -1,5 +1,6 @@
 {
   "updatedAt": "2026-10-19",
+  "cycle": "매주",
   "shown": 10,
   "scoreFloor": 3.8,
   "blocked": ["미투디스크", "파일캐스트", "파일이즈"],

@@ -29,6 +29,7 @@ export function loadFaq(file = 'data/faq.json') {
 export function validate(data) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(data.updatedAt ?? '')) throw new Error('updatedAt은 YYYY-MM-DD 형식이어야 합니다');
   if (!Array.isArray(data.items) || !data.items.length) throw new Error('items가 비어 있습니다');
+  if (typeof data.cycle !== 'string' || !data.cycle.trim()) throw new Error('cycle(점검 주기) 값이 없습니다');
   const slugs = new Set();
   for (const [i, it] of data.items.entries()) {
     const where = `items[${i}]`;
@@ -94,6 +95,24 @@ export function moveHtml(it, rank) {
   return diff > 0
     ? `<span class="move up" aria-label="${diff}계단 상승">▲${diff}</span>`
     : `<span class="move down" aria-label="${-diff}계단 하락">▼${-diff}</span>`;
+}
+
+export function changeSummary(items, n = items.length) {
+  const tally = { up: 0, down: 0, fresh: 0 };
+  items.slice(0, n).forEach((it, i) => {
+    if (it.prevRank === undefined) return;
+    if (it.prevRank === null) tally.fresh += 1;
+    else if (it.prevRank > i + 1) tally.up += 1;
+    else if (it.prevRank < i + 1) tally.down += 1;
+  });
+  const total = tally.up + tally.down + tally.fresh;
+  if (!total) return '<p class="changes">이번 점검 순위 변동 없음</p>';
+  const parts = [
+    tally.up && `<span class="up">▲ 상승 ${tally.up}</span>`,
+    tally.down && `<span class="down">▼ 하락 ${tally.down}</span>`,
+    tally.fresh && `<span class="new">NEW ${tally.fresh}</span>`,
+  ].filter(Boolean);
+  return `<p class="changes">이번 점검 변동 <b>${total}곳</b> ${parts.join(' ')}</p>`;
 }
 
 // blocked와 archived는 빼고, required를 먼저 넣은 뒤 items 순서대로 shown개까지 채운다. 보여주는 순서는 items 순서다.
@@ -340,6 +359,7 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
     COUNT: String(items.length),
     UPDATED: updatedAt.replaceAll('-', '.'),
     UPDATED_ISO: updatedAt,
+    CYCLE: escape(data.cycle),
   };
   const pageValues = {
     ...common,
@@ -352,6 +372,7 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
       .map((it, i) => `            <li>\n              <a href="#rank-${i + 1}"><b>${i + 1}</b>${escape(it.name)}</a>\n            </li>`)
       .join('\n'),
     FAQ: faq.map(faqItem).join('\n'),
+    CHANGES: changeSummary(items),
     JSONLD: jsonLd({ updatedAt, items }, faq),
   };
 
