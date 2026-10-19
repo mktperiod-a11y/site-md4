@@ -792,10 +792,12 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
     scale: 0.8;
     transform-origin: right center;
   }
+}
 
+@media (max-width: 1100px) {
   .row {
     grid-template-columns: 32px 96px minmax(0, 1fr) 96px;
-    gap: 0 12px;
+    gap: 6px 12px;
     padding: 20px;
   }
 
