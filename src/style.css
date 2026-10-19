@@ -877,37 +877,6 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
     font-size: 15px;
   }
 
-  .banner {
-    padding: 104px 0 32px;
-  }
-
-  .k3 {
-    display: none;
-  }
-
-  .art-stage {
-    top: 6px;
-    right: 8px;
-    height: 330px;
-    scale: 0.32;
-    transform-origin: top right;
-  }
-
-  .k1 {
-    top: -60px;
-    left: 30%;
-    width: 90px;
-    height: 90px;
-  }
-
-  .k2 {
-    top: auto;
-    right: 4%;
-    bottom: -20px;
-    width: 64px;
-    height: 64px;
-  }
-
   .hero-top {
     gap: 6px;
     margin-top: 24px;
