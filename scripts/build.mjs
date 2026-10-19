@@ -193,8 +193,10 @@ export function rankRow(it, i, logo) {
                 <span class="no">${i + 1}</span>${moveHtml(it, i + 1) && `\n                ${moveHtml(it, i + 1)}`}
               </span>
               <div class="service">
-                ${mark}
-                <h2>${name}</h2>
+                <div class="brand">
+                  ${mark.replaceAll('\n                ', '\n                  ')}
+                  <h2>${name}</h2>
+                </div>
                 <div class="meta">
                   <span class="score" aria-label="별점 ${escape(it.score)}">${escape(it.score)}</span>
                   <p class="benefit">${escape(it.benefit)}</p>

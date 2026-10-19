@@ -410,9 +410,9 @@ summary:focus-visible {
   display: grid;
   grid-template-columns: 32px 96px minmax(0, 1fr) 96px;
   grid-template-areas:
-    "no . score go"
-    "no mark benefit go"
-    "no title tags go";
+    "no brand score go"
+    "no brand benefit go"
+    "no brand tags go";
   gap: 6px 12px;
   align-items: center;
   padding: 20px;
@@ -538,9 +538,13 @@ summary:focus-visible {
   color: #fff;
 }
 
-.service .mark {
-  grid-area: mark;
-  justify-self: center;
+.brand {
+  display: flex;
+  flex-direction: column;
+  grid-area: brand;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
 }
 
 .mark {
@@ -582,7 +586,6 @@ summary:focus-visible {
 }
 
 .service h2 {
-  grid-area: title;
   margin: 0;
   font-size: 15px;
   font-weight: 700;
@@ -855,9 +858,9 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
   .row {
     grid-template-columns: 28px 96px minmax(0, 1fr);
     grid-template-areas:
-      "no . score"
-      "no mark benefit"
-      "no title tags"
+      "no brand score"
+      "no brand benefit"
+      "no brand tags"
       "go go go";
     gap: 6px 12px;
     padding: 18px;
