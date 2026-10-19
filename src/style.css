@@ -744,6 +744,12 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
   font-size: 17px;
 }
 
+.checks mark {
+  padding: 0 3px;
+  background: linear-gradient(transparent 45%, #9fead5 45%, #9fead5 92%, transparent 92%);
+  color: inherit;
+}
+
 .checks span {
   display: block;
   padding-left: 30px;
