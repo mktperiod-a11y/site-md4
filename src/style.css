@@ -233,9 +233,11 @@ summary:focus-visible {
 .art-stage {
   position: absolute;
   top: 0;
-  left: calc(50% + 20px);
+  right: max(0px, calc(50% - 560px));
   width: 560px;
   height: 100%;
+  scale: 0.8;
+  transform-origin: right center;
 }
 
 .rankup {
@@ -353,14 +355,14 @@ summary:focus-visible {
 
 .row {
   display: grid;
-  grid-template-columns: 32px 112px minmax(0, 1fr) 104px;
+  grid-template-columns: 32px 96px minmax(0, 1fr) 96px;
   grid-template-areas:
     "no . score go"
     "no mark benefit go"
     "no title tags go";
-  gap: 6px 16px;
+  gap: 6px 12px;
   align-items: center;
-  padding: 22px 24px;
+  padding: 20px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #fff;
@@ -411,7 +413,7 @@ summary:focus-visible {
 .score,
 .benefit,
 .tags {
-  padding-left: 20px;
+  padding-left: 14px;
 }
 
 .score {
@@ -504,8 +506,8 @@ summary:focus-visible {
 }
 
 .mark.logo {
-  width: 112px;
-  height: 34px;
+  width: 96px;
+  height: 29px;
   border: 0;
   border-radius: 0;
   background: none;
@@ -523,7 +525,7 @@ summary:focus-visible {
 }
 
 .rank:has(.mark.logo) .mark:not(.logo) {
-  margin-inline: 34px;
+  margin-inline: 29px;
 }
 
 .service h2 {
@@ -786,32 +788,6 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
 
 .foot-legal p {
   margin: 4px 0;
-}
-
-@media (max-width: 1200px) {
-  .art-stage {
-    right: 0;
-    left: auto;
-    scale: 0.8;
-    transform-origin: right center;
-  }
-
-  .row {
-    grid-template-columns: 32px 96px minmax(0, 1fr) 96px;
-    gap: 6px 12px;
-    padding: 20px;
-  }
-
-  .mark.logo {
-    width: 96px;
-    height: 29px;
-  }
-
-  .score,
-  .benefit,
-  .tags {
-    padding-left: 14px;
-  }
 }
 
 @media (max-width: 1024px) {
