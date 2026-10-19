@@ -376,8 +376,11 @@ summary:focus-visible {
   }
 
   .go:hover {
-    box-shadow: 0 6px 14px #050a0c33;
-    transform: translateY(-1px);
+    background: #3a464e;
+  }
+
+  .top .go:hover {
+    background: #1b2a30;
   }
 }
 
@@ -598,9 +601,7 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
   color: #fff;
   font-size: 14px;
   font-weight: 700;
-  transition:
-    box-shadow 0.15s,
-    transform 0.15s;
+  transition: background-color 0.15s;
 }
 
 .top .go {
