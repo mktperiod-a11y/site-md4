@@ -389,11 +389,19 @@ summary:focus-visible {
   display: contents;
 }
 
+.row::before {
+  grid-column: 3;
+  grid-row: 1 / -1;
+  align-self: stretch;
+  width: 1px;
+  background: var(--line);
+  content: "";
+}
+
 .score,
 .benefit,
 .tags {
   padding-left: 20px;
-  border-left: 1px solid var(--line);
 }
 
 .score {
@@ -933,13 +941,16 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
     min-width: 0;
   }
 
+  .row::before {
+    display: none;
+  }
+
   .score,
   .benefit,
   .tags,
   .go {
     grid-area: auto;
     padding-left: 0;
-    border-left: 0;
   }
 
   .score,
