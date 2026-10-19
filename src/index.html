@@ -202,12 +202,14 @@
         <div class="wrap">
           <div class="board-head">
             <p id="board-title">전체 <b>{{COUNT}}</b>개 서비스</p>
+          </div>
+          <div class="board-meta">
+            {{CHANGES}}
             <p class="checked">
               최근 점검 <time datetime="{{UPDATED_ISO}}">{{UPDATED}}</time><span class="ago" hidden></span>
               <span class="cycle">{{CYCLE}} 점검</span>
             </p>
           </div>
-          {{CHANGES}}
           <div class="cols" aria-hidden="true">
             <span>순위</span><span>서비스</span><span>가입 혜택</span><span>별점</span><span></span>
           </div>
