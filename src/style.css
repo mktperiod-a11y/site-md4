@@ -932,10 +932,6 @@ summary:focus-visible {
     font-size: 14px;
   }
 
-  .tags span + span {
-    display: none;
-  }
-
   .go {
     grid-area: go;
     height: 36px;
@@ -974,6 +970,12 @@ summary:focus-visible {
 
   .foot-brand {
     grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .tags span + span {
+    display: none;
   }
 }
 
