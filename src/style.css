@@ -398,12 +398,12 @@ summary:focus-visible {
 
 .score {
   grid-area: score;
-  padding-bottom: 2px;
+  padding-bottom: 4px;
 }
 
 .benefit {
   grid-area: benefit;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
 }
 
 .tags {
@@ -540,27 +540,39 @@ summary:focus-visible {
 }
 
 .benefit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin: 0;
   overflow: hidden;
-  color: var(--mint-deep);
-  font-size: 14px;
-  font-weight: 700;
+  color: var(--sub);
+  font-size: 13px;
+  font-weight: 500;
   white-space: nowrap;
 }
 
-.benefit.unchecked {
-  color: var(--sub);
-  font-weight: 500;
+.benefit::before {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  background: currentColor;
+  content: "";
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' \
+stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='8' width='18' \
+height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 \
+12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .score {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.3;
 }
 
 .score::before {
   content: "★ ";
   color: var(--star);
+  font-size: 16px;
 }
 
 .go {
@@ -983,7 +995,7 @@ summary:focus-visible {
   }
 
   .score {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .benefit {
