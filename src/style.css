@@ -364,12 +364,6 @@ r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E") center / contain no-repeat;
   font-weight: 700;
 }
 
-.checked .ago {
-  color: var(--ink);
-  font-weight: 600;
-}
-
-.checked .ago::before,
 .checked .cycle::before {
   margin: 0 6px;
   color: var(--sub);

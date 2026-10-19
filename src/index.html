@@ -206,7 +206,7 @@
           <div class="board-meta">
             {{CHANGES}}
             <p class="checked">
-              업데이트 <time datetime="{{UPDATED_ISO}}">{{UPDATED}}</time><span class="ago" hidden></span>
+              업데이트 <time datetime="{{UPDATED_ISO}}">{{UPDATED}}</time>
               <span class="cycle">{{CYCLE}} 확인</span>
             </p>
           </div>
@@ -259,15 +259,5 @@
       </section>
     </main>
 {{FOOTER}}
-    <script>
-      (() => {
-        const time = document.querySelector('.checked time');
-        const ago = document.querySelector('.checked .ago');
-        const days = Math.floor((Date.now() - new Date(`${time.dateTime}T00:00:00+09:00`)) / 864e5);
-        if (days < 0) return;
-        ago.textContent = days === 0 ? '오늘' : days === 1 ? '어제' : `${days}일 전`;
-        ago.hidden = false;
-      })();
-    </script>
   </body>
 </html>
