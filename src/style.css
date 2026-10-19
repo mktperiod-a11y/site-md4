@@ -509,7 +509,7 @@ summary:focus-visible {
 
 .tags {
   display: flex;
-  flex: 1;
+  flex: 0 1 auto;
   flex-wrap: wrap;
   gap: 6px;
   min-width: 0;
@@ -530,7 +530,7 @@ summary:focus-visible {
 }
 
 .benefit {
-  flex: 0 1 auto;
+  flex: 0 10000 auto;
   min-width: 0;
   overflow: hidden;
   font-size: 15px;
@@ -929,6 +929,10 @@ summary:focus-visible {
 
   .benefit {
     font-size: 14px;
+  }
+
+  .tags span + span {
+    display: none;
   }
 
   .go {
