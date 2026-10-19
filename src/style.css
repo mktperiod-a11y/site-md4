@@ -23,6 +23,7 @@ html {
 }
 
 body {
+  min-width: 340px;
   margin: 0;
   background: #fff;
   color: var(--ink);
