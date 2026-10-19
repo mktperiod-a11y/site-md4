@@ -9,6 +9,8 @@
   --star: #f2a33a;
   --button: #4b5961;
   --night: #050a0c;
+  --chip: #eef0f2;
+  --chip-ink: #4b5961;
   --radius: 16px;
 }
 
@@ -335,56 +337,71 @@ summary:focus-visible {
   font-weight: 700;
 }
 
-.cols,
-.row {
-  display: grid;
-  grid-template-columns: 56px minmax(0, 1fr) 180px 64px 116px;
-  gap: 20px;
-  align-items: center;
-}
-
 .cols {
-  padding: 13px 24px;
-  border: 1px solid var(--line);
-  border-bottom: 0;
-  border-radius: var(--radius) var(--radius) 0 0;
-  background: #eef3f2;
-  color: var(--ink);
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.cols span:first-child,
-.cols span:nth-child(4) {
-  text-align: center;
+  display: none;
 }
 
 .rank {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 0 0 var(--radius) var(--radius);
-  background: #fff;
   list-style: none;
 }
 
 .row {
-  padding: 16px 24px;
-  transition: background 0.15s;
-}
-
-.row + .row {
-  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  grid-template-areas:
+    "no service score"
+    "no tags tags"
+    "no benefit go";
+  gap: 14px 16px;
+  align-items: center;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .row:hover {
-  background: #f9fcfb;
+  border-color: #bfe9de;
+  box-shadow: 0 8px 24px #26323a0f;
 }
 
 .row:target {
-  background: var(--mint-soft);
-  box-shadow: inset 4px 0 0 var(--mint);
+  border-color: var(--mint);
+  box-shadow: 0 0 0 3px #22c5a540;
+}
+
+.rank-no {
+  grid-area: no;
+  align-self: start;
+  margin-top: 6px;
+}
+
+.service {
+  grid-area: service;
+}
+
+.score {
+  grid-area: score;
+}
+
+.benefit {
+  grid-area: benefit;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+}
+
+.go {
+  grid-area: go;
+  align-self: end;
+  padding: 0 20px;
 }
 
 .rank-no {
@@ -489,16 +506,17 @@ summary:focus-visible {
 
 .tags {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 5px 0 0;
+  grid-area: tags;
+  gap: 6px;
+  margin: 0;
+  overflow: hidden;
 }
 
 .tags span {
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: 99px;
-  background: var(--mint-soft);
-  color: var(--mint-deep);
+  background: var(--chip);
+  color: var(--chip-ink);
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
@@ -823,18 +841,24 @@ summary:focus-visible {
   }
 
   .rank {
-    display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 10px;
-    overflow: visible;
-    border: 0;
-    border-radius: 0;
-    background: none;
+  }
+
+  .benefit {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .go {
+    align-self: center;
   }
 
   .row {
     grid-template-columns: 32px minmax(0, 1fr) auto;
     grid-template-areas:
       "no service score"
+      "no tags tags"
       "no benefit go";
     gap: 10px 12px;
     padding: 16px;
@@ -889,8 +913,6 @@ summary:focus-visible {
 
   .score {
     grid-area: score;
-    align-self: start;
-    margin-top: 10px;
     font-size: 15px;
   }
 
