@@ -376,11 +376,11 @@ summary:focus-visible {
   }
 
   .go:hover {
-    background: #3a464e;
+    background: #333e45;
   }
 
   .top .go:hover {
-    background: #1b2a30;
+    background: #000;
   }
 }
 
