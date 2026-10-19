@@ -310,37 +310,48 @@ summary:focus-visible {
 }
 
 .board-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
-  padding: 0 4px;
+  padding: 0 4px 12px;
+  border-bottom: 1px solid #d5dbdd;
 }
 
 .board-head p {
   margin: 0;
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
 }
 
 .board-head b {
   color: var(--mint-deep);
 }
 
-.board-head .checked {
+.board-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin: 12px 0 16px;
+  padding: 0 4px;
+}
+
+.board-meta p {
+  margin: 0;
+}
+
+.checked {
   color: var(--sub);
   font-size: 13px;
   font-weight: 500;
 }
 
-.board-head .checked time {
+.checked time {
   margin-left: 4px;
   color: var(--ink);
   font-weight: 700;
 }
 
-.board-head .ago {
+.checked .ago {
   margin-left: 6px;
   padding: 1px 7px;
   border-radius: 99px;
@@ -350,7 +361,7 @@ summary:focus-visible {
   font-weight: 700;
 }
 
-.board-head .cycle::before {
+.checked .cycle::before {
   margin: 0 6px;
   content: "·";
 }
@@ -360,8 +371,6 @@ summary:focus-visible {
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  margin: -4px 0 14px;
-  padding: 0 4px;
   color: var(--sub);
   font-size: 13px;
   font-weight: 500;
@@ -379,18 +388,18 @@ summary:focus-visible {
 }
 
 .changes .up {
-  background: #ffe3e3;
-  color: #d10009;
+  background: #ffe3e4;
+  color: #c8000a;
 }
 
 .changes .down {
-  background: #dcebff;
-  color: #005ee0;
+  background: #e0ecff;
+  color: #0057d9;
 }
 
 .changes .new {
-  background: #ffe8d8;
-  color: #bf3a00;
+  background: #efe8ff;
+  color: #6a2cf0;
 }
 
 .cols {
@@ -502,11 +511,11 @@ summary:focus-visible {
 }
 
 .move.up {
-  color: #d10009;
+  color: #c8000a;
 }
 
 .move.down {
-  color: #005ee0;
+  color: #0057d9;
 }
 
 .move.same {
@@ -516,8 +525,8 @@ summary:focus-visible {
 .move.new {
   padding: 2px 5px;
   border-radius: 4px;
-  background: #ffe8d8;
-  color: #bf3a00;
+  background: #efe8ff;
+  color: #6a2cf0;
   font-size: 10px;
 }
 
@@ -966,12 +975,17 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
 }
 
 @media (max-width: 480px) {
-  .board-head {
-    flex-direction: column;
-    gap: 4px;
+  .board-head p {
+    font-size: 20px;
   }
 
-  .board-head p {
+  .board-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .board-meta p {
     white-space: nowrap;
   }
 
