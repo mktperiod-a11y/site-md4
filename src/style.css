@@ -340,6 +340,59 @@ summary:focus-visible {
   font-weight: 700;
 }
 
+.board-head .ago {
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 99px;
+  background: var(--mint-soft);
+  color: var(--mint-deep);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.board-head .cycle::before {
+  margin: 0 6px;
+  content: "·";
+}
+
+.changes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: -4px 0 14px;
+  padding: 0 4px;
+  color: var(--sub);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.changes b {
+  color: var(--ink);
+}
+
+.changes span {
+  padding: 1px 8px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.changes .up {
+  background: #fff1ea;
+  color: #d9480f;
+}
+
+.changes .down {
+  background: #eaf2fc;
+  color: #1c6dd0;
+}
+
+.changes .new {
+  background: #fff1e6;
+  color: #c2410c;
+}
+
 .cols {
   display: none;
 }
@@ -910,6 +963,15 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
 }
 
 @media (max-width: 480px) {
+  .board-head {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .board-head p {
+    white-space: nowrap;
+  }
+
   .banner {
     padding: 104px 0 32px;
   }

@@ -202,8 +202,12 @@
         <div class="wrap">
           <div class="board-head">
             <p id="board-title">전체 <b>{{COUNT}}</b>개 서비스</p>
-            <p class="checked">최근 점검 <time datetime="{{UPDATED_ISO}}">{{UPDATED}}</time></p>
+            <p class="checked">
+              최근 점검 <time datetime="{{UPDATED_ISO}}">{{UPDATED}}</time><span class="ago" hidden></span>
+              <span class="cycle">{{CYCLE}} 점검</span>
+            </p>
           </div>
+          {{CHANGES}}
           <div class="cols" aria-hidden="true">
             <span>순위</span><span>서비스</span><span>가입 혜택</span><span>별점</span><span></span>
           </div>
@@ -253,5 +257,15 @@
       </section>
     </main>
 {{FOOTER}}
+    <script>
+      (() => {
+        const time = document.querySelector('.checked time');
+        const ago = document.querySelector('.checked .ago');
+        const days = Math.floor((Date.now() - new Date(`${time.dateTime}T00:00:00+09:00`)) / 864e5);
+        if (days < 0) return;
+        ago.textContent = days === 0 ? '오늘' : days === 1 ? '어제' : `${days}일 전`;
+        ago.hidden = false;
+      })();
+    </script>
   </body>
 </html>

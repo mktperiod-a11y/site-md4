@@ -5,6 +5,7 @@ import path from 'node:path';
 import { test } from 'node:test';
 import {
   build,
+  changeSummary,
   displayWidth,
   escape,
   loadData,
@@ -227,4 +228,20 @@ test('문장 줄바꿈과 조사', () => {
   assert.equal(ro('꿀파일'), '꿀파일로');
   assert.equal(ro('온디스크'), '온디스크로');
   assert.equal(ro('ABC'), 'ABC(으)로');
+});
+
+test('순위 변동 요약은 직전 순위와 비교한 실제 변동만 센다', () => {
+  const items = [{ prevRank: 1 }, { prevRank: 5 }, { prevRank: null }, { prevRank: 3 }, {}];
+  const html = changeSummary(items);
+  assert.match(html, /변동 <b>3곳<\/b>/);
+  assert.match(html, /상승 1/);
+  assert.match(html, /하락 1/);
+  assert.match(html, /NEW 1/);
+  assert.match(changeSummary([{ prevRank: 1 }, { prevRank: 2 }]), /변동 없음/);
+});
+
+test('점검 주기가 없으면 빌드를 멈춘다', () => {
+  const data = loadData();
+  delete data.cycle;
+  assert.throws(() => build(fs.mkdtempSync(path.join(os.tmpdir(), 'cycle-')), '', data), /cycle/);
 });
