@@ -904,6 +904,41 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
     display: none;
   }
 
+  .section {
+    padding: 52px 0;
+  }
+
+  .section h2.title {
+    font-size: 24px;
+  }
+
+  .checks {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .checks li {
+    padding: 18px;
+  }
+
+  .faq summary {
+    padding: 18px;
+  }
+
+  .faq details p {
+    padding: 0 18px 18px;
+  }
+
+  .foot-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .foot-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 540px) {
   .rank {
     grid-template-columns: minmax(0, 1fr);
     gap: 10px;
@@ -1022,39 +1057,6 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
     height: 36px;
     padding: 0 14px;
     font-size: 13px;
-  }
-
-  .section {
-    padding: 52px 0;
-  }
-
-  .section h2.title {
-    font-size: 24px;
-  }
-
-  .checks {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .checks li {
-    padding: 18px;
-  }
-
-  .faq summary {
-    padding: 18px;
-  }
-
-  .faq details p {
-    padding: 0 18px 18px;
-  }
-
-  .foot-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .foot-brand {
-    grid-column: 1 / -1;
   }
 }
 
