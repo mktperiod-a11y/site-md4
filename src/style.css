@@ -391,7 +391,7 @@ summary:focus-visible {
 
 .row::before {
   grid-column: 3;
-  grid-row: 1 / -1;
+  grid-row: 1 / 4;
   align-self: stretch;
   width: 1px;
   background: var(--line);
@@ -430,6 +430,7 @@ summary:focus-visible {
 .move {
   position: absolute;
   top: calc(100% + 3px);
+  white-space: nowrap;
   font-size: 11px;
   font-weight: 700;
   line-height: 1;
@@ -819,6 +820,30 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
     display: none;
   }
 
+  .row {
+    grid-template-columns: 28px 96px minmax(0, 1fr);
+    grid-template-areas:
+      "no . score"
+      "no mark benefit"
+      "no title tags"
+      "go go go";
+    gap: 6px 12px;
+    padding: 18px;
+  }
+
+  .no {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .go {
+    height: 40px;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 760px) {
   .rank {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -940,66 +965,13 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
 
 @media (max-width: 540px) {
   .rank {
-    grid-template-columns: minmax(0, 1fr);
     gap: 10px;
   }
 
   .row {
-    grid-template-columns: 32px minmax(0, 1fr);
-    grid-template-areas:
-      "no service"
-      "act act";
-    gap: 14px 12px;
-    padding: 16px 16px 14px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: #fff;
-  }
-
-
-  .no {
-    width: 28px;
-    height: 28px;
-    font-size: 13px;
-  }
-
-  .service {
-    display: grid;
-    grid-area: service;
-    grid-template-columns: 40px minmax(0, 1fr);
-    grid-template-areas:
-      "mark title"
-      "mark meta";
-    gap: 2px 10px;
-    min-width: 0;
-  }
-
-  .row::before {
-    display: none;
-  }
-
-  .score,
-  .benefit,
-  .tags,
-  .go {
-    grid-area: auto;
-    padding-left: 0;
-  }
-
-  .service .mark {
-    align-self: start;
-  }
-
-  .service h2 {
-    font-size: 16px;
-    text-align: left;
-  }
-
-  .meta {
-    display: grid;
-    grid-area: meta;
-    gap: 2px;
-    min-width: 0;
+    grid-template-columns: 28px 64px minmax(0, 1fr);
+    gap: 6px 10px;
+    padding: 16px;
   }
 
   .mark,
@@ -1015,6 +987,7 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
     width: 40px;
     height: 40px;
     border: 1px solid var(--line);
+    border-radius: 11px;
   }
 
   .mark.for-desk {
@@ -1029,34 +1002,26 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
     object-fit: cover;
   }
 
+  .service h2 {
+    font-size: 13px;
+  }
+
+  .score,
+  .benefit,
+  .tags {
+    padding-left: 12px;
+  }
+
   .score {
-    font-size: 15px;
-    line-height: 1.3;
+    font-size: 16px;
   }
 
   .benefit {
     font-size: 13px;
   }
 
-  .act {
-    display: flex;
-    grid-area: act;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--line);
-  }
-
-  .act .tags {
-    justify-content: flex-start;
-  }
-
   .go {
-    height: 36px;
-    padding: 0 14px;
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 
