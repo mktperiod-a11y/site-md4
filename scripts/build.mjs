@@ -165,8 +165,6 @@ function markHtml(it, { wide, app } = {}) {
   ].join(pad);
 }
 
-const UNCHECKED = '가입 혜택 확인';
-
 export function rankRow(it, i, logo) {
   const name = escape(it.name);
   const tags = it.tags.map((t) => `<span>#${escape(t)}</span>`).join(' ');
@@ -180,7 +178,7 @@ export function rankRow(it, i, logo) {
                 <h2>${name}</h2>
                 <div class="meta">
                   <span class="score" aria-label="별점 ${escape(it.score)}">${escape(it.score)}</span>
-                  <p class="benefit${it.benefit === UNCHECKED ? ' unchecked' : ''}">${escape(it.benefit)}</p>
+                  <p class="benefit">${escape(it.benefit)}</p>
                 </div>
               </div>
               <div class="act">
