@@ -109,27 +109,34 @@ export function wrap(text, indent, width = 100) {
   return lines.map((l) => indent + l).join('\n');
 }
 
-// src/logos/<slug>.(webp|png|svg)가 있으면 { wide, app } 경로를 준다. app은 모바일용 정사각형(src/logos/app/)이다.
+// 데스크톱용 가로 로고(src/logos/)와 모바일용 정사각형 앱 아이콘(src/logos/app/) 경로. 없으면 undefined
 function findLogo(slug) {
   const find = (dir) => {
     const ext = LOGO_TYPES.find((e) => fs.existsSync(path.join('src', dir, `${slug}.${e}`)));
     return ext && `${dir}/${slug}.${ext}`;
   };
-  const wide = find(LOGOS);
-  return wide && { wide, app: find(`${LOGOS}/app`) };
+  return { wide: find(LOGOS), app: find(`${LOGOS}/app`) };
+}
+
+// 로고가 없는 쪽(데스크톱 또는 모바일)에는 이니셜을 보여준다.
+function markHtml(it, { wide, app } = {}) {
+  const pad = '\n                ';
+  const img = (src, cls, w, h) =>
+    `<span class="mark logo ${cls}" aria-hidden="true">` +
+    `${pad}  <img src="${escape(src)}" alt="" width="${w}" height="${h}" loading="lazy" />` +
+    `${pad}</span>`;
+  const initial = (cls) => `<span class="mark${cls ? ` ${cls}` : ''}" aria-hidden="true">${escape(it.mark)}</span>`;
+  if (!wide && !app) return initial('');
+  return [
+    wide ? img(wide, 'for-desk', 132, 40) : initial('for-desk'),
+    app ? img(app, 'for-app', 40, 40) : initial('for-app'),
+  ].join(pad);
 }
 
 export function rankRow(it, i, logo) {
   const name = escape(it.name);
   const tags = it.tags.map((t) => `<span>#${escape(t)}</span>`).join(' ');
-  const source = logo?.app
-    ? `\n                  <source media="(max-width: 860px)" srcset="${escape(logo.app)}" />`
-    : '';
-  const mark = logo
-    ? `<picture class="mark logo" aria-hidden="true">${source}
-                  <img src="${escape(logo.wide)}" alt="" width="132" height="40" />
-                </picture>`
-    : `<span class="mark" aria-hidden="true">${escape(it.mark)}</span>`;
+  const mark = markHtml(it, logo);
   return `            <li class="row${i < 3 ? ' top' : ''}" id="rank-${i + 1}">
               <span class="no">${i + 1}</span>
               <div class="service">

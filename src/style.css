@@ -234,12 +234,12 @@ summary:focus-visible {
   rotate: -12deg;
 }
 
-.cloud {
-  top: 92px;
-  right: calc(50% - 600px);
-  width: 260px;
-  height: 230px;
-  rotate: 6deg;
+.play {
+  top: 84px;
+  right: calc(50% - 610px);
+  width: 280px;
+  height: 250px;
+  rotate: -8deg;
 }
 
 .rating {
@@ -417,6 +417,14 @@ summary:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.mark.for-app {
+  display: none;
+}
+
+.rank:has(.mark.logo) .mark:not(.logo) {
+  margin-inline: 44px;
 }
 
 .service h2 {
@@ -656,7 +664,7 @@ summary:focus-visible {
     transform-origin: top left;
   }
 
-  .cloud {
+  .play {
     right: 8px;
     scale: 0.78;
     transform-origin: top right;
@@ -669,7 +677,7 @@ summary:focus-visible {
 
 @media (max-width: 1024px) {
   .rankup,
-  .cloud {
+  .play {
     scale: 0.62;
   }
 }
@@ -713,7 +721,7 @@ summary:focus-visible {
     transform-origin: top left;
   }
 
-  .cloud {
+  .play {
     top: 6px;
     right: 14px;
     scale: 0.38;
@@ -784,9 +792,12 @@ summary:focus-visible {
     gap: 10px;
   }
 
-  .mark {
+  .mark,
+  .rank:has(.mark.logo) .mark:not(.logo) {
     width: 40px;
     height: 40px;
+    margin-inline: 0;
+    border-radius: 11px;
     font-size: 14px;
   }
 
@@ -794,7 +805,14 @@ summary:focus-visible {
     width: 40px;
     height: 40px;
     border: 1px solid var(--line);
-    border-radius: 11px;
+  }
+
+  .mark.for-desk {
+    display: none;
+  }
+
+  .mark.for-app {
+    display: grid;
   }
 
   .mark.logo img {
@@ -864,7 +882,7 @@ summary:focus-visible {
     animation: float 7s ease-in-out infinite;
   }
 
-  .cloud {
+  .play {
     animation-delay: -3.5s;
   }
 }
