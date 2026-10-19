@@ -398,18 +398,18 @@ r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .changes .up {
-  background: #ffe3e4;
-  color: #c8000a;
+  background: #ffeff0;
+  color: #d93a40;
 }
 
 .changes .down {
-  background: #e0ecff;
-  color: #0057d9;
+  background: #edf3ff;
+  color: #2f6ad9;
 }
 
 .changes .new {
-  background: #dbf6ef;
-  color: #00806a;
+  background: #e6f7f2;
+  color: #0f8a74;
 }
 
 .cols {
@@ -521,11 +521,11 @@ r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .move.up {
-  color: #c8000a;
+  color: #d93a40;
 }
 
 .move.down {
-  color: #0057d9;
+  color: #2f6ad9;
 }
 
 .move.same {
@@ -535,8 +535,8 @@ r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E") center / contain no-repeat;
 .move.new {
   padding: 2px 5px;
   border-radius: 4px;
-  background: #dbf6ef;
-  color: #00806a;
+  background: #e6f7f2;
+  color: #0f8a74;
   font-size: 10px;
 }
 
