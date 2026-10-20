@@ -26,7 +26,9 @@
       "prevRank": 1,
       "benefitValue": 1000,
       "interest": 396.85,
-      "momentum": 0.985
+      "momentum": 0.985,
+      "convenience": null,
+      "billing": null
     },
     {
       "slug": "yesfile",
@@ -39,7 +41,9 @@
       "tags": ["웹툰·웹소설", "정액제"],
       "prevRank": 4,
       "interest": 213.99,
-      "momentum": 1.072
+      "momentum": 1.072,
+      "convenience": null,
+      "billing": null
     },
     {
       "slug": "smartfile",
@@ -53,20 +57,9 @@
       "prevRank": 3,
       "benefitValue": 2000,
       "interest": 122.32,
-      "momentum": 0.972
-    },
-    {
-      "slug": "filesun",
-      "name": "파일썬",
-      "url": "https://filesun.com/",
-      "mark": "썬",
-      "score": "4.2",
-      "benefit": "가입 혜택 확인",
-      "desc": "여러 장르와 다양한 프로모션을 함께 살펴보려는 이용자에게 알려진 서비스",
-      "tags": ["여러 장르", "프로모션"],
-      "prevRank": 7,
-      "interest": 161.41,
-      "momentum": 0.989
+      "momentum": 0.972,
+      "convenience": null,
+      "billing": null
     },
     {
       "slug": "kdisk",
@@ -80,20 +73,9 @@
       "maxRank": 6,
       "prevRank": 2,
       "interest": 118.1,
-      "momentum": 1.004
-    },
-    {
-      "slug": "ssadafile",
-      "name": "싸다파일",
-      "url": "https://ssadafile.com/",
-      "mark": "싸",
-      "score": "4.0",
-      "benefit": "가입 혜택 확인",
-      "desc": "비용 구조와 신규 이용 혜택을 중심으로 비교 목록에 자주 포함되는 서비스",
-      "tags": ["신규 서비스", "프로모션"],
-      "prevRank": 6,
-      "interest": 21.96,
-      "momentum": 0.798
+      "momentum": 1.004,
+      "convenience": null,
+      "billing": null
     },
     {
       "slug": "geniefile",
@@ -107,7 +89,69 @@
       "prevRank": 5,
       "benefitValue": 300,
       "interest": 20.68,
-      "momentum": 1.05
+      "momentum": 1.05,
+      "convenience": null,
+      "billing": null
+    },
+    {
+      "slug": "filesun",
+      "name": "파일썬",
+      "url": "https://filesun.com/",
+      "mark": "썬",
+      "score": "4.0",
+      "benefit": "가입 혜택 확인",
+      "desc": "여러 장르와 다양한 프로모션을 함께 살펴보려는 이용자에게 알려진 서비스",
+      "tags": ["여러 장르", "프로모션"],
+      "prevRank": 7,
+      "interest": 161.41,
+      "momentum": 0.989,
+      "convenience": null,
+      "billing": null
+    },
+    {
+      "slug": "applefile",
+      "name": "애플파일",
+      "url": "https://www.applefile.com/",
+      "mark": "A",
+      "score": "4.0",
+      "benefit": "가입 혜택 확인",
+      "desc": "자료가 매일 올라오는 정액제 중심 서비스",
+      "tags": ["매일 업데이트", "정액제"],
+      "prevRank": 10,
+      "interest": 70.21,
+      "momentum": 0.991,
+      "convenience": null,
+      "billing": null
+    },
+    {
+      "slug": "ssadafile",
+      "name": "싸다파일",
+      "url": "https://ssadafile.com/",
+      "mark": "싸",
+      "score": "4.0",
+      "benefit": "가입 혜택 확인",
+      "desc": "비용 구조와 신규 이용 혜택을 중심으로 비교 목록에 자주 포함되는 서비스",
+      "tags": ["신규 서비스", "프로모션"],
+      "prevRank": 6,
+      "interest": 21.96,
+      "momentum": 0.798,
+      "convenience": null,
+      "billing": null
+    },
+    {
+      "slug": "filebogo",
+      "name": "파일보고",
+      "url": "https://www.filebogo.com/",
+      "mark": "보",
+      "score": "3.9",
+      "benefit": "가입 혜택 확인",
+      "desc": "다시보기 콘텐츠를 중심으로 구성한 신규 웹하드",
+      "tags": ["다시보기", "신규 서비스"],
+      "prevRank": 9,
+      "interest": 21.83,
+      "momentum": 0.972,
+      "convenience": null,
+      "billing": null
     },
     {
       "slug": "filestar",
@@ -120,33 +164,9 @@
       "tags": ["다운로드", "간편 기능"],
       "prevRank": 8,
       "interest": 12.03,
-      "momentum": 0.943
-    },
-    {
-      "slug": "filebogo",
-      "name": "파일보고",
-      "url": "https://www.filebogo.com/",
-      "mark": "보",
-      "score": "3.8",
-      "benefit": "가입 혜택 확인",
-      "desc": "다시보기 콘텐츠를 중심으로 구성한 신규 웹하드",
-      "tags": ["다시보기", "신규 서비스"],
-      "prevRank": 9,
-      "interest": 21.83,
-      "momentum": 0.972
-    },
-    {
-      "slug": "applefile",
-      "name": "애플파일",
-      "url": "https://www.applefile.com/",
-      "mark": "A",
-      "score": "3.8",
-      "benefit": "가입 혜택 확인",
-      "desc": "자료가 매일 올라오는 정액제 중심 서비스",
-      "tags": ["매일 업데이트", "정액제"],
-      "prevRank": 10,
-      "interest": 70.21,
-      "momentum": 0.991
+      "momentum": 0.943,
+      "convenience": null,
+      "billing": null
     },
     {
       "slug": "ggulfile",
