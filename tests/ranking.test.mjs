@@ -48,8 +48,9 @@ test('검색량이 어떻게 바뀌어도 제1원칙과 주간 변동 상한을 
     assert.ok(rankOf('ondisk') >= 1 && rankOf('ondisk') <= 4);
     assert.ok(rankOf('kdisk') >= 1 && rankOf('kdisk') <= 6);
     for (const name of data.required) assert.ok(shown.some((it) => it.name === name));
-    assert.ok(shown.filter((it, i) => it.prevRank !== i + 1).length <= 4);
+    assert.ok(shown.filter((it, i) => it.prevRank !== i + 1).length <= 6);
     shown.forEach((it, i) => {
+      if (it.prevRank != null) assert.ok(Math.abs(i + 1 - it.prevRank) <= 9);
       if (i) assert.ok(Number(it.score) <= Number(shown[i - 1].score));
       assert.ok(Number(it.score) >= data.scoreFloor);
     });
@@ -84,7 +85,7 @@ test('같은 값은 같은 점수를 받고, 비율은 낮을수록 높은 점�
   assert.deepEqual([...points], [['a', 3], ['b', 3], ['c', 1]]);
 });
 
-test('바뀌는 업체는 10곳 중 4곳까지만 두고, 점수 순서에 가장 가깝게 고른다', () => {
+test('바뀌는 업체 수를 제한하고, 그 안에서 점수 순서에 가깝게 고른다', () => {
   const chosen = ['a', 'b', 'c', 'd', 'e', 'f'].map((slug, i) => ({ slug, prevRank: i + 1 }));
   const ideal = ['f', 'e', 'd', 'c', 'b', 'a'].map((slug) => chosen.find((it) => it.slug === slug));
   const order = limitChanges(chosen, ideal, 2);
@@ -93,6 +94,17 @@ test('바뀌는 업체는 10곳 중 4곳까지만 두고, 점수 순서에 가�
     order.map((it) => it.slug),
     ['f', 'b', 'c', 'd', 'e', 'a'],
   );
+});
+
+test('많이 움직일수록 비용이 커서, 큰 이동은 점수 차가 클 때만 일어난다', () => {
+  const chosen = Array.from({ length: 10 }, (_, i) => ({ slug: `s${i + 1}`, prevRank: i + 1 }));
+  const last = chosen[9];
+  const ideal = [last, ...chosen.slice(0, 9)];
+  const order = limitChanges(chosen, ideal, 6);
+  const moved = 10 - (order.indexOf(last) + 1);
+  assert.ok(moved > 0 && moved < 9);
+  const capped = limitChanges(chosen, ideal, 10, 2);
+  assert.ok(10 - (capped.indexOf(last) + 1) <= 2);
 });
 
 test('maxRank는 점수보다 먼저 지킨다', () => {
@@ -106,58 +118,44 @@ test('maxRank는 점수보다 먼저 지킨다', () => {
   );
 });
 
-test('검색량을 못 받은 업체는 지난 값×전체 변화율, 비율은 지난 값으로 채우고 없으면 뺀다', () => {
+test('검색 관심도를 하나라도 못 받으면 API 값을 섞지 않고 모두 지난 값을 쓴다', () => {
   const candidates = [
-    { slug: 'a', name: 'A', interest: 100, convenience: 0.02 },
+    { slug: 'a', name: 'A', interest: 100, momentum: 1.2, convenience: 0.02 },
     { slug: 'b', name: 'B', interest: 50 },
-    { slug: 'c', name: 'C', interest: 10, billing: 0.3 },
+    { slug: 'c', name: 'C' },
   ];
   const fresh = {
     weekly: new Map([
       ['a', [0, 50, 50, 50, 50]],
       ['b', [0, 25, 25, 25, 25]],
     ]),
-    signals: new Map([
-      ['a', { brand: 200, convenience: 4, billing: 10 }],
-      ['b', { brand: 100, convenience: 0, billing: 0 }],
-    ]),
+    signals: new Map([['b', { brand: 100, convenience: 3, billing: 1 }]]),
   };
   const { trends, notes } = fillGaps(candidates, fresh);
-  assert.deepEqual(trends.a, { interest: 200, momentum: 1, convenience: 0.02, billing: 0.05 });
-  assert.equal(trends.c.interest, 20);
-  assert.equal(trends.c.momentum, 1);
-  assert.equal(trends.c.billing, 0.3);
-  assert.equal(trends.c.convenience, undefined);
-  assert.ok(notes.some((n) => n.includes('점수 제외')));
+  assert.deepEqual(trends.a, { interest: 100, momentum: null, convenience: 0.02, billing: null });
+  assert.deepEqual(trends.b, { interest: 50, momentum: null, convenience: 0.03, billing: 0.01 });
+  assert.deepEqual(trends.c, { interest: 50, momentum: null, convenience: null, billing: null });
+  assert.ok(notes.length >= 3);
 });
 
-test('검색량을 전혀 못 받아도 지난 값으로 계산한다', () => {
-  const candidates = [
-    { slug: 'a', name: 'A', interest: 100, convenience: 0.02, billing: 0.01 },
-    { slug: 'b', name: 'B' },
-  ];
-  const { trends } = fillGaps(candidates, { weekly: new Map(), signals: new Map() });
-  assert.deepEqual(trends.a, { interest: 100, momentum: 1, convenience: 0.02, billing: 0.01 });
-  assert.deepEqual(trends.b, { interest: 100, momentum: 1 });
+test('API를 전혀 부르지 못해도 지난 값만으로 계산한다', () => {
+  const data = loadData();
+  const { trends } = fillGaps(pool(data), { weekly: new Map(), signals: new Map() });
+  const next = rerank(data, trends, '2026-10-26');
+  const shown = next.items.slice(0, next.shown);
+  assert.equal(shown.length, data.shown);
+  assert.ok(shown.findIndex((it) => it.slug === 'ondisk') < 4);
+  assert.ok(shown.every((it) => it.momentum === null));
 });
 
-test('글이 적은 업체는 비율을 믿지 않고, 세 곳 이상 받은 주에는 중앙값으로 채운다', () => {
-  const candidates = ['a', 'b', 'c', 'd'].map((slug) => ({ slug, name: slug }));
+test('글이 100개보다 적은 업체는 비율을 믿지 않는다', () => {
+  const candidates = [{ slug: 'a', name: 'A', interest: 1 }];
   const fresh = {
-    weekly: new Map(),
-    signals: new Map([
-      ['a', { brand: 1000, convenience: 10, billing: 40 }],
-      ['b', { brand: 500, convenience: 10, billing: 10 }],
-      ['c', { brand: 200, convenience: 10, billing: 2 }],
-      ['d', { brand: 20, convenience: 0, billing: 0 }],
-    ]),
+    weekly: new Map([['a', [1, 1, 1, 1, 1]]]),
+    signals: new Map([['a', { brand: 20, convenience: 0, billing: 0 }]]),
   };
   const { trends } = fillGaps(candidates, fresh);
-  assert.deepEqual(
-    ['a', 'b', 'c', 'd'].map((slug) => trends[slug].convenience),
-    [0.01, 0.02, 0.05, 0.02],
-  );
-  assert.equal(trends.d.billing, 0.02);
+  assert.equal(trends.a.convenience, null);
 });
 
 test('주간 값은 날짜에 맞춰 빈 주를 0으로 채운다', () => {

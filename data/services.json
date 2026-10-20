@@ -3,7 +3,8 @@
   "cycle": "매주",
   "shown": 10,
   "scoreFloor": 3.8,
-  "changeLimit": 0.4,
+  "changeLimit": 0.6,
+  "moveLimit": 9,
   "signals": {
     "convenience": ["오류", "안됨", "느림", "끊김"],
     "billing": ["해지", "환불", "자동결제", "자동연장"]

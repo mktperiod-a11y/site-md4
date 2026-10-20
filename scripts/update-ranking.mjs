@@ -6,24 +6,17 @@ const FILE = 'data/services.json';
 const HOST = 'https://naverapihub.apigw.ntruss.com';
 const WEEKS = 5;
 const BATCH = 4;
-const TRIES = 3;
+const RETRIES = 2;
 const STAR_MIN = 3.8;
 const STAR_MAX = 4.9;
 const POINTS_MIN = 1;
 const POINTS_MAX = 22;
 const MIN_POSTS = 100;
-const MIN_VALID = 3;
 const SIGNALS = ['convenience', 'billing'];
 
 const key = (name) => name.normalize('NFKC').replace(/\s+/g, '').toLowerCase();
 const round = (n, d) => Math.round(n * 10 ** d) / 10 ** d;
 const sum = (list) => list.reduce((a, b) => a + b, 0);
-const median = (list) => {
-  const s = [...list].sort((a, b) => a - b);
-  if (!s.length) return null;
-  const mid = Math.floor(s.length / 2);
-  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
-};
 
 export function kstDate(now = new Date()) {
   return new Date(now.getTime() + 9 * 3600e3).toISOString().slice(0, 10);
@@ -63,7 +56,7 @@ export function totals(items) {
   const parts = [
     rankPoints(items, (it) => it.interest ?? 0),
     rankPoints(items, (it) => (Number(it.benefitValue) > 0 ? Number(it.benefitValue) : null), 3),
-    rankPoints(items, (it) => it.momentum ?? 1, 3),
+    rankPoints(items, (it) => it.momentum ?? null, 3),
     ...SIGNALS.map((name) => rankPoints(items, (it) => it[name] ?? null, 3, (a, b) => a < b)),
   ];
   return new Map(items.map((it) => [it.slug, sum(parts.map((p) => p.get(it.slug) ?? 0))]));
@@ -94,50 +87,70 @@ export function arrange(ranked, limit) {
   return placed;
 }
 
-const changes = (order) => order.filter((it, i) => it.prevRank !== i + 1).length;
-const allowed = (order) => order.every((it, i) => i + 1 <= (it.maxRank ?? Infinity));
+const movePenalty = (d) => (d / 3) ** 2;
 
-function* subsets(n, size, from = 0, acc = []) {
-  if (acc.length === size) {
-    yield acc;
-    return;
-  }
-  for (let i = from; i <= n - (size - acc.length); i += 1) yield* subsets(n, size, i + 1, [...acc, i]);
-}
-
-function* permutations(list) {
-  if (list.length <= 1) {
-    yield list;
-    return;
-  }
-  for (let i = 0; i < list.length; i += 1) {
-    for (const rest of permutations([...list.slice(0, i), ...list.slice(i + 1)])) yield [list[i], ...rest];
-  }
-}
-
-export function limitChanges(chosen, ideal, limit) {
-  const target = new Map(ideal.map((it, i) => [it.slug, i]));
-  const base = [...chosen].sort(
-    (a, b) => (a.prevRank ?? Infinity) - (b.prevRank ?? Infinity) || target.get(a.slug) - target.get(b.slug),
-  );
-  const cap = Math.max(limit, changes(base));
-  const cost = (order) => [sum(order.map((it, i) => Math.abs(i - target.get(it.slug)))), changes(order)];
-  let best = null;
-  let bestCost = null;
-  for (let size = 0; size <= Math.min(limit, base.length); size += 1) {
-    for (const spots of subsets(base.length, size)) {
-      for (const moved of permutations(spots.map((i) => base[i]))) {
-        const order = [...base];
-        spots.forEach((spot, j) => {
-          order[spot] = moved[j];
-        });
-        if (!allowed(order) || changes(order) > cap) continue;
-        const c = cost(order);
-        if (!bestCost || c[0] < bestCost[0] || (c[0] === bestCost[0] && c[1] < bestCost[1])) {
-          best = order;
-          bestCost = c;
-        }
+function assign(items, spots, cost) {
+  const size = items.length;
+  const best = new Array(1 << size).fill(Infinity);
+  const from = new Array(1 << size).fill(-1);
+  best[0] = 0;
+  for (let mask = 0; mask < 1 << size; mask += 1) {
+    if (best[mask] === Infinity) continue;
+    const spot = spots[popcount(mask)];
+    for (let i = 0; i < size; i += 1) {
+      if (mask & (1 << i)) continue;
+      const next = mask | (1 << i);
+      const c = best[mask] + cost(items[i], spot);
+      if (c < best[next]) {
+        best[next] = c;
+        from[next] = i;
       }
+    }
+  }
+  const full = (1 << size) - 1;
+  if (best[full] === Infinity) return null;
+  const placed = new Map();
+  for (let mask = full; mask; mask &= ~(1 << from[mask])) placed.set(spots[popcount(mask) - 1], items[from[mask]]);
+  return { cost: best[full], placed };
+}
+
+const popcount = (n) => {
+  let c = 0;
+  for (let m = n; m; m &= m - 1) c += 1;
+  return c;
+};
+
+export function limitChanges(chosen, ideal, limit, maxMove = Infinity) {
+  const n = chosen.length;
+  const target = new Map(ideal.map((it, i) => [it.slug, i + 1]));
+  const cost = (it, pos) => {
+    if (pos > (it.maxRank ?? Infinity)) return Infinity;
+    if (it.prevRank == null) return Math.abs(pos - target.get(it.slug));
+    const d = Math.abs(pos - it.prevRank);
+    if (d > maxMove) return Infinity;
+    return Math.abs(pos - target.get(it.slug)) + movePenalty(d);
+  };
+  const fixable = chosen.filter((it) => it.prevRank != null && it.prevRank <= n);
+  const cap = Math.max(limit, n - fixable.length);
+  let best = null;
+  let bestCost = Infinity;
+  for (let mask = 0; mask < 1 << fixable.length; mask += 1) {
+    const fixed = fixable.filter((_, i) => mask & (1 << i));
+    if (n - fixed.length > cap) continue;
+    const taken = new Set(fixed.map((it) => it.prevRank));
+    if (taken.size !== fixed.length) continue;
+    const base = sum(fixed.map((it) => cost(it, it.prevRank)));
+    if (base === Infinity) continue;
+    const movers = chosen.filter((it) => !fixed.includes(it));
+    const spots = Array.from({ length: n }, (_, i) => i + 1).filter((p) => !taken.has(p));
+    const result = assign(movers, spots, cost);
+    if (!result) continue;
+    const total = base + result.cost + (n - fixed.length) * 1e-6;
+    if (total < bestCost) {
+      bestCost = total;
+      best = Array.from({ length: n }, (_, i) =>
+        taken.has(i + 1) ? fixed.find((it) => it.prevRank === i + 1) : result.placed.get(i + 1),
+      );
     }
   }
   return best ?? ideal;
@@ -173,8 +186,8 @@ export function rerank(data, trends, today) {
     chosen.map(({ prevRank, ...it }) => it),
     chosen.length,
   ).map((it) => chosen.find((c) => c.slug === it.slug));
-  const limit = Math.floor(chosen.length * (data.changeLimit ?? 0.4) + 1e-9);
-  const finalOrder = limitChanges(chosen, ideal, limit);
+  const limit = Math.floor(chosen.length * (data.changeLimit ?? 0.6) + 1e-9);
+  const finalOrder = limitChanges(chosen, ideal, limit, data.moveLimit ?? 9);
   const star = stars(finalOrder.map((it) => total.get(it.slug)));
   const shown = finalOrder.map((it, i) => ({ ...it, score: star[i] }));
   const rest = items.filter((it) => !shown.some((s) => s.slug === it.slug));
@@ -184,40 +197,28 @@ export function rerank(data, trends, today) {
 export function fillGaps(candidates, fresh) {
   const notes = [];
   const trends = {};
-  const got = candidates.filter((it) => fresh.weekly.has(it.slug));
-  const summary = new Map(got.map((it) => [it.slug, summarize(fresh.weekly.get(it.slug))]));
-  const growth = median(
-    got.filter((it) => it.interest > 0).map((it) => summary.get(it.slug).interest / it.interest),
-  );
-  const fallbackInterest = median([...summary.values()].map((s) => s.interest)) ?? median(
-    candidates.filter((it) => it.interest != null).map((it) => it.interest),
-  ) ?? 0;
+  const complete = candidates.every((it) => fresh.weekly.has(it.slug));
+  const stored = candidates.filter((it) => it.interest != null).map((it) => it.interest);
+  const lowest = stored.length ? Math.min(...stored) : 0;
+  if (!complete) notes.push('검색 관심도를 다 받지 못해 모든 업체에 지난 값을 쓰고, 관심 변화 점수는 이번 주에 뺀다');
   for (const it of candidates) {
-    let next = summary.get(it.slug);
-    if (!next) {
-      const interest = it.interest != null ? it.interest * (growth ?? 1) : fallbackInterest;
-      next = { interest: round(interest, 2), momentum: 1 };
-      notes.push(`${it.name}: 검색 관심도 대체(${it.interest != null ? '지난 값×전체 변화율' : '중앙값'}), 관심 변화 1`);
+    if (complete) {
+      trends[it.slug] = summarize(fresh.weekly.get(it.slug));
+    } else {
+      trends[it.slug] = { interest: it.interest ?? lowest, momentum: null };
+      if (it.interest == null) notes.push(`${it.name}: 지난 검색 관심도가 없어 가장 낮은 값을 쓴다`);
     }
-    trends[it.slug] = next;
   }
   for (const name of SIGNALS) {
-    const ratios = new Map();
     for (const it of candidates) {
       const s = fresh.signals.get(it.slug);
-      if (s && s.brand >= MIN_POSTS && s[name] != null) ratios.set(it.slug, round(s[name] / s.brand, 4));
-    }
-    const middle = ratios.size >= MIN_VALID ? median([...ratios.values()]) : null;
-    for (const it of candidates) {
-      if (ratios.has(it.slug)) {
-        trends[it.slug][name] = ratios.get(it.slug);
+      if (s && s.brand >= MIN_POSTS && s[name] != null) {
+        trends[it.slug][name] = round(s[name] / s.brand, 4);
       } else if (it[name] != null) {
         trends[it.slug][name] = it[name];
         notes.push(`${it.name}: ${name} 지난 값 사용`);
-      } else if (middle != null) {
-        trends[it.slug][name] = middle;
-        notes.push(`${it.name}: ${name} 중앙값 사용`);
       } else {
+        trends[it.slug][name] = null;
         notes.push(`${it.name}: ${name} 값 없음, 이번 주 점수 제외`);
       }
     }
@@ -259,10 +260,14 @@ async function call(path, init = {}) {
           'X-NCP-APIGW-API-KEY': process.env.NAVER_CLIENT_SECRET,
         },
       });
-      if (!res.ok) throw new Error(`응답 ${res.status}`);
+      if (!res.ok) {
+        const err = new Error(`응답 ${res.status}`);
+        err.final = res.status >= 400 && res.status < 500 && res.status !== 429;
+        throw err;
+      }
       return await res.json();
     } catch (err) {
-      if (attempt >= TRIES) throw err;
+      if (err.final || attempt > RETRIES) throw err;
       await wait(2000 * 2 ** (attempt - 1));
     }
   }
@@ -319,19 +324,20 @@ async function collect(candidates, signals, today) {
       fresh.signals.set(it.slug, counts);
     } catch (err) {
       errors.push(`${it.name} 편의성·해지 글 수: ${err.message}`);
+      if (err.final) break;
     }
   }
   return { fresh, errors };
 }
 
 async function main() {
-  if (!process.env.NAVER_CLIENT_ID || !process.env.NAVER_CLIENT_SECRET) {
-    throw new Error('NAVER_CLIENT_ID와 NAVER_CLIENT_SECRET이 필요합니다');
-  }
   const data = JSON.parse(fs.readFileSync(FILE, 'utf8'));
   const today = kstDate();
   const candidates = pool(data);
-  const { fresh, errors } = await collect(candidates, data.signals, today);
+  const keys = process.env.NAVER_CLIENT_ID && process.env.NAVER_CLIENT_SECRET;
+  const { fresh, errors } = keys
+    ? await collect(candidates, data.signals, today)
+    : { fresh: { weekly: new Map(), signals: new Map() }, errors: ['API 키가 없어 호출하지 않음'] };
   const { trends, notes } = fillGaps(candidates, fresh);
   for (const line of [...errors, ...notes]) console.log(`::warning::${line}`);
   const next = rerank(data, trends, today);

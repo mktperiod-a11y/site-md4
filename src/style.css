@@ -453,18 +453,8 @@ r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .row:target {
-  animation: arrive 1.8s ease-out;
-}
-
-@keyframes arrive {
-  0%,
-  35% {
-    background: var(--mint-soft);
-  }
-
-  100% {
-    background: #fff;
-  }
+  border-color: var(--mint);
+  box-shadow: 0 0 0 1px var(--mint);
 }
 
 .rank-no {
