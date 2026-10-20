@@ -16,8 +16,10 @@ function randomTrends(data, seed) {
 
 test('검색량이 어떻게 바뀌어도 제1원칙과 이동 상한을 지킨다', () => {
   const data = loadData();
+  let week = data;
   for (let seed = 1; seed <= 300; seed += 1) {
-    const next = rerank(data, randomTrends(data, seed), '2026-10-20');
+    const next = rerank(week, randomTrends(week, seed), '2026-10-20');
+    week = next;
     const shown = next.items.slice(0, next.shown);
     const rankOf = (slug) => shown.findIndex((it) => it.slug === slug) + 1;
     assert.ok(rankOf('ondisk') >= 1 && rankOf('ondisk') <= 4);

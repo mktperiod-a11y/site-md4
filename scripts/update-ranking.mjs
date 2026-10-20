@@ -66,13 +66,18 @@ export function arrange(ranked, limit) {
     const hi = Math.min(n, it.prevRank == null ? n : it.prevRank + limit, it.maxRank ?? n);
     return { lo, hi };
   };
+  const fits = (rest, pos) => {
+    for (let k = pos; k <= n; k += 1) {
+      if (rest.filter((c) => c.hi <= k).length > k - pos) return false;
+    }
+    return true;
+  };
   const left = ranked.map((it, order) => ({ it, order, ...window(it) }));
   const placed = [];
   for (let pos = 1; pos <= n; pos += 1) {
-    const open = left.filter((c) => c.lo <= pos);
-    const due = open.filter((c) => c.hi <= pos);
-    const pool = due.length ? due : open.length ? open : left;
-    const best = pool.reduce((a, b) => (b.order < a.order ? b : a));
+    const options = [...left].sort((a, b) => a.order - b.order);
+    const ok = (c) => c.lo <= pos && fits(left.filter((x) => x !== c), pos);
+    const best = options.find(ok) ?? options.find((c) => fits(left.filter((x) => x !== c), pos)) ?? options[0];
     placed.push(best.it);
     left.splice(left.indexOf(best), 1);
   }
