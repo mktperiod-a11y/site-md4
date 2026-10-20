@@ -1,0 +1,22 @@
+name: Cleanup
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+
+jobs:
+  runs:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          gh api --paginate "repos/$REPO/actions/runs?per_page=100" -q '.workflow_runs[].id' > ids.txt
+          grep -vx "$RUN_ID" ids.txt | while read -r id; do
+            gh api -X DELETE "repos/$REPO/actions/runs/$id" > /dev/null || true
+          done
+          echo "$(wc -l < ids.txt)"
