@@ -108,7 +108,8 @@ export function changeSummary(items, n = items.length) {
     tally.down && `<span class="down">▼ 하락 ${tally.down}</span>`,
     tally.fresh && `<span class="new">NEW ${tally.fresh}</span>`,
   ].filter(Boolean);
-  return `<p class="changes">이번 주 변동 <b>${total}곳</b> ${parts.join(' ')}</p>`;
+  const pad = '\n              ';
+  return `<p class="changes">${pad}이번 주 변동 <b>${total}곳</b>${pad}${parts.join(pad)}\n            </p>`;
 }
 
 export function pick(data) {
