@@ -257,3 +257,20 @@ test('기본 Pages 주소로 빌드하면 결과물에 그 주소를 적지 않�
   assert.ok(!fs.existsSync(path.join(dir, 'sitemap.xml')));
   assert.doesNotMatch(read(dir, 'index.html'), /rel="canonical"/);
 });
+
+test('제휴 링크가 있으면 이동 페이지가 그 링크로 보내고, 버튼과 고지에 표시한다', () => {
+  const data = loadData();
+  const plain = read(buildTo(SITE, data), 'index.html');
+  assert.ok(!plain.includes('제휴 링크'));
+  assert.ok(!plain.includes('sponsored'));
+  const link = 'https://partner.example.test/go?id=1';
+  const items = data.items.map((it, i) => (i === 0 ? { ...it, link } : it));
+  const dir = buildTo(SITE, { ...data, items });
+  const html = read(dir, 'index.html');
+  assert.match(html, /일부 바로가기는 제휴 링크예요/);
+  assert.equal((html.match(/sponsored/g) ?? []).length, 1);
+  const go = read(dir, `go/${items[0].slug}/index.html`);
+  assert.ok(go.includes(link));
+  assert.ok(!go.includes(items[0].url));
+  assert.throws(() => buildTo(SITE, { ...data, items: [{ ...items[0], link: 'http://x.test/' }, ...items.slice(1)] }), /link/);
+});
