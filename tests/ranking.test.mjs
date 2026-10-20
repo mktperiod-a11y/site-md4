@@ -11,6 +11,7 @@ import {
   pool,
   rankPoints,
   rerank,
+  roll,
   shift,
   stars,
   summarize,
@@ -45,6 +46,7 @@ test('검색량이 어떻게 바뀌어도 제1원칙과 주간 변동 상한을 
     assert.ok(rankOf('kdisk') >= 1 && rankOf('kdisk') <= 6);
     for (const name of data.required) assert.ok(shown.some((it) => it.name === name));
     assert.ok(shown.filter((it, i) => it.prevRank !== i + 1).length <= 6);
+    assert.equal(shown[0].score, '4.9');
     shown.forEach((it, i) => {
       if (it.prevRank != null) assert.ok(Math.abs(i + 1 - it.prevRank) <= 9);
       if (i) assert.ok(Number(it.score) <= Number(shown[i - 1].score));
@@ -150,8 +152,18 @@ test('주간 값은 날짜에 맞춰 빈 주를 0으로 채운다', () => {
   );
 });
 
-test('별점은 3.8~4.9 안에서 순위가 낮을수록 같거나 낮다', () => {
+test('별점은 1위가 항상 4.9이고, 순위가 낮을수록 같거나 낮다', () => {
   assert.deepEqual(stars([16, 8, 10, 1]), ['4.9', '4.3', '4.3', '3.8']);
+  assert.deepEqual(stars([9, 12, 5]), ['4.9', '4.9', '4.2']);
+});
+
+test('편의성·해지 점수는 0~2이고, 같은 날에는 같은 값, 주마다 바뀐다', () => {
+  const values = Array.from({ length: 200 }, (_, i) => roll(`2026-10-26:s${i}:convenience`));
+  assert.ok(values.every((v) => v >= 0 && v <= 2));
+  for (const v of [0, 1, 2]) assert.ok(values.filter((x) => x === v).length > 40);
+  assert.equal(roll('2026-10-26:ondisk:billing'), roll('2026-10-26:ondisk:billing'));
+  const weeks = Array.from({ length: 20 }, (_, i) => roll(`${shift('2026-10-26', 7 * i)}:ondisk:billing`));
+  assert.ok(new Set(weeks).size > 1);
 });
 
 test('완결된 주(월~일)만 받는다', () => {
