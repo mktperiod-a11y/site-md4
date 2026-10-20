@@ -7,7 +7,7 @@
   "moveLimit": 9,
   "blocked": ["미투디스크", "파일캐스트", "파일이즈"],
   "required": ["예스파일", "파일보고", "애플파일"],
-  "archived": ["꿀파일"],
+  "archived": [],
   "items": [
     {
       "slug": "ondisk",
@@ -208,11 +208,10 @@
       "name": "꿀파일",
       "url": "https://ggulfile.com/",
       "mark": "꿀",
-      "score": "4.5",
+      "score": "3.8",
       "benefit": "가입 혜택 300P",
       "desc": "가입 혜택과 단순한 다운로드 흐름을 중심으로 알려진 서비스",
       "tags": ["가입 혜택", "간결한 UI"],
-      "prevRank": 4,
       "convenience": 1,
       "billing": 1,
       "benefitValue": 300
