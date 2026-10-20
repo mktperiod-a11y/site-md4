@@ -194,7 +194,11 @@ export function rerank(data, trends, today) {
   const sorted = [...candidates].sort(
     (a, b) => total.get(b.slug) - total.get(a.slug) || (before.get(a.slug) ?? 99) - (before.get(b.slug) ?? 99),
   );
-  const chosen = pick({ ...data, items: sorted }).map((it) => ({ ...it, prevRank: before.get(it.slug) ?? null }));
+  const required = [...(data.required ?? []), ...candidates.filter((it) => it.maxRank).map((it) => it.name)];
+  const chosen = pick({ ...data, required: [...new Set(required)], items: sorted }).map((it) => ({
+    ...it,
+    prevRank: before.get(it.slug) ?? null,
+  }));
   const ideal = arrange(
     chosen.map(({ prevRank, ...it }) => it),
     chosen.length,
