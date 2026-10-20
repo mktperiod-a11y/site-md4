@@ -65,14 +65,15 @@
       "url": "https://www.yesfile.com/",
       "mark": "Y",
       "score": "4.8",
-      "benefit": "가입 혜택 확인",
+      "benefit": "가입 혜택 1,000P",
       "desc": "웹툰·웹소설 콘텐츠까지 함께 볼 수 있는 정액제 중심 서비스",
       "tags": ["웹툰·웹소설", "정액제"],
       "prevRank": 4,
       "interest": 213.99,
       "momentum": 1.072,
       "convenience": 2,
-      "billing": 0
+      "billing": 0,
+      "benefitValue": 1000
     },
     {
       "slug": "filesun",
@@ -159,14 +160,15 @@
       "url": "https://www.filebogo.com/",
       "mark": "보",
       "score": "4.2",
-      "benefit": "가입 혜택 확인",
+      "benefit": "가입 혜택 1,000P",
       "desc": "다시보기 콘텐츠를 중심으로 구성한 신규 웹하드",
       "tags": ["다시보기", "신규 서비스"],
       "prevRank": 9,
       "interest": 21.83,
       "momentum": 0.972,
       "convenience": 2,
-      "billing": 2
+      "billing": 2,
+      "benefitValue": 1000
     },
     {
       "slug": "ssadafile",
@@ -174,14 +176,15 @@
       "url": "https://ssadafile.com/",
       "mark": "싸",
       "score": "4.2",
-      "benefit": "가입 혜택 확인",
+      "benefit": "가입 혜택 300P",
       "desc": "비용 구조와 신규 이용 혜택을 중심으로 비교 목록에 자주 포함되는 서비스",
       "tags": ["신규 서비스", "프로모션"],
       "prevRank": 6,
       "interest": 21.96,
       "momentum": 0.798,
       "convenience": 2,
-      "billing": 0
+      "billing": 0,
+      "benefitValue": 300
     },
     {
       "slug": "filestar",
@@ -205,12 +208,13 @@
       "url": "https://ggulfile.com/",
       "mark": "꿀",
       "score": "4.5",
-      "benefit": "가입 혜택 확인",
+      "benefit": "가입 혜택 300P",
       "desc": "가입 혜택과 단순한 다운로드 흐름을 중심으로 알려진 서비스",
       "tags": ["가입 혜택", "간결한 UI"],
       "prevRank": 4,
       "convenience": 1,
-      "billing": 1
+      "billing": 1,
+      "benefitValue": 300
     }
   ],
   "rankedOn": "2026-10-20"
