@@ -3,7 +3,11 @@
   "cycle": "매주",
   "shown": 10,
   "scoreFloor": 3.8,
-  "moveLimit": 4,
+  "changeLimit": 0.4,
+  "signals": {
+    "convenience": ["오류", "안됨", "느림", "끊김"],
+    "billing": ["해지", "환불", "자동결제", "자동연장"]
+  },
   "blocked": ["미투디스크", "파일캐스트", "파일이즈"],
   "required": ["예스파일", "파일보고", "애플파일"],
   "archived": ["꿀파일"],
@@ -20,7 +24,6 @@
       "maxRank": 4,
       "prevRank": 1,
       "benefitValue": 1000,
-      "editorial": 3,
       "interest": 396.85,
       "momentum": 0.985
     },
@@ -34,7 +37,6 @@
       "desc": "웹툰·웹소설 콘텐츠까지 함께 볼 수 있는 정액제 중심 서비스",
       "tags": ["웹툰·웹소설", "정액제"],
       "prevRank": 4,
-      "editorial": 2,
       "interest": 213.99,
       "momentum": 1.072
     },
@@ -49,7 +51,6 @@
       "tags": ["입문형", "간편 이용"],
       "prevRank": 3,
       "benefitValue": 2000,
-      "editorial": 2,
       "interest": 122.32,
       "momentum": 0.972
     },
@@ -64,7 +65,6 @@
       "tags": ["쉬운 탐색", "다양한 장르"],
       "maxRank": 6,
       "prevRank": 2,
-      "editorial": 3,
       "interest": 118.1,
       "momentum": 1.004
     },
@@ -78,7 +78,6 @@
       "desc": "여러 장르와 다양한 프로모션을 함께 살펴보려는 이용자에게 알려진 서비스",
       "tags": ["여러 장르", "프로모션"],
       "prevRank": 7,
-      "editorial": 1,
       "interest": 161.41,
       "momentum": 0.989
     },
@@ -93,7 +92,6 @@
       "tags": ["정돈된 구성", "이벤트"],
       "prevRank": 5,
       "benefitValue": 300,
-      "editorial": 2,
       "interest": 20.68,
       "momentum": 1.05
     },
@@ -107,7 +105,6 @@
       "desc": "자료가 매일 올라오는 정액제 중심 서비스",
       "tags": ["매일 업데이트", "정액제"],
       "prevRank": 10,
-      "editorial": 1,
       "interest": 70.21,
       "momentum": 0.991
     },
@@ -121,7 +118,6 @@
       "desc": "비용 구조와 신규 이용 혜택을 중심으로 비교 목록에 자주 포함되는 서비스",
       "tags": ["신규 서비스", "프로모션"],
       "prevRank": 6,
-      "editorial": 1,
       "interest": 21.96,
       "momentum": 0.798
     },
@@ -135,7 +131,6 @@
       "desc": "다시보기 콘텐츠를 중심으로 구성한 신규 웹하드",
       "tags": ["다시보기", "신규 서비스"],
       "prevRank": 9,
-      "editorial": 1,
       "interest": 21.83,
       "momentum": 0.972
     },
@@ -149,7 +144,6 @@
       "desc": "다운로드 중심의 단순한 이용 흐름과 이벤트를 확인하기 좋은 서비스",
       "tags": ["다운로드", "간편 기능"],
       "prevRank": 8,
-      "editorial": 1,
       "interest": 12.03,
       "momentum": 0.943
     },
@@ -162,8 +156,7 @@
       "benefit": "가입 혜택 확인",
       "desc": "가입 혜택과 단순한 다운로드 흐름을 중심으로 알려진 서비스",
       "tags": ["가입 혜택", "간결한 UI"],
-      "prevRank": 4,
-      "editorial": 1
+      "prevRank": 4
     }
   ]
 }
