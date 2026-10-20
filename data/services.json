@@ -25,9 +25,7 @@
       "prevRank": 1,
       "benefitValue": 1000,
       "interest": 396.85,
-      "momentum": 0.985,
-      "convenience": 0,
-      "billing": 0
+      "momentum": 0.985
     },
     {
       "slug": "yesfile",
@@ -40,9 +38,7 @@
       "tags": ["웹툰·웹소설", "정액제"],
       "prevRank": 4,
       "interest": 213.99,
-      "momentum": 1.072,
-      "convenience": 0,
-      "billing": 0
+      "momentum": 1.072
     },
     {
       "slug": "smartfile",
@@ -56,9 +52,7 @@
       "prevRank": 3,
       "benefitValue": 2000,
       "interest": 122.32,
-      "momentum": 0.972,
-      "convenience": 0,
-      "billing": 0
+      "momentum": 0.972
     },
     {
       "slug": "filesun",
@@ -71,9 +65,7 @@
       "tags": ["여러 장르", "프로모션"],
       "prevRank": 7,
       "interest": 161.41,
-      "momentum": 0.989,
-      "convenience": 0,
-      "billing": 0
+      "momentum": 0.989
     },
     {
       "slug": "kdisk",
@@ -87,9 +79,7 @@
       "maxRank": 6,
       "prevRank": 2,
       "interest": 118.1,
-      "momentum": 1.004,
-      "convenience": 0,
-      "billing": 0
+      "momentum": 1.004
     },
     {
       "slug": "ssadafile",
@@ -102,9 +92,7 @@
       "tags": ["신규 서비스", "프로모션"],
       "prevRank": 6,
       "interest": 21.96,
-      "momentum": 0.798,
-      "convenience": 0,
-      "billing": 0.0002
+      "momentum": 0.798
     },
     {
       "slug": "geniefile",
@@ -118,9 +106,7 @@
       "prevRank": 5,
       "benefitValue": 300,
       "interest": 20.68,
-      "momentum": 1.05,
-      "convenience": 0,
-      "billing": 0.0003
+      "momentum": 1.05
     },
     {
       "slug": "filestar",
@@ -133,9 +119,7 @@
       "tags": ["다운로드", "간편 기능"],
       "prevRank": 8,
       "interest": 12.03,
-      "momentum": 0.943,
-      "convenience": 0,
-      "billing": 0
+      "momentum": 0.943
     },
     {
       "slug": "filebogo",
@@ -148,9 +132,7 @@
       "tags": ["다시보기", "신규 서비스"],
       "prevRank": 9,
       "interest": 21.83,
-      "momentum": 0.972,
-      "convenience": 0,
-      "billing": 0
+      "momentum": 0.972
     },
     {
       "slug": "applefile",
@@ -163,9 +145,7 @@
       "tags": ["매일 업데이트", "정액제"],
       "prevRank": 10,
       "interest": 70.21,
-      "momentum": 0.991,
-      "convenience": 0,
-      "billing": 0
+      "momentum": 0.991
     },
     {
       "slug": "ggulfile",
