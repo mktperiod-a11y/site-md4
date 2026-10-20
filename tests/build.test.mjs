@@ -237,6 +237,7 @@ test('순위 변동 요약은 직전 순위와 비교한 실제 변동만 센다
   assert.match(html, /상승 1/);
   assert.match(html, /하락 1/);
   assert.match(html, /NEW 1/);
+  for (const line of html.split('\n')) assert.ok(displayWidth(line) <= MAX_WIDTH);
   assert.match(changeSummary([{ prevRank: 1 }, { prevRank: 2 }]), /변동 없음/);
 });
 
