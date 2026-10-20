@@ -345,10 +345,33 @@ function htmlFiles(dir) {
     .filter((f) => f.endsWith('.html') && !f.startsWith(PARTIALS));
 }
 
+function hideAddress(outDir) {
+  const findBase = `    <script>
+      document.write('<base href="/' + location.pathname.split('/')[1] + '/" />');
+    </script>`;
+  for (const file of htmlFiles(outDir)) {
+    const full = path.join(outDir, file);
+    let text = fs.readFileSync(full, 'utf8')
+      .split('\n')
+      .filter((line) => !/rel="canonical"|property="og:url"|property="og:image/.test(line))
+      .join('\n')
+      .replace('content="summary_large_image"', 'content="summary"');
+    if (file === '404.html') {
+      text = text
+        .replace('<meta charset="utf-8" />', `<meta charset="utf-8" />\n${findBase}`)
+        .replaceAll(`href="${PLACEHOLDER}/"`, 'href="./"')
+        .replaceAll(`${PLACEHOLDER}/`, '');
+    }
+    fs.writeFileSync(full, text.replaceAll(`${PLACEHOLDER}/`, './').replaceAll(PLACEHOLDER, '.'));
+  }
+}
+
 export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
   site = site.replace(/\/+$/, '');
   if (site && !/^https?:\/\/[^/\s]+(\/[\w.-]+)*$/.test(site)) throw new Error(`사이트 주소 형식 오류: ${site}`);
   const basePath = site ? new URL(site).pathname.replace(/\/+$/, '') : '';
+  // 계정 이름이 든 기본 주소(*.github.io)는 결과물에 적지 않고 상대 주소로 만든다.
+  const hidden = Boolean(site) && /\.github\.io$/i.test(new URL(site).hostname);
   const { updatedAt } = validate(data);
   const items = pick(data);
 
@@ -393,6 +416,12 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
   }
 
   const pages = ['/'];
+  if (hidden) {
+    fs.writeFileSync(path.join(outDir, 'robots.txt'), 'User-agent: *\nAllow: /\n');
+    fs.writeFileSync(path.join(outDir, 'llms.txt'), llms({ updatedAt, items }, faq).replace(/^- 사이트: .*\n/m, ''));
+    hideAddress(outDir);
+    return items.length;
+  }
   fs.writeFileSync(
     path.join(outDir, 'robots.txt'),
     `User-agent: *\nAllow: /\nDisallow: ${basePath}/go/\n\nSitemap: ${PLACEHOLDER}/sitemap.xml\n`,
