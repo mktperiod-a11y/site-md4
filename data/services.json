@@ -81,14 +81,15 @@
       "url": "https://filesun.com/",
       "mark": "썬",
       "score": "4.6",
-      "benefit": "가입 혜택 확인",
+      "benefit": "가입 혜택 300P",
       "desc": "여러 장르와 다양한 프로모션을 함께 살펴보려는 이용자에게 알려진 서비스",
       "tags": ["여러 장르", "프로모션"],
       "prevRank": 7,
       "interest": 161.41,
       "momentum": 0.989,
       "convenience": 2,
-      "billing": 2
+      "billing": 2,
+      "benefitValue": 300
     },
     {
       "slug": "filejo",
