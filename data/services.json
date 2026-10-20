@@ -108,22 +108,6 @@
       "benefitValue": 500
     },
     {
-      "slug": "filebogo",
-      "name": "파일보고",
-      "url": "https://www.filebogo.com/",
-      "mark": "보",
-      "score": "4.4",
-      "benefit": "가입 혜택 1,000P",
-      "desc": "다시보기 콘텐츠를 중심으로 구성한 신규 웹하드",
-      "tags": ["다시보기", "신규 서비스"],
-      "prevRank": 9,
-      "interest": 21.83,
-      "momentum": 0.972,
-      "convenience": 2,
-      "billing": 2,
-      "benefitValue": 1000
-    },
-    {
       "slug": "applefile",
       "name": "애플파일",
       "url": "https://www.applefile.com/",
@@ -137,6 +121,22 @@
       "momentum": 0.991,
       "convenience": 2,
       "billing": 0,
+      "benefitValue": 1000
+    },
+    {
+      "slug": "filebogo",
+      "name": "파일보고",
+      "url": "https://www.filebogo.com/",
+      "mark": "보",
+      "score": "4.3",
+      "benefit": "가입 혜택 1,000P",
+      "desc": "다시보기 콘텐츠를 중심으로 구성한 신규 웹하드",
+      "tags": ["다시보기", "신규 서비스"],
+      "prevRank": 9,
+      "interest": 21.83,
+      "momentum": 0.972,
+      "convenience": 2,
+      "billing": 2,
       "benefitValue": 1000
     },
     {
@@ -214,7 +214,9 @@
       "tags": ["가입 혜택", "간결한 UI"],
       "convenience": 1,
       "billing": 1,
-      "benefitValue": 300
+      "benefitValue": 300,
+      "interest": 44.02,
+      "momentum": 0.993
     }
   ],
   "rankedOn": "2026-10-20"
