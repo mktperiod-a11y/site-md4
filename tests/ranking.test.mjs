@@ -105,10 +105,7 @@ test('많이 움직일수록 비용이 커서, 큰 이동은 점수 차가 클 �
 });
 
 test('maxRank는 점수보다 먼저 지킨다', () => {
-  const order = arrange(
-    [{ slug: 'a' }, { slug: 'b' }, { slug: 'c', maxRank: 1 }],
-    3,
-  );
+  const order = arrange([{ slug: 'a' }, { slug: 'b' }, { slug: 'c', maxRank: 1 }]);
   assert.deepEqual(
     order.map((it) => it.slug),
     ['c', 'a', 'b'],

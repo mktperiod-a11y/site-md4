@@ -28,7 +28,7 @@ export function shift(date, days) {
 }
 
 export function pool(data) {
-  const hidden = new Set([...(data.blocked ?? []), ...(data.archived ?? [])].map(key));
+  const hidden = new Set((data.blocked ?? []).map(key));
   return data.items.filter((it) => !hidden.has(key(it.name)));
 }
 
@@ -61,25 +61,19 @@ export function totals(items) {
   return new Map(items.map((it) => [it.slug, sum(parts.map((p) => p.get(it.slug) ?? 0))]));
 }
 
-export function arrange(ranked, limit) {
+export function arrange(ranked) {
   const n = ranked.length;
-  const window = (it) => {
-    const lo = it.prevRank == null ? 1 : Math.max(1, it.prevRank - limit);
-    const hi = Math.min(n, it.prevRank == null ? n : it.prevRank + limit, it.maxRank ?? n);
-    return { lo, hi };
-  };
   const fits = (rest, pos) => {
     for (let k = pos; k <= n; k += 1) {
       if (rest.filter((c) => c.hi <= k).length > k - pos) return false;
     }
     return true;
   };
-  const left = ranked.map((it, order) => ({ it, order, ...window(it) }));
+  const left = ranked.map((it, order) => ({ it, order, hi: Math.min(n, it.maxRank ?? n) }));
   const placed = [];
   for (let pos = 1; pos <= n; pos += 1) {
     const options = [...left].sort((a, b) => a.order - b.order);
-    const ok = (c) => c.lo <= pos && fits(left.filter((x) => x !== c), pos);
-    const best = options.find(ok) ?? options.find((c) => fits(left.filter((x) => x !== c), pos)) ?? options[0];
+    const best = options.find((c) => fits(left.filter((x) => x !== c), pos)) ?? options[0];
     placed.push(best.it);
     left.splice(left.indexOf(best), 1);
   }
@@ -175,7 +169,7 @@ export function roll(seed) {
 }
 
 function previousRanks(data, today) {
-  const sameDay = (data.rankedOn ?? data.updatedAt) === today;
+  const sameDay = data.rankedOn === today;
   if (sameDay && data.items.some((it) => it.prevRank !== undefined)) {
     return new Map(data.items.filter((it) => it.prevRank != null).map((it) => [it.slug, it.prevRank]));
   }
@@ -199,10 +193,7 @@ export function rerank(data, trends, today) {
     ...it,
     prevRank: before.get(it.slug) ?? null,
   }));
-  const ideal = arrange(
-    chosen.map(({ prevRank, ...it }) => it),
-    chosen.length,
-  ).map((it) => chosen.find((c) => c.slug === it.slug));
+  const ideal = arrange(chosen);
   const limit = Math.floor(chosen.length * (data.changeLimit ?? 0.6) + 1e-9);
   const finalOrder = limitChanges(chosen, ideal, limit, data.moveLimit ?? 9);
   const star = stars(finalOrder.map((it) => total.get(it.slug)));
