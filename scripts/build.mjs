@@ -37,6 +37,9 @@ export function validate(data) {
     if (slugs.has(it.slug)) throw new Error(`${where}.slug가 겹칩니다: ${it.slug}`);
     slugs.add(it.slug);
     if (!/^https:\/\/[^/\s"']+\/\S*$/.test(it.url)) throw new Error(`${where}.url은 https 주소여야 합니다: ${it.url}`);
+    if (it.link !== undefined && !/^https:\/\/[^/\s"']+\/\S*$/.test(it.link)) {
+      throw new Error(`${where}.link는 https 주소여야 합니다: ${it.link}`);
+    }
     if (!Array.isArray(it.tags)) throw new Error(`${where}.tags는 배열이어야 합니다`);
   }
   const shown = data.shown ?? data.items.length;
@@ -193,7 +196,7 @@ export function rankRow(it, i, logo) {
                   class="go"
                   href="go/${it.slug}/"
                   target="_blank"
-                  rel="noopener noreferrer nofollow"
+                  rel="noopener noreferrer ${it.link ? 'sponsored ' : ''}nofollow"
                   aria-label="${name} 바로가기 (새 창)"
                   >바로가기</a
                 >
@@ -267,13 +270,15 @@ function jsonLd({ updatedAt, items }, faq) {
 
 function goPage(it) {
   const name = escape(it.name);
-  const url = escape(it.url);
+  const to = it.link ?? it.url;
+  const url = escape(to);
   return `<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
+    <meta name="referrer" content="origin" />
     <meta http-equiv="refresh" content="0;url=${url}" />
     <title>${escape(ro(it.name))} 이동 중 | 모리디</title>
   </head>
@@ -282,12 +287,12 @@ function goPage(it) {
       ${name} 공식 사이트로 이동 중입니다. 자동으로 이동하지 않으면
       <a
         href="${url}"
-        rel="noopener noreferrer nofollow"
+        rel="noopener noreferrer ${it.link ? 'sponsored ' : ''}nofollow"
         >여기를 눌러주세요.</a
       >
     </p>
     <script>
-      location.replace(${JSON.stringify(it.url)});
+      location.replace(${JSON.stringify(to)});
     </script>
   </body>
 </html>
@@ -381,6 +386,7 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
       .join('\n'),
     FAQ: faq.map(faqItem).join('\n'),
     CHANGES: changeSummary(items),
+    LINK_NOTICE: items.some((it) => it.link) ? '일부 바로가기는 제휴 링크예요. ' : '',
     JSONLD: jsonLd({ updatedAt, items }, faq),
   };
 
