@@ -245,3 +245,17 @@ test('점검 주기가 없으면 빌드를 멈춘다', () => {
   delete data.cycle;
   assert.throws(() => build(fs.mkdtempSync(path.join(os.tmpdir(), 'cycle-')), '', data), /cycle/);
 });
+
+test('기본 Pages 주소로 빌드하면 결과물에 그 주소를 적지 않는다', () => {
+  const host = ['user-name', 'github', 'io'].join('.');
+  const dir = buildTo(`https://${host}/repo-name`);
+  for (const file of walk(dir)) {
+    if (!/\.(html|txt|xml)$/.test(file)) continue;
+    const text = read(dir, file);
+    for (const word of [host, 'user-name', 'repo-name', PLACEHOLDER]) {
+      assert.ok(!text.includes(word), `${file}에 ${word}가 남음`);
+    }
+  }
+  assert.ok(!fs.existsSync(path.join(dir, 'sitemap.xml')));
+  assert.doesNotMatch(read(dir, 'index.html'), /rel="canonical"/);
+});
