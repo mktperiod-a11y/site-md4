@@ -985,6 +985,17 @@ height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-
 }
 
 @media (max-width: 480px) {
+  .faq summary {
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .faq details p {
+    padding: 0 16px 16px;
+    font-size: 14px;
+  }
+
   .board-head p {
     font-size: 20px;
   }
