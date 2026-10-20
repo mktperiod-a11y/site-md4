@@ -10,7 +10,8 @@ const RETRIES = 2;
 const STAR_MIN = 3.8;
 const STAR_MAX = 4.9;
 const POINTS_MIN = 1;
-const POINTS_MAX = 16;
+const ROLLS = ['convenience', 'billing'];
+const ROLL_MAX = 2;
 
 const key = (name) => name.normalize('NFKC').replace(/\s+/g, '').toLowerCase();
 const round = (n, d) => Math.round(n * 10 ** d) / 10 ** d;
@@ -55,6 +56,7 @@ export function totals(items) {
     rankPoints(items, (it) => it.interest ?? 0),
     rankPoints(items, (it) => (Number(it.benefitValue) > 0 ? Number(it.benefitValue) : null), 3),
     rankPoints(items, (it) => it.momentum ?? null, 3),
+    new Map(items.map((it) => [it.slug, sum(ROLLS.map((name) => it[name] ?? 0))])),
   ];
   return new Map(items.map((it) => [it.slug, sum(parts.map((p) => p.get(it.slug) ?? 0))]));
 }
@@ -154,12 +156,22 @@ export function limitChanges(chosen, ideal, limit, maxMove = Infinity) {
 }
 
 export function stars(points) {
+  const top = Math.max(...points);
   let cap = STAR_MAX;
-  return points.map((p) => {
-    const ratio = Math.min(Math.max((p - POINTS_MIN) / (POINTS_MAX - POINTS_MIN), 0), 1);
+  return points.map((p, i) => {
+    if (i === 0) return STAR_MAX.toFixed(1);
+    const ratio = top > POINTS_MIN ? Math.min(Math.max((p - POINTS_MIN) / (top - POINTS_MIN), 0), 1) : 1;
     cap = Math.min(cap, Math.round((STAR_MIN + (STAR_MAX - STAR_MIN) * ratio) * 10) / 10);
     return cap.toFixed(1);
   });
+}
+
+export function roll(seed) {
+  let h = 2166136261;
+  for (const ch of seed) h = Math.imul(h ^ ch.codePointAt(0), 16777619);
+  h = Math.imul(h ^ (h >>> 15), 2246822507);
+  h = Math.imul(h ^ (h >>> 13), 3266489909);
+  return ((h ^ (h >>> 16)) >>> 0) % (ROLL_MAX + 1);
 }
 
 function previousRanks(data, today) {
@@ -172,7 +184,11 @@ function previousRanks(data, today) {
 
 export function rerank(data, trends, today) {
   const before = previousRanks(data, today);
-  const items = data.items.map((it) => ({ ...it, ...(trends[it.slug] ?? {}) }));
+  const items = data.items.map((it) => ({
+    ...it,
+    ...(trends[it.slug] ?? {}),
+    ...Object.fromEntries(ROLLS.map((name) => [name, roll(`${today}:${it.slug}:${name}`)])),
+  }));
   const candidates = pool({ ...data, items });
   const total = totals(candidates);
   const sorted = [...candidates].sort(
