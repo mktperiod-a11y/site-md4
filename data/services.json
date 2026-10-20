@@ -3,6 +3,7 @@
   "cycle": "매주",
   "shown": 10,
   "scoreFloor": 3.8,
+  "moveLimit": 4,
   "blocked": ["미투디스크", "파일캐스트", "파일이즈"],
   "required": ["예스파일", "파일보고", "애플파일"],
   "archived": ["꿀파일"],
@@ -17,7 +18,9 @@
       "desc": "콘텐츠 범위와 PC·모바일 이용 환경을 함께 살펴보기 좋은 종합 서비스",
       "tags": ["종합형", "PC·모바일"],
       "maxRank": 4,
-      "prevRank": 1
+      "prevRank": 1,
+      "benefitValue": 1000,
+      "editorial": 3
     },
     {
       "slug": "kdisk",
@@ -28,8 +31,9 @@
       "benefit": "가입 혜택 확인",
       "desc": "직관적인 카테고리와 간결한 탐색 흐름이 돋보이는 서비스",
       "tags": ["쉬운 탐색", "다양한 장르"],
-      "maxRank": 4,
-      "prevRank": 2
+      "maxRank": 6,
+      "prevRank": 2,
+      "editorial": 3
     },
     {
       "slug": "smartfile",
@@ -40,7 +44,9 @@
       "benefit": "가입 시 2,000 지급",
       "desc": "기본 기능과 입문자 중심의 이용 흐름을 비교하기 좋은 서비스",
       "tags": ["입문형", "간편 이용"],
-      "prevRank": 3
+      "prevRank": 3,
+      "benefitValue": 2000,
+      "editorial": 2
     },
     {
       "slug": "yesfile",
@@ -51,7 +57,8 @@
       "benefit": "가입 혜택 확인",
       "desc": "웹툰·웹소설 콘텐츠까지 함께 볼 수 있는 정액제 중심 서비스",
       "tags": ["웹툰·웹소설", "정액제"],
-      "prevRank": 8
+      "prevRank": 8,
+      "editorial": 2
     },
     {
       "slug": "ggulfile",
@@ -62,7 +69,8 @@
       "benefit": "가입 혜택 확인",
       "desc": "가입 혜택과 단순한 다운로드 흐름을 중심으로 알려진 서비스",
       "tags": ["가입 혜택", "간결한 UI"],
-      "prevRank": 4
+      "prevRank": 4,
+      "editorial": 1
     },
     {
       "slug": "geniefile",
@@ -73,7 +81,9 @@
       "benefit": "가입 즉시 300BP",
       "desc": "반복 이용 시 편의성과 정돈된 탐색 구조를 확인하기 좋은 서비스",
       "tags": ["정돈된 구성", "이벤트"],
-      "prevRank": 5
+      "prevRank": 5,
+      "benefitValue": 300,
+      "editorial": 2
     },
     {
       "slug": "ssadafile",
@@ -84,7 +94,8 @@
       "benefit": "가입 혜택 확인",
       "desc": "비용 구조와 신규 이용 혜택을 중심으로 비교 목록에 자주 포함되는 서비스",
       "tags": ["신규 서비스", "프로모션"],
-      "prevRank": 6
+      "prevRank": 6,
+      "editorial": 1
     },
     {
       "slug": "filesun",
@@ -95,7 +106,8 @@
       "benefit": "가입 혜택 확인",
       "desc": "여러 장르와 다양한 프로모션을 함께 살펴보려는 이용자에게 알려진 서비스",
       "tags": ["여러 장르", "프로모션"],
-      "prevRank": 7
+      "prevRank": 7,
+      "editorial": 1
     },
     {
       "slug": "filestar",
@@ -106,7 +118,8 @@
       "benefit": "가입 혜택 확인",
       "desc": "다운로드 중심의 단순한 이용 흐름과 이벤트를 확인하기 좋은 서비스",
       "tags": ["다운로드", "간편 기능"],
-      "prevRank": null
+      "prevRank": null,
+      "editorial": 1
     },
     {
       "slug": "filebogo",
@@ -117,7 +130,8 @@
       "benefit": "가입 혜택 확인",
       "desc": "다시보기 콘텐츠를 중심으로 구성한 신규 웹하드",
       "tags": ["다시보기", "신규 서비스"],
-      "prevRank": 9
+      "prevRank": 9,
+      "editorial": 1
     },
     {
       "slug": "applefile",
@@ -128,7 +142,8 @@
       "benefit": "가입 혜택 확인",
       "desc": "자료가 매일 올라오는 정액제 중심 서비스",
       "tags": ["매일 업데이트", "정액제"],
-      "prevRank": 10
+      "prevRank": 10,
+      "editorial": 1
     }
   ]
 }
