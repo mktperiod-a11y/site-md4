@@ -377,7 +377,7 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
   const pageValues = {
     ...common,
     DESCRIPTION: escape(
-      `웹하드 순위 2026 TOP ${items.length}. ${top3.join(', ')} 등 검색 관심도와 혜택을 한눈에 비교해요.`,
+      `웹하드·p2p사이트 순위 2026 TOP ${items.length}. ${top3.join(', ')} 등 검색 관심도와 혜택을 한눈에 비교해요.`,
     ),
     RANKING: items.map((it, i) => rankRow(it, i, findLogo(it.slug))).join('\n'),
     TOP3: items
