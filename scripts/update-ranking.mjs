@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { pick, validate } from './build.mjs';
 
 const FILE = 'data/services.json';
-const ENDPOINT = 'https://naverapihub.apigw.ntruss.com/search-trend/v1/search';
+const HOST = 'https://naverapihub.apigw.ntruss.com';
 const WEEKS = 5;
 const BATCH = 4;
 const TRIES = 3;
@@ -11,7 +11,8 @@ const STAR_MIN = 3.8;
 const STAR_MAX = 4.9;
 const POINTS_MIN = 1;
 const POINTS_MAX = 22;
-const ENOUGH_VOLUME = 0.2;
+const MIN_POSTS = 100;
+const MIN_VALID = 3;
 const SIGNALS = ['convenience', 'billing'];
 
 const key = (name) => name.normalize('NFKC').replace(/\s+/g, '').toLowerCase();
@@ -191,7 +192,6 @@ export function fillGaps(candidates, fresh) {
   const fallbackInterest = median([...summary.values()].map((s) => s.interest)) ?? median(
     candidates.filter((it) => it.interest != null).map((it) => it.interest),
   ) ?? 0;
-  const topInterest = Math.max(0, ...[...summary.values()].map((s) => s.interest));
   for (const it of candidates) {
     let next = summary.get(it.slug);
     if (!next) {
@@ -205,11 +205,9 @@ export function fillGaps(candidates, fresh) {
     const ratios = new Map();
     for (const it of candidates) {
       const s = fresh.signals.get(it.slug);
-      if (!s || !(s.brand > 0)) continue;
-      const enough = s[name] > 0 || trends[it.slug].interest >= topInterest * ENOUGH_VOLUME;
-      if (enough) ratios.set(it.slug, round(s[name] / s.brand, 4));
+      if (s && s.brand >= MIN_POSTS && s[name] != null) ratios.set(it.slug, round(s[name] / s.brand, 4));
     }
-    const middle = median([...ratios.values()]);
+    const middle = ratios.size >= MIN_VALID ? median([...ratios.values()]) : null;
     for (const it of candidates) {
       if (ratios.has(it.slug)) {
         trends[it.slug][name] = ratios.get(it.slug);
@@ -219,6 +217,8 @@ export function fillGaps(candidates, fresh) {
       } else if (middle != null) {
         trends[it.slug][name] = middle;
         notes.push(`${it.name}: ${name} 중앙값 사용`);
+      } else {
+        notes.push(`${it.name}: ${name} 값 없음, 이번 주 점수 제외`);
       }
     }
   }
@@ -247,27 +247,38 @@ export function format(data) {
 
 const wait = (ms) => new Promise((done) => setTimeout(done, ms));
 
-async function request(groups, startDate, endDate) {
+async function call(path, init = {}) {
   for (let attempt = 1; ; attempt += 1) {
     try {
-      const res = await fetch(ENDPOINT, {
-        method: 'POST',
+      const res = await fetch(`${HOST}${path}`, {
+        ...init,
         signal: AbortSignal.timeout(20000),
         headers: {
           'Content-Type': 'application/json',
           'X-NCP-APIGW-API-KEY-ID': process.env.NAVER_CLIENT_ID,
           'X-NCP-APIGW-API-KEY': process.env.NAVER_CLIENT_SECRET,
         },
-        body: JSON.stringify({ startDate, endDate, timeUnit: 'week', keywordGroups: groups }),
       });
       if (!res.ok) throw new Error(`응답 ${res.status}`);
-      const body = await res.json();
-      return new Map(body.results.map((r) => [r.title, align(r.data ?? [], startDate)]));
+      return await res.json();
     } catch (err) {
       if (attempt >= TRIES) throw err;
       await wait(2000 * 2 ** (attempt - 1));
     }
   }
+}
+
+async function request(groups, startDate, endDate) {
+  const body = await call('/search-trend/v1/search', {
+    method: 'POST',
+    body: JSON.stringify({ startDate, endDate, timeUnit: 'week', keywordGroups: groups }),
+  });
+  return new Map(body.results.map((r) => [r.title, align(r.data ?? [], startDate)]));
+}
+
+async function posts(query) {
+  const body = await call(`/search/v1/blog?query=${encodeURIComponent(query)}&display=1`);
+  return Number(body.total) || 0;
 }
 
 async function collect(candidates, signals, today) {
@@ -299,18 +310,15 @@ async function collect(candidates, signals, today) {
   }
   for (const it of candidates) {
     try {
-      const got = await request(
-        [
-          { groupName: 'brand', keywords: [it.name] },
-          ...SIGNALS.map((name) => ({ groupName: name, keywords: signals[name].map((w) => `${it.name} ${w}`) })),
-        ],
-        startDate,
-        endDate,
-      );
-      const recent = (name) => sum((got.get(name) ?? []).slice(-4));
-      fresh.signals.set(it.slug, Object.fromEntries(['brand', ...SIGNALS].map((name) => [name, recent(name)])));
+      const counts = { brand: await posts(it.name) };
+      for (const name of SIGNALS) {
+        let total = 0;
+        for (const word of signals[name]) total += await posts(`${it.name} ${word}`);
+        counts[name] = total;
+      }
+      fresh.signals.set(it.slug, counts);
     } catch (err) {
-      errors.push(`${it.name} 편의성·해지 검색: ${err.message}`);
+      errors.push(`${it.name} 편의성·해지 글 수: ${err.message}`);
     }
   }
   return { fresh, errors };

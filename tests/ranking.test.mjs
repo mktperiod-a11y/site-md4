@@ -106,7 +106,7 @@ test('maxRank는 점수보다 먼저 지킨다', () => {
   );
 });
 
-test('검색량을 못 받은 업체는 지난 값×전체 변화율, 비율은 지난 값→중앙값으로 채운다', () => {
+test('검색량을 못 받은 업체는 지난 값×전체 변화율, 비율은 지난 값으로 채우고 없으면 뺀다', () => {
   const candidates = [
     { slug: 'a', name: 'A', interest: 100, convenience: 0.02 },
     { slug: 'b', name: 'B', interest: 50 },
@@ -127,8 +127,8 @@ test('검색량을 못 받은 업체는 지난 값×전체 변화율, 비율은 
   assert.equal(trends.c.interest, 20);
   assert.equal(trends.c.momentum, 1);
   assert.equal(trends.c.billing, 0.3);
-  assert.equal(trends.c.convenience, 0.01);
-  assert.ok(notes.length >= 2);
+  assert.equal(trends.c.convenience, undefined);
+  assert.ok(notes.some((n) => n.includes('점수 제외')));
 });
 
 test('검색량을 전혀 못 받아도 지난 값으로 계산한다', () => {
@@ -141,24 +141,23 @@ test('검색량을 전혀 못 받아도 지난 값으로 계산한다', () => {
   assert.deepEqual(trends.b, { interest: 100, momentum: 1 });
 });
 
-test('검색량이 적은 업체의 0은 데이터 부족으로 보고 대체한다', () => {
-  const candidates = [
-    { slug: 'a', name: 'A' },
-    { slug: 'b', name: 'B' },
-  ];
+test('글이 적은 업체는 비율을 믿지 않고, 세 곳 이상 받은 주에는 중앙값으로 채운다', () => {
+  const candidates = ['a', 'b', 'c', 'd'].map((slug) => ({ slug, name: slug }));
   const fresh = {
-    weekly: new Map([
-      ['a', [0, 100, 100, 100, 100]],
-      ['b', [0, 1, 1, 1, 1]],
-    ]),
+    weekly: new Map(),
     signals: new Map([
-      ['a', { brand: 400, convenience: 8, billing: 4 }],
-      ['b', { brand: 4, convenience: 0, billing: 0 }],
+      ['a', { brand: 1000, convenience: 10, billing: 40 }],
+      ['b', { brand: 500, convenience: 10, billing: 10 }],
+      ['c', { brand: 200, convenience: 10, billing: 2 }],
+      ['d', { brand: 20, convenience: 0, billing: 0 }],
     ]),
   };
   const { trends } = fillGaps(candidates, fresh);
-  assert.equal(trends.b.convenience, 0.02);
-  assert.equal(trends.b.billing, 0.01);
+  assert.deepEqual(
+    ['a', 'b', 'c', 'd'].map((slug) => trends[slug].convenience),
+    [0.01, 0.02, 0.05, 0.02],
+  );
+  assert.equal(trends.d.billing, 0.02);
 });
 
 test('주간 값은 날짜에 맞춰 빈 주를 0으로 채운다', () => {
