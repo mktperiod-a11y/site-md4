@@ -7,7 +7,6 @@
   "moveLimit": 9,
   "blocked": ["미투디스크", "파일캐스트", "파일이즈"],
   "required": ["예스파일", "파일보고", "애플파일"],
-  "archived": [],
   "items": [
     {
       "slug": "ondisk",

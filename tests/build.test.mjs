@@ -145,22 +145,19 @@ test('보여줄 수, 뺄 곳, 넣을 곳을 지킨다', () => {
   assert.equal(shown.length, data.shown);
   const names = shown.map((it) => it.name);
   for (const name of data.required) assert.ok(names.includes(name), `${name}이 빠짐`);
-  for (const name of [...data.blocked, ...data.archived]) assert.ok(!names.includes(name), `${name}이 들어감`);
+  for (const name of data.blocked) assert.ok(!names.includes(name), `${name}이 들어감`);
 
   const item = (name) => ({ ...data.items[0], name, slug: `s${name.charCodeAt(0)}`, maxRank: undefined });
   const items = ['가', '나', '다', '라', '마'].map(item);
   const names3 = (patch) =>
-    pick({ ...data, items, shown: 3, blocked: [], required: [], archived: [], ...patch }).map((it) => it.name);
+    pick({ ...data, items, shown: 3, blocked: [], required: [], ...patch }).map((it) => it.name);
   assert.deepEqual(names3({}), ['가', '나', '다']);
   assert.deepEqual(names3({ required: ['마'] }), ['가', '나', '마']);
   assert.deepEqual(names3({ blocked: [' 나 '], required: ['마'] }), ['가', '다', '마']);
-  assert.deepEqual(names3({ archived: ['가'] }), ['나', '다', '라']);
 
-  const base = { ...data, items, shown: 3, blocked: [], required: [], archived: [] };
+  const base = { ...data, items, shown: 3, blocked: [], required: [] };
   assert.throws(() => buildTo(SITE, { ...base, required: ['바'] }), /items에 없습니다/);
   assert.throws(() => buildTo(SITE, { ...base, required: ['가'], blocked: ['가'] }), /함께/);
-  assert.throws(() => buildTo(SITE, { ...base, required: ['가'], archived: ['가'] }), /함께/);
-  assert.throws(() => buildTo(SITE, { ...base, archived: ['바'] }), /items에 없습니다/);
   assert.throws(() => buildTo(SITE, { ...base, shown: 1, required: ['가', '나'] }), /shown보다/);
   assert.throws(() => buildTo(SITE, { ...base, shown: 0 }), /shown/);
 
@@ -204,7 +201,7 @@ test('잘못된 데이터는 빌드를 멈춘다', () => {
 
 test('이름의 HTML 특수 문자를 이스케이프한다', () => {
   const data = loadData();
-  const dir = buildTo(SITE, { ...data, required: [], archived: [], items: [{ ...data.items[0], name: '<b>"A&B"</b>' }] });
+  const dir = buildTo(SITE, { ...data, required: [], items: [{ ...data.items[0], name: '<b>"A&B"</b>' }] });
   assert.match(read(dir, 'index.html'), /<h2>&lt;b&gt;&quot;A&amp;B&quot;&lt;\/b&gt;<\/h2>/);
 });
 

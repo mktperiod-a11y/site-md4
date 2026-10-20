@@ -41,7 +41,7 @@ export function validate(data) {
   }
   const shown = data.shown ?? data.items.length;
   if (!Number.isInteger(shown) || shown < 1) throw new Error('shown은 1 이상의 정수여야 합니다');
-  for (const key of ['blocked', 'required', 'archived']) {
+  for (const key of ['blocked', 'required']) {
     const list = data[key] ?? [];
     if (!Array.isArray(list) || !list.every((n) => typeof n === 'string' && n.trim())) {
       throw new Error(`${key}는 업체 이름 배열이어야 합니다`);
@@ -49,14 +49,9 @@ export function validate(data) {
   }
   const names = new Set(data.items.map((it) => normalize(it.name)));
   const blocked = new Set((data.blocked ?? []).map(normalize));
-  const archived = new Set((data.archived ?? []).map(normalize));
-  for (const name of data.archived ?? []) {
-    if (!names.has(normalize(name))) throw new Error(`archived의 ${name}이(가) items에 없습니다`);
-  }
   for (const name of data.required ?? []) {
     if (!names.has(normalize(name))) throw new Error(`required의 ${name}이(가) items에 없습니다`);
     if (blocked.has(normalize(name))) throw new Error(`${name}이(가) required와 blocked에 함께 있습니다`);
-    if (archived.has(normalize(name))) throw new Error(`${name}이(가) required와 archived에 함께 있습니다`);
   }
   if ((data.required ?? []).length > shown) throw new Error('required가 shown보다 많습니다');
   if (data.scoreFloor !== undefined && typeof data.scoreFloor !== 'number') throw new Error('scoreFloor는 숫자여야 합니다');
@@ -74,9 +69,8 @@ export function validate(data) {
       throw new Error(`${it.name}의 별점 ${it.score}이(가) 하한 ${data.scoreFloor}보다 낮습니다`);
     }
   }
-  const hidden = new Set([...(data.blocked ?? []), ...(data.archived ?? [])].map(normalize));
   for (const it of data.items) {
-    if (it.maxRank === undefined || hidden.has(normalize(it.name))) continue;
+    if (it.maxRank === undefined || blocked.has(normalize(it.name))) continue;
     const rank = items.indexOf(it) + 1;
     if (!rank || rank > it.maxRank) throw new Error(`${it.name}은(는) ${it.maxRank}위 안에 있어야 합니다`);
   }
@@ -113,9 +107,9 @@ export function changeSummary(items, n = items.length) {
 }
 
 export function pick(data) {
-  const hidden = new Set([...(data.blocked ?? []), ...(data.archived ?? [])].map(normalize));
+  const blocked = new Set((data.blocked ?? []).map(normalize));
   const required = new Set((data.required ?? []).map(normalize));
-  const allowed = data.items.filter((it) => !hidden.has(normalize(it.name)));
+  const allowed = data.items.filter((it) => !blocked.has(normalize(it.name)));
   const limit = data.shown ?? allowed.length;
   const chosen = new Set(allowed.filter((it) => required.has(normalize(it.name))));
   for (const it of allowed) if (chosen.size < limit) chosen.add(it);
