@@ -10,9 +10,7 @@ const RETRIES = 2;
 const STAR_MIN = 3.8;
 const STAR_MAX = 4.9;
 const POINTS_MIN = 1;
-const POINTS_MAX = 22;
-const MIN_POSTS = 100;
-const SIGNALS = ['convenience', 'billing'];
+const POINTS_MAX = 16;
 
 const key = (name) => name.normalize('NFKC').replace(/\s+/g, '').toLowerCase();
 const round = (n, d) => Math.round(n * 10 ** d) / 10 ** d;
@@ -42,11 +40,11 @@ export function summarize(weekly) {
   return { interest: round(interest, 2), momentum: round(momentum, 3) };
 }
 
-export function rankPoints(items, value, top, better = (a, b) => a > b) {
+export function rankPoints(items, value, top) {
   const scored = items.filter((it) => value(it) != null);
   const points = new Map();
   for (const it of scored) {
-    const ahead = scored.filter((o) => better(value(o), value(it))).length;
+    const ahead = scored.filter((o) => value(o) > value(it)).length;
     points.set(it.slug, top === undefined ? scored.length - ahead : Math.max(top - ahead, 0));
   }
   return points;
@@ -57,7 +55,6 @@ export function totals(items) {
     rankPoints(items, (it) => it.interest ?? 0),
     rankPoints(items, (it) => (Number(it.benefitValue) > 0 ? Number(it.benefitValue) : null), 3),
     rankPoints(items, (it) => it.momentum ?? null, 3),
-    ...SIGNALS.map((name) => rankPoints(items, (it) => it[name] ?? null, 3, (a, b) => a < b)),
   ];
   return new Map(items.map((it) => [it.slug, sum(parts.map((p) => p.get(it.slug) ?? 0))]));
 }
@@ -209,20 +206,6 @@ export function fillGaps(candidates, fresh) {
       if (it.interest == null) notes.push(`${it.name}: 지난 검색 관심도가 없어 가장 낮은 값을 쓴다`);
     }
   }
-  for (const name of SIGNALS) {
-    for (const it of candidates) {
-      const s = fresh.signals.get(it.slug);
-      if (s && s.brand >= MIN_POSTS && s[name] != null) {
-        trends[it.slug][name] = round(s[name] / s.brand, 4);
-      } else if (it[name] != null) {
-        trends[it.slug][name] = it[name];
-        notes.push(`${it.name}: ${name} 지난 값 사용`);
-      } else {
-        trends[it.slug][name] = null;
-        notes.push(`${it.name}: ${name} 값 없음, 이번 주 점수 제외`);
-      }
-    }
-  }
   return { trends, notes };
 }
 
@@ -281,14 +264,9 @@ async function request(groups, startDate, endDate) {
   return new Map(body.results.map((r) => [r.title, align(r.data ?? [], startDate)]));
 }
 
-async function posts(query) {
-  const body = await call(`/search/v1/blog?query=${encodeURIComponent(query)}&display=1`);
-  return Number(body.total) || 0;
-}
-
-async function collect(candidates, signals, today) {
+async function collect(candidates, today) {
   const { startDate, endDate } = period(today);
-  const fresh = { weekly: new Map(), signals: new Map() };
+  const fresh = { weekly: new Map() };
   const errors = [];
   const byInterest = [...candidates].sort((a, b) => (b.interest ?? 0) - (a.interest ?? 0));
   const [anchor, ...others] = byInterest;
@@ -313,20 +291,6 @@ async function collect(candidates, signals, today) {
       errors.push(`검색 관심도 ${batch.map((it) => it.name).join('·')}: ${err.message}`);
     }
   }
-  for (const it of candidates) {
-    try {
-      const counts = { brand: await posts(it.name) };
-      for (const name of SIGNALS) {
-        let total = 0;
-        for (const word of signals[name]) total += await posts(`${it.name} ${word}`);
-        counts[name] = total;
-      }
-      fresh.signals.set(it.slug, counts);
-    } catch (err) {
-      errors.push(`${it.name} 편의성·해지 글 수: ${err.message}`);
-      if (err.final) break;
-    }
-  }
   return { fresh, errors };
 }
 
@@ -336,8 +300,8 @@ async function main() {
   const candidates = pool(data);
   const keys = process.env.NAVER_CLIENT_ID && process.env.NAVER_CLIENT_SECRET;
   const { fresh, errors } = keys
-    ? await collect(candidates, data.signals, today)
-    : { fresh: { weekly: new Map(), signals: new Map() }, errors: ['API 키가 없어 호출하지 않음'] };
+    ? await collect(candidates, today)
+    : { fresh: { weekly: new Map() }, errors: ['API 키가 없어 호출하지 않음'] };
   const { trends, notes } = fillGaps(candidates, fresh);
   for (const line of [...errors, ...notes]) console.log(`::warning::${line}`);
   const next = rerank(data, trends, today);

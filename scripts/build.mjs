@@ -198,7 +198,7 @@ export function rankRow(it, i, logo) {
                   class="go"
                   href="go/${it.slug}/"
                   target="_blank"
-                  rel="noopener noreferrer sponsored nofollow"
+                  rel="noopener noreferrer nofollow"
                   aria-label="${name} 바로가기 (새 창)"
                   >바로가기</a
                 >
@@ -287,7 +287,7 @@ function goPage(it) {
       ${name} 공식 사이트로 이동 중입니다. 자동으로 이동하지 않으면
       <a
         href="${url}"
-        rel="noopener noreferrer sponsored nofollow"
+        rel="noopener noreferrer nofollow"
         >여기를 눌러주세요.</a
       >
     </p>
@@ -304,12 +304,11 @@ function llms({ updatedAt, items }, faq) {
   const qa = faq.map((f) => `### ${f.q}\n\n${f.a}`).join('\n\n');
   return `# 모리디
 
-> 웹하드의 가입 혜택과 이용 편의성을 비교하는 한국어 웹하드 순위 가이드입니다.
+> 웹하드의 검색 관심도와 가입 혜택을 비교하는 한국어 웹하드 순위 가이드입니다.
 
 페이지에 표시된 기준일과 각 서비스 공식 안내를 함께 확인해 주세요.
 
 - 사이트: ${PLACEHOLDER}/
-- 일부 바로가기는 제휴 링크입니다.
 - 기준일: ${updatedAt}
 
 ## 웹하드 순위 2026 TOP ${items.length}
@@ -378,7 +377,7 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
   const pageValues = {
     ...common,
     DESCRIPTION: escape(
-      `웹하드 순위 2026 TOP ${items.length}. ${top3.join(', ')} 등 혜택과 편의성을 한눈에 비교해요.`,
+      `웹하드 순위 2026 TOP ${items.length}. ${top3.join(', ')} 등 검색 관심도와 혜택을 한눈에 비교해요.`,
     ),
     RANKING: items.map((it, i) => rankRow(it, i, findLogo(it.slug))).join('\n'),
     TOP3: items

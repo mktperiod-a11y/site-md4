@@ -28,11 +28,7 @@ function randomTrends(data, seed) {
   const rnd = random(seed);
   const out = {};
   for (const it of pool(data)) {
-    out[it.slug] = {
-      ...summarize(Array.from({ length: 5 }, () => rnd() * 100)),
-      convenience: rnd() < 0.2 ? undefined : rnd() * 0.1,
-      billing: rnd() < 0.2 ? undefined : rnd() * 0.1,
-    };
+    out[it.slug] = summarize(Array.from({ length: 5 }, () => rnd() * 100));
   }
   return out;
 }
@@ -74,15 +70,14 @@ test('검색 관심도는 최근 4주 합, 변화율은 지난주와 그 전 3�
   assert.deepEqual(summarize([10, 10, 20, 30, 40]), { interest: 100, momentum: 2 });
 });
 
-test('같은 값은 같은 점수를 받고, 비율은 낮을수록 높은 점수다', () => {
+test('같은 값은 같은 점수를 받는다', () => {
   const items = [
-    { slug: 'a', v: 0.01 },
-    { slug: 'b', v: 0.01 },
-    { slug: 'c', v: 0.05 },
+    { slug: 'a', v: 5 },
+    { slug: 'b', v: 5 },
+    { slug: 'c', v: 1 },
     { slug: 'd', v: null },
   ];
-  const points = rankPoints(items, (it) => it.v, 3, (x, y) => x < y);
-  assert.deepEqual([...points], [['a', 3], ['b', 3], ['c', 1]]);
+  assert.deepEqual([...rankPoints(items, (it) => it.v, 3)], [['a', 3], ['b', 3], ['c', 1]]);
 });
 
 test('바뀌는 업체 수를 제한하고, 그 안에서 점수 순서에 가깝게 고른다', () => {
@@ -120,7 +115,7 @@ test('maxRank는 점수보다 먼저 지킨다', () => {
 
 test('검색 관심도를 하나라도 못 받으면 API 값을 섞지 않고 모두 지난 값을 쓴다', () => {
   const candidates = [
-    { slug: 'a', name: 'A', interest: 100, momentum: 1.2, convenience: 0.02 },
+    { slug: 'a', name: 'A', interest: 100, momentum: 1.2 },
     { slug: 'b', name: 'B', interest: 50 },
     { slug: 'c', name: 'C' },
   ];
@@ -129,33 +124,22 @@ test('검색 관심도를 하나라도 못 받으면 API 값을 섞지 않고 �
       ['a', [0, 50, 50, 50, 50]],
       ['b', [0, 25, 25, 25, 25]],
     ]),
-    signals: new Map([['b', { brand: 100, convenience: 3, billing: 1 }]]),
   };
   const { trends, notes } = fillGaps(candidates, fresh);
-  assert.deepEqual(trends.a, { interest: 100, momentum: null, convenience: 0.02, billing: null });
-  assert.deepEqual(trends.b, { interest: 50, momentum: null, convenience: 0.03, billing: 0.01 });
-  assert.deepEqual(trends.c, { interest: 50, momentum: null, convenience: null, billing: null });
-  assert.ok(notes.length >= 3);
+  assert.deepEqual(trends.a, { interest: 100, momentum: null });
+  assert.deepEqual(trends.b, { interest: 50, momentum: null });
+  assert.deepEqual(trends.c, { interest: 50, momentum: null });
+  assert.equal(notes.length, 2);
 });
 
 test('API를 전혀 부르지 못해도 지난 값만으로 계산한다', () => {
   const data = loadData();
-  const { trends } = fillGaps(pool(data), { weekly: new Map(), signals: new Map() });
+  const { trends } = fillGaps(pool(data), { weekly: new Map() });
   const next = rerank(data, trends, '2026-10-26');
   const shown = next.items.slice(0, next.shown);
   assert.equal(shown.length, data.shown);
   assert.ok(shown.findIndex((it) => it.slug === 'ondisk') < 4);
   assert.ok(shown.every((it) => it.momentum === null));
-});
-
-test('글이 100개보다 적은 업체는 비율을 믿지 않는다', () => {
-  const candidates = [{ slug: 'a', name: 'A', interest: 1 }];
-  const fresh = {
-    weekly: new Map([['a', [1, 1, 1, 1, 1]]]),
-    signals: new Map([['a', { brand: 20, convenience: 0, billing: 0 }]]),
-  };
-  const { trends } = fillGaps(candidates, fresh);
-  assert.equal(trends.a.convenience, null);
 });
 
 test('주간 값은 날짜에 맞춰 빈 주를 0으로 채운다', () => {
@@ -167,7 +151,7 @@ test('주간 값은 날짜에 맞춰 빈 주를 0으로 채운다', () => {
 });
 
 test('별점은 3.8~4.9 안에서 순위가 낮을수록 같거나 낮다', () => {
-  assert.deepEqual(stars([22, 10, 12, 1]), ['4.9', '4.3', '4.3', '3.8']);
+  assert.deepEqual(stars([16, 8, 10, 1]), ['4.9', '4.3', '4.3', '3.8']);
 });
 
 test('완결된 주(월~일)만 받는다', () => {
