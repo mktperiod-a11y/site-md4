@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-// data/와 src/로 사이트를 만든다.
-// 사용법: SITE_URL=https://example.com node scripts/build.mjs [출력 폴더]
-// SITE_URL이 없으면 https://site-url.invalid 자리표시를 그대로 둔다.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -86,7 +83,6 @@ export function validate(data) {
   return data;
 }
 
-// 이전 순위와 비교한 표시. prevRank가 없으면 표시하지 않고, null이면 새로 들어온 업체다.
 export function moveHtml(it, rank) {
   if (it.prevRank === undefined) return '';
   if (it.prevRank === null) return '<span class="move new">NEW</span>';
@@ -115,7 +111,6 @@ export function changeSummary(items, n = items.length) {
   return `<p class="changes">이번 주 변동 <b>${total}곳</b> ${parts.join(' ')}</p>`;
 }
 
-// blocked와 archived는 빼고, required를 먼저 넣은 뒤 items 순서대로 shown개까지 채운다. 보여주는 순서는 items 순서다.
 export function pick(data) {
   const hidden = new Set([...(data.blocked ?? []), ...(data.archived ?? [])].map(normalize));
   const required = new Set((data.required ?? []).map(normalize));
@@ -129,7 +124,6 @@ export function pick(data) {
 export const escape = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
-// 받침이 없거나 ㄹ 받침이면 '로', 그 밖의 받침이면 '으로'
 export function ro(word) {
   const code = word.charCodeAt(word.length - 1) - 0xac00;
   if (code < 0 || code > 11171) return `${word}(으)로`;
@@ -137,14 +131,12 @@ export function ro(word) {
   return `${word}${final === 0 || final === 8 ? '로' : '으로'}`;
 }
 
-// 화면에 보이는 폭. 한글·한자 등 넓은 글자는 2칸으로 센다.
 export function displayWidth(text) {
   let width = 0;
   for (const ch of text) width += /[ᄀ-ᅟ⺀-꓏가-힣豈-﫿＀-｠]/.test(ch) ? 2 : 1;
   return width;
 }
 
-// 긴 문장을 띄어쓰기 기준으로 나눠 들여쓴 여러 줄로 만든다.
 export function wrap(text, indent, width = 100) {
   const lines = [];
   let line = '';
@@ -160,7 +152,6 @@ export function wrap(text, indent, width = 100) {
   return lines.map((l) => indent + l).join('\n');
 }
 
-// 데스크톱용 가로 로고(src/logos/)와 모바일용 정사각형 앱 아이콘(src/logos/app/) 경로. 없으면 undefined
 function findLogo(slug) {
   const find = (dir) => {
     const ext = LOGO_TYPES.find((e) => fs.existsSync(path.join('src', dir, `${slug}.${e}`)));
@@ -169,7 +160,6 @@ function findLogo(slug) {
   return { wide: find(LOGOS), app: find(`${LOGOS}/app`) };
 }
 
-// 로고가 없는 쪽(데스크톱 또는 모바일)에는 이니셜을 보여준다.
 function markHtml(it, { wide, app } = {}) {
   const pad = '\n                ';
   const img = (src, cls, w, h) =>
@@ -370,7 +360,6 @@ export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
   site = site.replace(/\/+$/, '');
   if (site && !/^https?:\/\/[^/\s]+(\/[\w.-]+)*$/.test(site)) throw new Error(`사이트 주소 형식 오류: ${site}`);
   const basePath = site ? new URL(site).pathname.replace(/\/+$/, '') : '';
-  // 계정 이름이 든 기본 주소(*.github.io)는 결과물에 적지 않고 상대 주소로 만든다.
   const hidden = Boolean(site) && /\.github\.io$/i.test(new URL(site).hostname);
   const { updatedAt } = validate(data);
   const items = pick(data);

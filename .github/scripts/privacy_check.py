@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
-"""개인정보 규칙 자동 검사.
-
-사용법:
-  python3 .github/scripts/privacy_check.py files            추적 중인 파일 검사
-  python3 .github/scripts/privacy_check.py commits <범위>    커밋 이메일·메시지 검사 (예: origin/main..HEAD)
-
-금지 문자열은 환경 변수 PRIVACY_PATTERNS(한 줄에 하나, 대소문자 무시)로만 받는다.
-값은 출력하지 않고 "금지 문자열 #번호"로만 알린다.
-"""
 import os
 import re
 import struct
 import subprocess
 import sys
+
+USAGE = """사용법:
+  python3 .github/scripts/privacy_check.py files
+  python3 .github/scripts/privacy_check.py commits origin/main..HEAD
+"""
 
 SELF = ".github/scripts/privacy_check.py"
 PAGES_HOST = re.compile(r"[a-z0-9-]+\.github\.io", re.I)
@@ -186,7 +182,7 @@ def main():
     elif len(sys.argv) >= 3 and sys.argv[1] == "commits":
         check_commits(sys.argv[2:])
     else:
-        print(__doc__)
+        print(USAGE)
         return 2
     return 1 if errors else 0
 
