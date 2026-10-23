@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-20",
+  "updatedAt": "2026-10-23",
   "cycle": "매주",
   "shown": 10,
   "scoreFloor": 3.8,
   "changeLimit": 0.6,
   "moveLimit": 9,
-  "blocked": ["미투디스크", "파일캐스트", "파일이즈"],
-  "required": ["예스파일", "파일보고", "애플파일"],
+  "blocked": ["미투디스크", "파일캐스트", "파일이즈", "애플파일"],
+  "required": ["예스파일", "파일보고"],
   "items": [
     {
       "slug": "ondisk",
@@ -40,22 +40,6 @@
       "interest": 118.1,
       "momentum": 1.004,
       "convenience": 2,
-      "billing": 2
-    },
-    {
-      "slug": "smartfile",
-      "name": "스마트파일",
-      "url": "https://smartfile.co.kr/",
-      "mark": "S",
-      "score": "4.7",
-      "benefit": "가입 혜택 2,000P",
-      "desc": "기본 기능과 입문자 중심의 이용 흐름을 비교하기 좋은 서비스",
-      "tags": ["입문형", "간편 이용"],
-      "prevRank": 3,
-      "benefitValue": 2000,
-      "interest": 122.32,
-      "momentum": 0.972,
-      "convenience": 1,
       "billing": 2
     },
     {
@@ -105,22 +89,6 @@
       "billing": 1,
       "prevRank": null,
       "benefitValue": 500
-    },
-    {
-      "slug": "applefile",
-      "name": "애플파일",
-      "url": "https://www.applefile.com/",
-      "mark": "A",
-      "score": "4.4",
-      "benefit": "가입 혜택 1,000P",
-      "desc": "자료가 매일 올라오는 정액제 중심 서비스",
-      "tags": ["매일 업데이트", "정액제"],
-      "prevRank": 10,
-      "interest": 70.21,
-      "momentum": 0.991,
-      "convenience": 2,
-      "billing": 0,
-      "benefitValue": 1000
     },
     {
       "slug": "filebogo",

@@ -56,6 +56,9 @@ export function validate(data) {
     if (!names.has(normalize(name))) throw new Error(`required의 ${name}이(가) items에 없습니다`);
     if (blocked.has(normalize(name))) throw new Error(`${name}이(가) required와 blocked에 함께 있습니다`);
   }
+  for (const it of data.items) {
+    if (blocked.has(normalize(it.name))) throw new Error(`${it.name}은(는) blocked 업체라 items에 넣을 수 없습니다`);
+  }
   if ((data.required ?? []).length > shown) throw new Error('required가 shown보다 많습니다');
   if (data.scoreFloor !== undefined && typeof data.scoreFloor !== 'number') throw new Error('scoreFloor는 숫자여야 합니다');
   for (const [i, it] of data.items.entries()) {
