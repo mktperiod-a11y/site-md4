@@ -191,7 +191,8 @@
       "url": "https://www.wedisk.co.kr/",
       "mark": "위",
       "score": "3.8",
-      "benefit": "가입 혜택 확인",
+      "benefit": "가입 혜택 2,000P",
+      "benefitValue": 2000,
       "desc": "찜해 둔 자료를 다시 보고 화면 전송으로 이어 보기 좋은 서비스",
       "tags": ["찜·다시보기", "화면 전송"]
     },
@@ -201,7 +202,8 @@
       "url": "https://www.filenori.com/",
       "mark": "노",
       "score": "3.8",
-      "benefit": "가입 혜택 확인",
+      "benefit": "가입 혜택 2,000P",
+      "benefitValue": 2000,
       "desc": "모바일 탐색과 전용 플레이어로 이용하기 좋은 서비스",
       "tags": ["모바일 탐색", "전용 플레이어"]
     },
