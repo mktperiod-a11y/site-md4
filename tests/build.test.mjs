@@ -158,6 +158,7 @@ test('보여줄 수, 뺄 곳, 넣을 곳을 지킨다', () => {
   const base = { ...data, items, shown: 3, blocked: [], required: [] };
   assert.throws(() => buildTo(SITE, { ...base, required: ['바'] }), /items에 없습니다/);
   assert.throws(() => buildTo(SITE, { ...base, required: ['가'], blocked: ['가'] }), /함께/);
+  assert.throws(() => buildTo(SITE, { ...base, blocked: ['나'] }), /blocked 업체/);
   assert.throws(() => buildTo(SITE, { ...base, shown: 1, required: ['가', '나'] }), /shown보다/);
   assert.throws(() => buildTo(SITE, { ...base, shown: 0 }), /shown/);
 
