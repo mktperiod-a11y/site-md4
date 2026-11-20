@@ -359,7 +359,7 @@ function hideAddress(outDir) {
 }
 
 export function build(outDir, site = '', data = loadData(), faq = loadFaq()) {
-  site = site.replace(/\/+$/, '');
+  site = site.replace(/\/+$/, '').replace(/^http:\/\//, 'https://');
   if (site && !/^https?:\/\/[^/\s]+(\/[\w.-]+)*$/.test(site)) throw new Error(`사이트 주소 형식 오류: ${site}`);
   const basePath = site ? new URL(site).pathname.replace(/\/+$/, '') : '';
   const hidden = Boolean(site) && /\.github\.io$/i.test(new URL(site).hostname);

@@ -275,3 +275,10 @@ test('제휴 링크가 있으면 이동 페이지가 그 링크로 보내고, �
   assert.ok(!go.includes(items[0].url));
   assert.throws(() => buildTo(SITE, { ...data, items: [{ ...items[0], link: 'http://x.test/' }, ...items.slice(1)] }), /link/);
 });
+
+test('사이트 주소가 http로 들어와도 https로 적는다', () => {
+  const dir = buildTo('http://example.test');
+  assert.match(read(dir, 'sitemap.xml'), /<loc>https:\/\/example\.test\/<\/loc>/);
+  assert.match(read(dir, 'robots.txt'), /Sitemap: https:\/\/example\.test\/sitemap\.xml/);
+  assert.ok(!read(dir, 'index.html').includes('http://example.test'));
+});
