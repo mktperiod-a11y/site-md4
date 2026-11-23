@@ -43,7 +43,7 @@ test('검색량이 어떻게 바뀌어도 제1원칙과 주간 변동 상한을 
     const next = rerank(week, randomTrends(week, seed), day);
     const shown = next.items.slice(0, next.shown);
     const rankOf = (slug) => shown.findIndex((it) => it.slug === slug) + 1;
-    assert.ok(rankOf('ondisk') >= 1 && rankOf('ondisk') <= 4);
+    assert.equal(rankOf('ondisk'), 1);
     assert.ok(rankOf('kdisk') >= 1 && rankOf('kdisk') <= 6);
     for (const name of data.required) assert.ok(shown.some((it) => it.name === name));
     assert.ok(shown.filter((it, i) => it.prevRank !== i + 1).length <= 6);

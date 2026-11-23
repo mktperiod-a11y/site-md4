@@ -283,3 +283,9 @@ test('사이트 주소가 http로 들어와도 https로 적는다', () => {
   assert.match(read(dir, 'robots.txt'), /Sitemap: https:\/\/example\.test\/sitemap\.xml/);
   assert.ok(!read(dir, 'index.html').includes('http://example.test'));
 });
+
+test('maxRank가 겹쳐서 지킬 수 없으면 바로 멈춘다', () => {
+  const data = loadData();
+  const items = data.items.map((it) => (it.slug === 'kdisk' ? { ...it, maxRank: 1 } : it));
+  assert.throws(() => buildTo(SITE, { ...data, items }), /maxRank 겹침/);
+});
