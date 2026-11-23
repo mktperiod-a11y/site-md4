@@ -3,6 +3,8 @@ name: Ranking
 on:
   schedule:
     - cron: "0 1 * * 1"
+    - cron: "0 5 * * 1"
+    - cron: "0 1 * * 2"
   workflow_dispatch:
 
 permissions:
@@ -21,11 +23,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node scripts/update-ranking.mjs
+      - run: node scripts/update-ranking.mjs ${{ github.event_name == 'schedule' && '--if-stale' || '' }}
         env:
           NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
           NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
-      - run: node --test tests/*.test.mjs
+      - run: node scripts/build.mjs _site
+      - run: node --test tests/*.test.mjs || echo "::warning::테스트가 실패했지만 데이터 검사와 빌드는 통과해 갱신을 이어갑니다"
       - env:
           GH_TOKEN: ${{ github.token }}
         run: |

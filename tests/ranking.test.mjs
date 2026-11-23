@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { loadData } from '../scripts/build.mjs';
+import { loadData, pick } from '../scripts/build.mjs';
 import {
   align,
   arrange,
@@ -10,6 +10,7 @@ import {
   period,
   pool,
   rankPoints,
+  rankedThisWeek,
   rerank,
   roll,
   shift,
@@ -170,4 +171,21 @@ test('완결된 주(월~일)만 받는다', () => {
 test('데이터 파일 형식을 그대로 유지한다', async () => {
   const fs = await import('node:fs');
   assert.equal(format(loadData()), fs.readFileSync('data/services.json', 'utf8'));
+});
+
+test('목록 밖으로 밀려난 업체에는 낡은 순위가 남지 않는다', () => {
+  const data = loadData();
+  const next = rerank(data, randomTrends(data, 3), shift(data.rankedOn ?? '2026-01-05', 7));
+  const shown = new Set(pick(data).map((it) => it.slug));
+  for (const it of next.items.slice(next.shown)) {
+    if (shown.has(it.slug)) assert.ok(Number.isInteger(it.prevRank));
+    else assert.equal(it.prevRank, undefined);
+  }
+});
+
+test('이번 주에 이미 계산했으면 예비 실행은 건너뛴다', () => {
+  assert.equal(rankedThisWeek({ rankedOn: '2026-11-23' }, '2026-11-24'), true);
+  assert.equal(rankedThisWeek({ rankedOn: '2026-11-16' }, '2026-11-24'), false);
+  assert.equal(rankedThisWeek({ rankedOn: '2026-11-23' }, '2026-11-23'), true);
+  assert.equal(rankedThisWeek({}, '2026-11-23'), false);
 });
