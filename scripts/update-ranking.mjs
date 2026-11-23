@@ -198,7 +198,9 @@ export function rerank(data, trends, today) {
   const finalOrder = limitChanges(chosen, ideal, limit, data.moveLimit ?? 9);
   const star = stars(finalOrder.map((it) => total.get(it.slug)));
   const shown = finalOrder.map((it, i) => ({ ...it, score: star[i] }));
-  const rest = items.filter((it) => !shown.some((s) => s.slug === it.slug));
+  const rest = items
+    .filter((it) => !shown.some((s) => s.slug === it.slug))
+    .map(({ prevRank, ...it }) => (before.has(it.slug) ? { ...it, prevRank: before.get(it.slug) } : it));
   return { ...data, updatedAt: today, rankedOn: today, items: [...shown, ...rest] };
 }
 
@@ -305,9 +307,18 @@ async function collect(candidates, today) {
   return { fresh, errors };
 }
 
+export function rankedThisWeek(data, today) {
+  const day = new Date(`${today}T00:00:00Z`).getUTCDay();
+  return Boolean(data.rankedOn) && data.rankedOn >= shift(today, -((day + 6) % 7));
+}
+
 async function main() {
   const data = JSON.parse(fs.readFileSync(FILE, 'utf8'));
   const today = kstDate();
+  if (process.argv.includes('--if-stale') && rankedThisWeek(data, today)) {
+    console.log(`이번 주(${data.rankedOn})에 이미 계산해서 건너뜁니다`);
+    return;
+  }
   const candidates = pool(data);
   const keys = process.env.NAVER_CLIENT_ID && process.env.NAVER_CLIENT_SECRET;
   const { fresh, errors } = keys
