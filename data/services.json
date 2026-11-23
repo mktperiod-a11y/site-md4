@@ -17,7 +17,7 @@
       "benefit": "가입 혜택 1,000P",
       "desc": "콘텐츠 범위와 PC·모바일 이용 환경을 함께 살펴보기 좋은 종합 서비스",
       "tags": ["종합형", "PC·모바일"],
-      "maxRank": 4,
+      "maxRank": 1,
       "prevRank": 1,
       "benefitValue": 1000,
       "interest": 395.21,

@@ -69,6 +69,13 @@ export function validate(data) {
       throw new Error(`items[${i}].prevRank는 1 이상의 정수나 null이어야 합니다`);
     }
   }
+  const caps = data.items.filter((it) => it.maxRank !== undefined && !blocked.has(normalize(it.name)));
+  for (const it of caps) {
+    const tighter = caps.filter((o) => o.maxRank <= it.maxRank);
+    if (tighter.length > it.maxRank) {
+      throw new Error(`${tighter.map((o) => o.name).join('·')}을(를) 모두 ${it.maxRank}위 안에 둘 수 없습니다(maxRank 겹침)`);
+    }
+  }
   const items = pick(data);
   for (const it of items) {
     if (data.scoreFloor !== undefined && Number(it.score) < data.scoreFloor) {
