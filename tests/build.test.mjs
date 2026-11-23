@@ -174,7 +174,8 @@ test('별점 하한과 최대 순위를 지키고, 이전 순위와 비교해 �
 
   const low = { ...data, items: data.items.map((it, i) => (i === 0 ? { ...it, score: '3.0' } : it)) };
   assert.throws(() => buildTo(SITE, low), /하한/);
-  const late = { ...data, items: [...data.items.slice(1, 6), data.items[0], ...data.items.slice(6)] };
+  const capped = data.items.find((x) => x.maxRank && !data.required.includes(x.name));
+  const late = { ...data, items: [...data.items.filter((x) => x !== capped), capped] };
   assert.throws(() => buildTo(SITE, late), /위 안에 있어야/);
 
   const it = data.items[0];
