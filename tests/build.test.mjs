@@ -70,7 +70,8 @@ test('순위 목록과 이동 페이지가 데이터와 맞는다', () => {
     const go = read(dir, `go/${it.slug}/index.html`);
     assert.match(go, /<meta name="robots" content="noindex,nofollow" \/>/);
     assert.ok(go.includes(`content="0;url=${it.url}"`), `${it.slug} 새로고침 주소`);
-    assert.ok(go.includes(`location.replace(${JSON.stringify(it.url)})`), `${it.slug} 스크립트 주소`);
+    if (it.link) assert.ok(go.includes('location.replace(atob('), `${it.slug} 스크립트 주소`);
+    else assert.ok(go.includes(`location.replace(${JSON.stringify(it.url)})`), `${it.slug} 스크립트 주소`);
   }
   assert.deepEqual(fs.readdirSync(path.join(dir, 'go')).sort(), items.map((it) => it.slug).sort());
 });
@@ -261,7 +262,8 @@ test('기본 Pages 주소로 빌드하면 결과물에 그 주소를 적지 않�
 });
 
 test('제휴 링크가 있으면 이동 페이지가 그 링크로 보내고, 버튼과 고지에 표시한다', () => {
-  const data = loadData();
+  const loaded = loadData();
+  const data = { ...loaded, items: loaded.items.map(({ link, ...it }) => it) };
   const plain = read(buildTo(SITE, data), 'index.html');
   assert.ok(!plain.includes('제휴 링크'));
   assert.ok(!plain.includes('sponsored'));
@@ -272,8 +274,10 @@ test('제휴 링크가 있으면 이동 페이지가 그 링크로 보내고, �
   assert.match(html, /일부 바로가기는 제휴 링크예요/);
   assert.equal((html.match(/sponsored/g) ?? []).length, 1);
   const go = read(dir, `go/${items[0].slug}/index.html`);
-  assert.ok(go.includes(link));
-  assert.ok(!go.includes(items[0].url));
+  assert.ok(!go.includes(link) && !go.includes('partner.example'), '제휴 주소가 그대로 보이지 않는다');
+  const hidden = go.match(/atob\("([^"]+)"/)[1];
+  assert.equal(Buffer.from([...hidden].reverse().join(''), 'base64').toString(), link);
+  assert.match(go, /<noscript><meta http-equiv="refresh" content="0;url=[^"]+" \/><\/noscript>/);
   assert.throws(() => buildTo(SITE, { ...data, items: [{ ...items[0], link: 'http://x.test/' }, ...items.slice(1)] }), /link/);
 });
 
