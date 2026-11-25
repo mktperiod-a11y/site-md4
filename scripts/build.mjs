@@ -280,8 +280,14 @@ function jsonLd({ updatedAt, items }, faq) {
 
 function goPage(it) {
   const name = escape(it.name);
-  const to = it.link ?? it.url;
-  const url = escape(to);
+  const official = escape(it.url);
+  const hidden = it.link ? [...Buffer.from(it.link).toString('base64')].reverse().join('') : '';
+  const refresh = it.link
+    ? `<noscript><meta http-equiv="refresh" content="0;url=${official}" /></noscript>`
+    : `<meta http-equiv="refresh" content="0;url=${official}" />`;
+  const go = it.link
+    ? `location.replace(atob(${JSON.stringify(hidden)}.split('').reverse().join('')));`
+    : `location.replace(${JSON.stringify(it.url)});`;
   return `<!doctype html>
 <html lang="ko">
   <head>
@@ -289,20 +295,20 @@ function goPage(it) {
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <meta name="referrer" content="origin" />
-    <meta http-equiv="refresh" content="0;url=${url}" />
+    ${refresh}
     <title>${escape(ro(it.name))} 이동 중 | 모리디</title>
   </head>
   <body>
     <p>
       ${name} 공식 사이트로 이동 중입니다. 자동으로 이동하지 않으면
       <a
-        href="${url}"
+        href="${official}"
         rel="noopener noreferrer ${it.link ? 'sponsored ' : ''}nofollow"
         >여기를 눌러주세요.</a
       >
     </p>
     <script>
-      location.replace(${JSON.stringify(to)});
+      ${go}
     </script>
   </body>
 </html>
